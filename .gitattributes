@@ -1,0 +1,2 @@
+# Normalise tous les fichiers texte en LF
+* text=auto eol=lf

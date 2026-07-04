@@ -1,0 +1,52 @@
+# ============================================================
+# SÉCURITÉ - Bloque l'accès HTTP direct aux fichiers sensibles
+# ============================================================
+# Protection directe Apache (sans dépendance à mod_headers ou mod_rewrite)
+<FilesMatch "^\.env(\..+)?$">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "^\.git">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "^\.htaccess$">
+    Require all denied
+</FilesMatch>
+
+# Bloque les fichiers de config et logs éventuels + sources map générés par Vite
+<FilesMatch "\.(log|map)$">
+    Require all denied
+</FilesMatch>
+
+# =======================
+# SÉCURITÉ - Headers HTTP
+# =======================
+# Headers de sécurité
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "DENY"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-ieoeWczDHkReVBsRBqaal5AFMlBtNjMzgwKvLqi/tSU='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+</IfModule>
+
+# ===============================================
+# SÉCURITÉ - Désactive le listing des répertoires
+# ===============================================
+Options -Indexes
+
+# ==================================
+# ROUTING - Redirige vers index.html
+# ==================================
+# Redirige vers index.html si pas de fichier réel ciblé
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    RewriteBase /
+    RewriteRule ^index\.html$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.html [L]
+</IfModule>

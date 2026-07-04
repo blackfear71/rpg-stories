@@ -1,0 +1,30 @@
+.picture-input-button {
+    background-color: var(--color-bg-tertiary);
+    border: 2px solid var(--color-border-primary);
+    color: var(--color-bg-white);
+    height: 34px;
+    cursor: pointer;
+}
+
+.picture-input-button:hover,
+.picture-input-button:active {
+    background-color: var(--color-bg-secondary) !important;
+}
+
+.picture-input-preview-wrapper {
+    color: var(--color-text-secondary);
+}
+
+.picture-input-preview-content {
+    min-width: 0;
+}
+
+.picture-input-preview-image {
+    height: auto;
+    max-height: 70px;
+    max-width: 100%;
+    min-width: 0;
+    object-fit: contain;
+    flex: 0 1 auto;
+    background-color: var(--color-bg-gray-light);
+}

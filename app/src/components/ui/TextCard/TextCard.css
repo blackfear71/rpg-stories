@@ -1,0 +1,33 @@
+.text-card {
+    background-color: var(--color-bg-item);
+    border: 1px solid var(--color-border-item);
+    border-radius: var(--bs-border-radius);
+}
+
+.text-card-header {
+    border-bottom: 1px solid var(--color-border-item);
+    color: var(--color-text-white);
+    font-size: larger;
+    font-style: italic;
+}
+
+.text-card-content {
+    color: var(--color-text-white);
+    text-align: justify;
+    white-space: pre-line;
+}
+
+.text-card-content-toggle {
+    background-color: var(--color-bg-transparent);
+    color: var(--color-text-toggle);
+    border: none;
+    font-size: smaller;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+.text-card-content-toggle:hover,
+.text-card-content-toggle:active {
+    background-color: var(--color-bg-transparent) !important;
+    color: var(--color-bg-icon);
+}

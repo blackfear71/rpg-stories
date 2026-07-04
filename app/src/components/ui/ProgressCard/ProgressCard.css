@@ -1,0 +1,22 @@
+.progress-card {
+    background-color: var(--color-bg-item);
+    border: 1px solid var(--color-border-item);
+    border-radius: var(--bs-border-radius);
+}
+
+.progress-card-header {
+    border-bottom: 1px solid var(--color-border-item);
+    color: var(--color-text-white);
+}
+
+.progress-card-title {
+    color: var(--color-text-white);
+    font-size: larger;
+    font-style: italic;
+}
+
+.progress-card-detail {
+    font-size: smaller;
+    color: var(--color-text-card);
+    text-align: center;
+}

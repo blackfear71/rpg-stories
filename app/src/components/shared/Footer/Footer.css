@@ -1,0 +1,39 @@
+.footer {
+    position: relative;
+    z-index: 5;
+    padding: 5px;
+    color: var(--color-text-secondary);
+    font-size: small;
+    background-color: var(--color-bg-white);
+}
+
+.footer-text {
+    text-align: center;
+}
+
+.footer-language-toggle {
+    position: absolute;
+    right: 0;
+    background-color: var(--color-bg-transparent);
+    border: none;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.25s ease-in-out;
+}
+
+.footer-language-toggle:hover {
+    background-color: var(--color-bg-transparent) !important;
+}
+
+.footer-language-toggle:active {
+    background-color: var(--color-bg-transparent) !important;
+    opacity: 0.7;
+    transition: opacity 0.1s ease-in-out;
+}
+
+.footer-language-flag {
+    width: 24px;
+    height: 16px;
+    border-radius: 2px;
+    object-fit: cover;
+}

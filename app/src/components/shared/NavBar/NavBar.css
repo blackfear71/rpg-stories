@@ -1,0 +1,88 @@
+.navbar-container {
+    position: fixed;
+    z-index: 5;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: var(--color-bg-primary);
+    box-shadow: 0 1px 3px var(--color-bg-black);
+}
+
+.navbar-logo {
+    height: 40px;
+    width: 40px;
+}
+
+.navbar-user-wrapper {
+    position: relative;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+}
+
+.navbar-user {
+    color: var(--color-bg-white);
+    height: 100%;
+    width: 100%;
+}
+
+.navbar-user-connected {
+    position: absolute;
+    bottom: 0;
+    right: -2px;
+    width: 14px;
+    height: 14px;
+    background-color: var(--color-bg-green);
+    border-radius: 50%;
+    border: 2px solid var(--color-border-white);
+}
+
+.navbar-dropdown-triangle {
+    content: '';
+    position: absolute;
+    top: 11px;
+    right: 10px;
+    z-index: 1000;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid var(--color-bg-gray-light);
+}
+
+.navbar-dropdown {
+    position: absolute;
+    top: calc(100% + 20px);
+    right: -10px;
+    width: max-content;
+    max-width: 45vw;
+    max-height: calc(100vh - 150px);
+    background-color: var(--color-bg-white);
+    border: 1px solid var(--color-border-gray-light) !important;
+    z-index: 1000;
+    overflow-y: auto;
+    border-radius: var(--bs-border-radius);
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.navbar-dropdown-item {
+    border-top: 1px solid var(--color-border-gray-light) !important;
+    cursor: pointer;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    color: var(--color-text-primary) !important;
+}
+
+.navbar-dropdown-item:first-child {
+    border-top: none !important;
+    font-weight: bold !important;
+    background-color: var(--color-bg-gray-light) !important;
+    cursor: inherit !important;
+}
+
+.navbar-dropdown-item:hover,
+.navbar-dropdown-item:active {
+    background-color: var(--color-bg-gray-light) !important;
+}

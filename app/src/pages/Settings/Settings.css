@@ -1,0 +1,105 @@
+.settings-item {
+    background-color: var(--color-bg-item);
+    border: 1px solid var(--color-border-item);
+    border-radius: var(--bs-border-radius);
+}
+
+.settings-item-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-bg-icon);
+    color: var(--color-text-primary);
+}
+
+.settings-item-name {
+    min-width: 0;
+    color: var(--color-text-white);
+}
+
+.settings-item-ellipsis-text {
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 0;
+    font-size: large;
+}
+
+.settings-item-role {
+    text-transform: uppercase;
+    font-size: x-small;
+    font-weight: 600;
+}
+
+.settings-item-button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: var(--color-bg-item-button) !important;
+    color: var(--color-text-white) !important;
+    border: none !important;
+    height: 36px;
+    width: 36px;
+    cursor: pointer;
+}
+
+.settings-item-button:hover,
+.settings-item-button:active {
+    background-color: var(--color-border-item) !important;
+}
+
+.settings-item-button .svg-large {
+    width: 15px !important;
+    height: 15px !important;
+    flex-shrink: 0;
+}
+
+.settings-description {
+    text-align: justify;
+    border-radius: var(--bs-border-radius);
+    background-color: var(--color-bg-item);
+    border: 1px solid var(--color-border-item);
+    border-left: 4px solid var(--color-bg-icon);
+    color: var(--color-text-white);
+}
+
+.settings-modal-user {
+    background-color: var(--color-bg-tertiary);
+}
+
+.settings-modal-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-bg-icon);
+    color: var(--color-bg-black);
+}
+
+.settings-modal-name {
+    color: var(--color-text-white);
+    min-width: 0;
+}
+
+.settings-modal-ellipsis-text {
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 0;
+    font-size: large;
+}
+
+.settings-modal-role {
+    text-transform: uppercase;
+    font-size: x-small;
+    font-weight: 600;
+}
+
+.settings-modal-description {
+    text-align: justify;
+    border-radius: var(--bs-border-radius);
+    background-color: var(--color-bg-gray-lighter);
+    border: 1px solid var(--color-border-gray-light);
+    border-left: 4px solid var(--color-bg-icon);
+}

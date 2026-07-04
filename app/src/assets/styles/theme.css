@@ -1,0 +1,52 @@
+:root {
+    /* Background */
+    --color-bg-primary: #07224c;
+    --color-bg-secondary: #163c76;
+    --color-bg-tertiary: #1d509e;
+    --color-bg-item: #162f57;
+    --color-bg-item-button: #223c66;
+    --color-bg-badge-title: #29334d;
+    --color-bg-gray-bold: #8892a4;
+    --color-bg-gray-medium: #c6cedd;
+    --color-bg-gray-light: #e3e3e3;
+    --color-bg-gray-lighter: #edeff5;
+    --color-bg-validate-hover: #0a2f68;
+    --color-bg-cancel-hover: #ba2f2f;
+    --color-bg-cancel: #f33e3e;
+    --color-bg-green: #22c55e;
+    --color-bg-icon: #fdd343;
+    --color-bg-black: black;
+    --color-bg-white: white;
+    --color-bg-transparent: transparent;
+
+    /* Border */
+    --color-border-primary: #163c76;
+    --color-border-item: #1f375e;
+    --color-border-badge-title: #4a4a4c;
+    --color-border-gray-bold: #4f6280;
+    --color-border-gray-medium: #8892a4;
+    --color-border-gray-light: #d1d5e5;
+    --color-border-separator: #e8eaf0;
+    --color-border-input: #dee2e6;
+    --color-border-input-hover: #adb5bd;
+    --color-border-input-focus: #86b7fe;
+    --color-border-cancel-hover: #ba2f2f;
+    --color-border-cancel: #f33e3e;
+    --color-border-tab: #fdd343;
+    --color-border-white: white;
+
+    /* Texte */
+    --color-text-primary: black;
+    --color-text-secondary: #8892a4;
+    --color-text-card: #5c6f85;
+    --color-text-placeholder: #c6cedd;
+    --color-text-white: white;
+    --color-text-red: #f33e3e;
+    --color-text-green: #0f6e3e;
+    --color-text-toggle: #987e4f;
+    --color-text-gold: #b8870a;
+    --color-text-tab: #fdd343;
+
+    /* Transparent */
+    --color-transparent-border-input: rgba(13, 110, 253, 0.25);
+}
