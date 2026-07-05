@@ -1,10 +1,11 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { Edition, Home, Settings } from './pages';
+import { Campaign, Campaigns, Home, Settings } from './pages';
 
 import { Layout } from './components/shared';
 
-import { AuthProvider, SseProvider } from './utils/providers';
+// TODO : si SseProvider inutile, le supprimer de partout
+import { AuthProvider } from './utils/providers';
 
 import './App.css';
 
@@ -15,18 +16,14 @@ function App() {
                 <AuthProvider>
                     <Routes>
                         <Route path="/" element={<Layout />}>
-                            {/* Editions : route par défaut */}
+                            {/* Connexion : route par défaut */}
                             <Route index element={<Home />} />
 
-                            {/* Edition */}
-                            <Route
-                                path="edition/:id"
-                                element={
-                                    <SseProvider>
-                                        <Edition />
-                                    </SseProvider>
-                                }
-                            />
+                            {/* Campagnes */}
+                            <Route path="campaigns" element={<Campaigns />} />
+
+                            {/* Campagne */}
+                            <Route path="campaign/:id" element={<Campaign />} />
 
                             {/* Paramètres */}
                             <Route path="settings" element={<Settings />} />

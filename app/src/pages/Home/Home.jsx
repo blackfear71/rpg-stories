@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -8,11 +8,14 @@ import * as Yup from 'yup';
 import { of, switchMap } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
 
-import { Button, Spinner } from 'react-bootstrap';
+import { Button, Form, Image, Spinner } from 'react-bootstrap';
+import { FaLock, FaUserCircle } from 'react-icons/fa';
 import { IoAddCircleOutline, IoCalendarNumberOutline, IoChevronBackOutline, IoLocationOutline } from 'react-icons/io5';
 
-import { EditionModal } from '../../components/modals';
-import { Message } from '../../components/shared';
+import rpgStoriesLogo from '../../assets/images/rpg-stories.webp';
+
+import { PasswordInput, TextInput } from '../../components/inputs';
+import { Message, SpinnerButton } from '../../components/shared';
 
 import { useAuth } from '../../utils/context/AuthContext';
 
@@ -23,15 +26,9 @@ import { EditionsService } from '../../api';
 import './Home.css';
 
 // Valeurs initiales des formulaires
-const initialEditionValues = {
-    location: '',
-    startDate: '',
-    startTime: '',
-    endTime: '',
-    picture: null,
-    pictureAction: null,
-    theme: '',
-    challenge: ''
+const initialConnectionValues = {
+    login: '',
+    password: ''
 };
 
 /**
@@ -43,84 +40,43 @@ const Home = () => {
     const navigate = useNavigate();
 
     // Contexte
-    const { auth, authMessage, setAuthMessage } = useAuth();
+    const { auth, authMessage, login, setAuthMessage } = useAuth();
 
     // Traductions
     const { t } = useTranslation();
 
     // Local states
+    const loginInputRef = useRef(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState(null);
-    const [modalOptionsEdition, setModalOptionsEdition] = useState({
-        action: null,
-        isOpen: false,
-        message: null
-    });
-
-    // API states
-    const [yearsAndEditions, setYearsAndEditions] = useState([]);
-    const [editionsByYear, setEditionsByYear] = useState();
-
-    // Constantes
-    const rights = {
-        isUser: auth.isLoggedIn && auth.level === EnumUserRole.USER,
-        isAdmin: auth.isLoggedIn && auth.level === EnumUserRole.ADMIN,
-        isSuperAdmin: auth.isLoggedIn && auth.level >= EnumUserRole.SUPERADMIN
-    };
 
     /**
-     * Schéma de validation Yup de l'édition
+     * Schéma de validation Yup de connexion
      */
-    const editionValidationSchema = useMemo(() => {
+    const connectionValidationSchema = useMemo(() => {
         return Yup.object({
-            startDate: Yup.string().required('errors.invalidStartDate'),
-            startTime: Yup.string().required('errors.invalidStartTime'),
-            endTime: Yup.string().required('errors.invalidEndTime'),
-            location: Yup.string().required('errors.invalidLocation'),
-            picture: Yup.mixed()
-                .nullable()
-                .test('file-type', 'errors.invalidFileType', (value) => {
-                    if (!value || typeof value === 'string') {
-                        return true;
-                    }
-
-                    return ['image/jpeg', 'image/png', 'image/webp'].includes(value.type);
-                })
+            login: Yup.string().required('errors.invalidLogin'),
+            password: Yup.string().required('errors.invalidPassword')
         });
     }, []);
 
     /**
-     * Formik édition
+     * Formik connexion
      */
-    const formEdition = useFormik({
-        initialValues: initialEditionValues,
-        validationSchema: editionValidationSchema,
-        onSubmit: (values) => handleSubmitEdition(values)
+    const formConnection = useFormik({
+        initialValues: initialConnectionValues,
+        validationSchema: connectionValidationSchema,
+        onSubmit: (values) => handleSubmitLogin(values)
     });
 
     /**
      * Lancement initial de la page
      */
     useEffect(() => {
-        const editionsService = new EditionsService();
-
-        editionsService
-            .getAllEditions()
-            .pipe(
-                map((dataEditions) => {
-                    groupByYear(dataEditions.response.data);
-                }),
-                take(1),
-                catchError((err) => {
-                    setMessage({ code: err?.response?.message, type: err?.response?.status });
-                    return of();
-                }),
-                finalize(() => {
-                    setIsLoading(false);
-                })
-            )
-            .subscribe();
+        // TODO : si connecté, prévoir une redirection automatique vers les campagnes
+        setIsLoading(false);
+        loginInputRef.current?.focus();
     }, []);
 
     /**
@@ -143,138 +99,23 @@ const Home = () => {
     }, [authMessage, setAuthMessage, location.state, location.pathname, navigate]);
 
     /**
-     * Mise à jour du formulaire de l'édition aux changements de sa modale
+     * Connexion
      */
-    useEffect(() => {
-        // Réinitialisation à l'ouverture/fermeture de la modale
-        formEdition.resetForm();
-    }, [modalOptionsEdition.isOpen]);
-
-    /**
-     * Regroupe par année les éditions et trie
-     * @param {*} editions Liste des éditions
-     * @returns Editions regroupées et triées
-     */
-    const groupByYear = (editions) => {
-        const grouped = {};
-
-        editions.forEach((item) => {
-            const year = new Date(item.startDate).getFullYear();
-
-            if (!grouped[year]) {
-                grouped[year] = [];
-            }
-
-            grouped[year].push(item);
-        });
-
-        // Trie les lieux dans chaque groupe d'année
-        for (const year in grouped) {
-            grouped[year].sort((a, b) => a.location.localeCompare(b.location));
-        }
-
-        // Trie les années par ordre décroissant
-        const sortedArray = Object.keys(grouped)
-            .sort((a, b) => b - a)
-            .map((year) => ({
-                year: Number(year),
-                editions: grouped[year]
-            }));
-
-        setYearsAndEditions(sortedArray);
-    };
-
-    /**
-     * Affiche les éditions d'une année
-     * @param {*} year Année
-     */
-    const showEditionsByYear = (year) => {
-        setEditionsByYear(year.editions);
-    };
-
-    /**
-     * Affiche les années
-     */
-    const showYearsOfEditions = () => {
-        setEditionsByYear([]);
-    };
-
-    /**
-     * Ouverture/fermeture de la modale de création d'édition
-     * @param {*} action Action à réaliser
-     */
-    const openCloseEditionModal = (action = null) => {
-        // Ouverture ou fermeture
-        setModalOptionsEdition((prev) => ({
-            ...prev,
-            action: action,
-            isOpen: !prev.isOpen,
-            message: null
-        }));
-    };
-
-    /**
-     * Création édition
-     * @param {*} values Données du formulaire
-     */
-    const handleSubmitEdition = (values) => {
-        setMessage(null);
+    const handleSubmitLogin = (values) => {
         setIsSubmitting(true);
-        setModalOptionsEdition((prev) => ({ ...prev, message: null }));
+        setMessage(null);
 
-        // Formatage des données
-        const body = formatDataEdition(values);
-
-        const editionsService = new EditionsService();
-
-        editionsService
-            .createEdition(body)
-            .pipe(
-                map((dataEdition) => {
-                    setMessage({ code: dataEdition.response.message, type: dataEdition.response.status });
-                }),
-                switchMap(() => editionsService.getAllEditions()),
-                map((dataEditions) => {
-                    groupByYear(dataEditions.response.data);
-                    openCloseEditionModal();
-                    setEditionsByYear([]);
-                }),
-                take(1),
-                catchError((err) => {
-                    setModalOptionsEdition((prev) => ({
-                        ...prev,
-                        message: { code: err?.response?.message, type: err?.response?.status }
-                    }));
-                    return of();
-                }),
-                finalize(() => {
-                    setIsSubmitting(false);
-                })
-            )
-            .subscribe();
-    };
-
-    /**
-     * Formate les données édition
-     * @param {*} values Données du formulaire
-     * @returns Données formatées
-     */
-    const formatDataEdition = (values) => {
-        const formData = new FormData();
-
-        // Champs textes
-        Object.entries(values).forEach(([key, value]) => {
-            if (key !== 'picture' && value !== null) {
-                formData.append(key, value);
-            }
-        });
-
-        // Images (s'il y a une image à traiter)
-        if (values.pictureAction === EnumAction.CREATE && values.picture) {
-            formData.append('picture', values.picture);
-        }
-
-        return formData;
+        // On attend la promesse de connexion pour fermer la modale
+        login(values)
+            .then(() => {
+                navigate('/campaigns');
+            })
+            .catch((err) => {
+                setMessage({ code: err?.code, type: err?.type });
+            })
+            .finally(() => {
+                setIsSubmitting(false);
+            });
     };
 
     return (
@@ -286,111 +127,63 @@ const Home = () => {
             ) : (
                 <>
                     {/* Message */}
+                    {/* TODO : faire en sorte qu'il ait une position fixed sous la navbar (attention à la page de connexion) */}
                     {message && <Message code={message.code} params={message.params} type={message.type} setMessage={setMessage} />}
 
-                    {/* Titre */}
-                    <h1 className="d-flex align-items-center gap-2">
-                        {editionsByYear && editionsByYear.length > 0 ? (
-                            <>
-                                <IoLocationOutline size={30} />
-                                {t('home.editionsTitle', { year: new Date(editionsByYear[0].startDate).getFullYear() })}
-                            </>
-                        ) : (
-                            <>
-                                <IoCalendarNumberOutline size={30} />
-                                {t('home.editions')}
-                            </>
-                        )}
-                    </h1>
+                    {/* Contenu */}
+                    <div className="d-flex flex-column align-items-center justify-content-center gap-3 home-form-container">
+                        {/* Logo & titre */}
+                        <div className="d-flex align-items-center gap-3">
+                            {/* Logo */}
+                            <Image src={rpgStoriesLogo} alt="rpg-stories" title={t('common.home')} className="home-logo" />
 
-                    {/* Grille */}
-                    <div className="gap-2 mt-3 home-grid">
-                        {/* Ajout */}
-                        {rights.isSuperAdmin && (
-                            <Button
-                                variant="outline-action"
-                                className="d-flex align-items-center home-grid-btn-action"
-                                onClick={() => openCloseEditionModal(EnumAction.CREATE)}
-                                disabled={isSubmitting}
-                            >
-                                <IoAddCircleOutline size={30} />
-                                {t('home.addEdition')}
-                            </Button>
-                        )}
-
-                        {/* Années et éditions */}
-                        {(yearsAndEditions && yearsAndEditions.length > 0) || (editionsByYear && editionsByYear.length > 0) ? (
-                            editionsByYear && editionsByYear.length > 0 ? (
-                                <>
-                                    {/* Retour */}
-                                    <Button
-                                        variant="outline-action"
-                                        className="d-flex align-items-center home-grid-btn-action btn-yellow"
-                                        onClick={showYearsOfEditions}
-                                        disabled={isSubmitting}
-                                    >
-                                        <IoChevronBackOutline size={25} />
-                                        {t('common.return')}
-                                    </Button>
-
-                                    {/* Editions */}
-                                    {editionsByYear.map((edition) => (
-                                        <Button
-                                            key={edition.id}
-                                            variant="action"
-                                            className="home-grid-btn-location"
-                                            onClick={() => navigate(`/edition/${edition.id}`)}
-                                            disabled={isSubmitting}
-                                        >
-                                            <span className="home-grid-btn-label">{edition.location}</span>
-                                            <span className="home-grid-btn-badge">
-                                                {t(edition.playerCount === 1 ? 'home.countPlayer' : 'home.countPlayers', {
-                                                    count: edition.playerCount
-                                                })}
-                                            </span>
-                                        </Button>
-                                    ))}
-                                </>
-                            ) : (
-                                <>
-                                    {/* Années */}
-                                    {yearsAndEditions.map((year) => (
-                                        <Button
-                                            key={year.year}
-                                            variant="action"
-                                            className="home-grid-btn-year"
-                                            onClick={() => showEditionsByYear(year)}
-                                            disabled={isSubmitting}
-                                        >
-                                            <span className="home-grid-btn-label">{year.year}</span>
-                                            <span className="home-grid-btn-badge">
-                                                {t(year.editions.length === 1 ? 'home.countEdition' : 'home.countEditions', {
-                                                    count: year.editions.length
-                                                })}
-                                            </span>
-                                        </Button>
-                                    ))}
-                                </>
-                            )
-                        ) : (
-                            <div
-                                className={`d-flex align-items-center justify-content-center px-2 py-3 home-empty ${rights.isSuperAdmin ? '' : ' home-empty-full'}`}
-                            >
-                                {t('home.noEdition')}
+                            {/* Texte RPG / STORIES centré */}
+                            <div className="d-flex flex-column align-items-start">
+                                <span className="home-title-1">RPG</span>
+                                <span className="home-title-2 ms-1">STORIES</span>
                             </div>
-                        )}
-                    </div>
+                        </div>
 
-                    {/* Modale de création d'édition */}
-                    {rights.isSuperAdmin && formEdition && modalOptionsEdition.isOpen && (
-                        <EditionModal
-                            formData={formEdition}
-                            modalOptions={modalOptionsEdition}
-                            setModalOptions={setModalOptionsEdition}
-                            onClose={openCloseEditionModal}
-                            isSubmitting={isSubmitting}
-                        />
-                    )}
+                        {/* Connexion */}
+                        {/* TODO : prendre une largeur fixe sur PC, toute la largeur sur mobile */}
+                        {/* TODO : finir / nettoyer le style */}
+                        <Form onSubmit={formConnection.handleSubmit}>
+                            <fieldset disabled={isSubmitting}>
+                                {/* Formulaire */}
+                                <div className="d-flex flex-column gap-3 p-3 home-form">
+                                    <div className="connection-modal-field">
+                                        <TextInput
+                                            title={t('navbar.login')}
+                                            name={'login'}
+                                            ref={loginInputRef}
+                                            placeholder={t('navbar.login')}
+                                            value={formConnection.values.login}
+                                            onChange={formConnection.handleChange}
+                                            error={formConnection.submitCount > 0 && formConnection.errors.login}
+                                            maxLength={100}
+                                            required={true}
+                                        />
+                                    </div>
+
+                                    <div className="connection-modal-field">
+                                        <PasswordInput
+                                            title={t('navbar.password')}
+                                            name={'password'}
+                                            placeholder={t('navbar.password')}
+                                            value={formConnection.values.password}
+                                            onChange={formConnection.handleChange}
+                                            error={formConnection.submitCount > 0 && formConnection.errors.password}
+                                            maxLength={100}
+                                            required={true}
+                                        />
+                                    </div>
+
+                                    {/* Boutons d'action */}
+                                    <SpinnerButton label={t('navbar.connect')} isSubmitting={isSubmitting} />
+                                </div>
+                            </fieldset>
+                        </Form>
+                    </div>
                 </>
             )}
         </>

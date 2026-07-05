@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { of } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
@@ -15,7 +15,6 @@ import { UsersService } from '../../api';
  */
 const AuthProvider = ({ children }) => {
     // Router
-    const { pathname } = useLocation();
     const navigate = useNavigate();
 
     // Local states
@@ -27,9 +26,6 @@ const AuthProvider = ({ children }) => {
     });
     const [authLoading, setAuthLoading] = useState(true);
     const [authMessage, setAuthMessage] = useState(null);
-
-    // Constantes
-    const redirectPages = ['/settings'];
 
     /**
      * Contrôle de la connexion au lancement de l'application
@@ -126,15 +122,11 @@ const AuthProvider = ({ children }) => {
                         resetAuth();
 
                         // Redirection avec message ou affichage du message selon la page d'origine
-                        if (redirectPages.includes(pathname)) {
-                            navigate('/', {
-                                state: {
-                                    navMessage: message
-                                }
-                            });
-                        } else {
-                            setAuthMessage(message);
-                        }
+                        navigate('/', {
+                            state: {
+                                navMessage: message
+                            }
+                        });
                     }),
                     take(1),
                     catchError((err) => {

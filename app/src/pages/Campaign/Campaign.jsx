@@ -16,14 +16,13 @@ import { ConfirmModal, EditionModal, GiftModal, PlayerModal, RewardModal } from 
 import { Message } from '../../components/shared';
 
 import { useAuth } from '../../utils/context/AuthContext';
-import { useSse } from '../../utils/context/SseContext';
 import { getDayFromDate, getLocalizedTime } from '../../utils/helpers/dateHelper';
 
 import { EnumAction, EnumUserRole } from '../../enums';
 
 import { EditionsService, GiftsService, PlayersService, RewardsService } from '../../api';
 
-import './Edition.css';
+import './Campaign.css';
 
 // Valeurs initiales des formulaires
 const initialEditionValues = {
@@ -57,14 +56,13 @@ const initialRewardValues = {
 /**
  * Page détail édition
  */
-const Edition = () => {
+const Campaign = () => {
     // Router
     const { id } = useParams();
     const navigate = useNavigate();
 
     // Contexte
     const { auth, authMessage, setAuthMessage } = useAuth();
-    const { events } = useSse();
 
     // Traductions
     const { t } = useTranslation();
@@ -278,27 +276,6 @@ const Edition = () => {
             )
             .subscribe();
     }, [id]);
-
-    /**
-     * Mise à jour depuis le SSE seulement si les données sont différentes
-     */
-    useEffect(() => {
-        // Mise à jour des cadeaux depuis le SSE
-        if (events?.gifts) {
-            setGifts((prev) => {
-                const next = processGiftsData(events.gifts);
-                return JSON.stringify(prev) !== JSON.stringify(next) ? next : prev;
-            });
-        }
-
-        // Mise à jour des participants depuis le SSE
-        if (events?.players) {
-            setPlayers((prev) => {
-                const next = processPlayersData(events.players);
-                return JSON.stringify(prev) !== JSON.stringify(next) ? next : prev;
-            });
-        }
-    }, [events]);
 
     /**
      * Si un message d'authentification est défini on l'affiche
@@ -1099,4 +1076,4 @@ const Edition = () => {
     );
 };
 
-export default Edition;
+export default Campaign;
