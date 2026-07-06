@@ -1,0 +1,4 @@
+.message-container {
+    position: fixed;
+    width: calc(100% - 40px);
+}

@@ -127,7 +127,7 @@ const Home = () => {
             ) : (
                 <>
                     {/* Message */}
-                    {/* TODO : faire en sorte qu'il ait une position fixed sous la navbar (attention à la page de connexion) */}
+                    {/* TODO : faire en sorte qu'il ait une position fixed sous la navbar (attention à la page de connexion) => ok mais à voir ailleurs que sur la page de connexion */}
                     {message && <Message code={message.code} params={message.params} type={message.type} setMessage={setMessage} />}
 
                     {/* Contenu */}
@@ -145,38 +145,36 @@ const Home = () => {
                         </div>
 
                         {/* Connexion */}
+                        {/* TODO : changer la police du site */}
                         {/* TODO : prendre une largeur fixe sur PC, toute la largeur sur mobile */}
                         {/* TODO : finir / nettoyer le style */}
+                        {/* TODO : si on ne renseigne rien et qu'on valide, la zone de saisie s'agrandit en largeur => à fixer */}
                         <Form onSubmit={formConnection.handleSubmit}>
                             <fieldset disabled={isSubmitting}>
                                 {/* Formulaire */}
-                                <div className="d-flex flex-column gap-3 p-3 home-form">
-                                    <div className="connection-modal-field">
-                                        <TextInput
-                                            title={t('navbar.login')}
-                                            name={'login'}
-                                            ref={loginInputRef}
-                                            placeholder={t('navbar.login')}
-                                            value={formConnection.values.login}
-                                            onChange={formConnection.handleChange}
-                                            error={formConnection.submitCount > 0 && formConnection.errors.login}
-                                            maxLength={100}
-                                            required={true}
-                                        />
-                                    </div>
+                                <div className="d-flex flex-column gap-3 p-3 home-form input-container">
+                                    <TextInput
+                                        title={t('navbar.login')}
+                                        name={'login'}
+                                        ref={loginInputRef}
+                                        placeholder={t('navbar.login')}
+                                        value={formConnection.values.login}
+                                        onChange={formConnection.handleChange}
+                                        error={formConnection.submitCount > 0 && formConnection.errors.login}
+                                        maxLength={100}
+                                        required={true}
+                                    />
 
-                                    <div className="connection-modal-field">
-                                        <PasswordInput
-                                            title={t('navbar.password')}
-                                            name={'password'}
-                                            placeholder={t('navbar.password')}
-                                            value={formConnection.values.password}
-                                            onChange={formConnection.handleChange}
-                                            error={formConnection.submitCount > 0 && formConnection.errors.password}
-                                            maxLength={100}
-                                            required={true}
-                                        />
-                                    </div>
+                                    <PasswordInput
+                                        title={t('navbar.password')}
+                                        name={'password'}
+                                        placeholder={t('navbar.password')}
+                                        value={formConnection.values.password}
+                                        onChange={formConnection.handleChange}
+                                        error={formConnection.submitCount > 0 && formConnection.errors.password}
+                                        maxLength={100}
+                                        required={true}
+                                    />
 
                                     {/* Boutons d'action */}
                                     <SpinnerButton label={t('navbar.connect')} isSubmitting={isSubmitting} />

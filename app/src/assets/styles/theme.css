@@ -2,7 +2,7 @@
     /* Background */
     --color-bg-primary: #262626;
     --color-bg-secondary: #323233;
-    --color-bg-tertiary: #1d509e;
+    --color-bg-tertiary: #4a4a4c;
     --color-bg-item: #162f57;
     --color-bg-item-button: #223c66;
     --color-bg-badge-title: #29334d;
@@ -10,7 +10,7 @@
     --color-bg-gray-medium: #c6cedd;
     --color-bg-gray-light: #e3e3e3;
     --color-bg-gray-lighter: #edeff5;
-    --color-bg-validate-hover: #0a2f68;
+    --color-bg-validate-hover: #ba2f2f;
     --color-bg-cancel-hover: #ba2f2f;
     --color-bg-cancel: #f33e3e;
     --color-bg-green: #22c55e;
@@ -20,7 +20,8 @@
     --color-bg-transparent: transparent;
 
     /* Border */
-    --color-border-primary: #163c76;
+    --color-border-primary: #262626;
+    --color-border-secondary: #323233;
     --color-border-item: #1f375e;
     --color-border-badge-title: #4a4a4c;
     --color-border-gray-bold: #4f6280;

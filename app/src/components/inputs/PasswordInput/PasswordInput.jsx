@@ -27,7 +27,7 @@ const PasswordInput = ({ title, icon, name, ref, placeholder, value, onChange, e
         <div className="d-flex flex-column gap-1">
             {/* Titre */}
             {title && (
-                <div className="modal-group-content-title">
+                <div className="input-title">
                     {title}
                     {required && <span className="required-star">*</span>}
                 </div>
@@ -35,7 +35,7 @@ const PasswordInput = ({ title, icon, name, ref, placeholder, value, onChange, e
 
             <div className="d-flex align-items-center gap-2">
                 {/* Icône */}
-                {icon && <div className="modal-input-icon">{icon}</div>}
+                {icon && <div className="input-icon">{icon}</div>}
 
                 {/* Saisie */}
                 <Form.Group className="w-100" controlId={name}>

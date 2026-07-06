@@ -51,6 +51,30 @@ h1 {
     border-color: var(--color-border-tab) !important;
 }
 
+/* Saisies */
+.input-container {
+    color: white;
+}
+
+.input-container .input-title {
+    font-size: small;
+    font-weight: 600;
+    color: var(--color-text-white);
+    text-transform: uppercase;
+}
+
+.input-container .input-icon {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    color: var(--color-bg-gray-bold);
+}
+
+.input-container .input-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
 /* Boutons */
 .btn-action {
     display: flex !important;
@@ -59,16 +83,16 @@ h1 {
     justify-content: center !important;
     width: 100%;
     gap: 6px;
-    background-color: var(--color-bg-secondary) !important;
+    background-color: var(--color-bg-primary) !important;
     border: 2px solid var(--color-border-primary) !important;
     color: var(--color-text-white) !important;
+    padding: 5px 12px !important;
     font-size: large !important;
-    padding: 8px !important;
 }
 
 .btn-action:hover,
 .btn-action:active {
-    background-color: var(--color-bg-validate-hover) !important;
+    background-color: var(--color-bg-tertiary) !important;
 }
 
 .btn-outline-action {
