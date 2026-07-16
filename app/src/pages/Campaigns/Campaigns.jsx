@@ -103,6 +103,8 @@ const Campaigns = () => {
      * Lancement initial de la page
      */
     useEffect(() => {
+        // TODO : pour toutes les pages si l'utilisateur n'est pas connecté, on le redirige vers la page de connexion (cf Settings.jsx)
+
         const editionsService = new EditionsService();
 
         editionsService

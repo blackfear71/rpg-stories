@@ -5,12 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { of, switchMap } from 'rxjs';
-import { catchError, finalize, map, take } from 'rxjs/operators';
-
-import { Button, Form, Image, Spinner } from 'react-bootstrap';
-import { FaLock, FaUserCircle } from 'react-icons/fa';
-import { IoAddCircleOutline, IoCalendarNumberOutline, IoChevronBackOutline, IoLocationOutline } from 'react-icons/io5';
+import { Form, Image, Spinner } from 'react-bootstrap';
 
 import rpgStoriesLogo from '../../assets/images/rpg-stories.webp';
 
@@ -18,10 +13,6 @@ import { PasswordInput, TextInput } from '../../components/inputs';
 import { Message, SpinnerButton } from '../../components/shared';
 
 import { useAuth } from '../../utils/context/AuthContext';
-
-import { EnumAction, EnumUserRole } from '../../enums';
-
-import { EditionsService } from '../../api';
 
 import './Home.css';
 
@@ -40,7 +31,7 @@ const Home = () => {
     const navigate = useNavigate();
 
     // Contexte
-    const { auth, authMessage, login, setAuthMessage } = useAuth();
+    const { auth, authMessage, login, refreshAuth, setAuthMessage } = useAuth();
 
     // Traductions
     const { t } = useTranslation();
@@ -74,9 +65,16 @@ const Home = () => {
      * Lancement initial de la page
      */
     useEffect(() => {
-        // TODO : si connecté, prévoir une redirection automatique vers les campagnes
-        setIsLoading(false);
-        loginInputRef.current?.focus();
+        // Rafraichissement du contexte d'authentification
+        refreshAuth(true);
+
+        // Redirection vers les campagnes si connecté, sinon on affiche le formulaire de connexion
+        if (auth && auth.isLoggedIn) {
+            navigate('/campaigns');
+        } else {
+            setIsLoading(false);
+            loginInputRef.current?.focus();
+        }
     }, []);
 
     /**
