@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Représente un utilisateur en base
  */

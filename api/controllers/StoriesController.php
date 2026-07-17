@@ -1,16 +1,16 @@
 <?php
 // Imports
-require_once 'models/dtos/GiftInputDTO.php';
+require_once 'models/dtos/StoryInputDTO.php';
 
-require_once 'services/GiftsService.php';
+require_once 'services/StoriesService.php';
 require_once 'services/UsersService.php';
 
-class GiftsController
+class StoriesController
 {
-    private const controllerName = 'GiftsController';
+    private const controllerName = 'StoriesController';
 
     private PDO $db;
-    private GiftsService $giftsService;
+    private StoriesService $storiesService;
     private ?UsersService $usersService = null;
 
     /**
@@ -19,7 +19,7 @@ class GiftsController
     public function __construct(PDO $db)
     {
         $this->db = $db;
-        $this->giftsService = new GiftsService($db);
+        $this->storiesService = new StoriesService($db);
     }
 
     /**
@@ -35,85 +35,85 @@ class GiftsController
     }
 
     /**
-     * Lecture des enregistrements d'une édition
+     * Lecture des enregistrements d'une campagne
      */
-    public function getEditionGifts(int $editionId): void
+    public function getCampaignStories(int $campaignId): void
     {
         try {
             // Lecture de tous les enregistrements
-            $gifts = $this->giftsService->getEditionGifts($editionId);
+            $stories = $this->storiesService->getCampaignStories($campaignId);
 
             // Succès
-            ResponseHelper::success($gifts);
+            ResponseHelper::success($stories);
         } catch (Exception $e) {
             // Exception
-            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$editionId]);
+            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$campaignId]);
         }
     }
 
     /**
      * Insertion d'un enregistrement
      */
-    public function createGift(?string $token, int $editionId, array $data): void
+    public function createStory(?string $token, int $campaignId, array $data): void
     {
         try {
             // Conversion DTO
-            $dataDTO = GiftInputDTO::fromArray($data);
+            $dataDTO = StoryInputDTO::fromArray($data);
 
             // Contrôle authentification et niveau utilisateur
-            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::ADMIN->value);
+            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
 
             // Insertion d'un enregistrement
-            $this->giftsService->createGift($editionId, $dataDTO, $user);
+            $this->storiesService->createStory($campaignId, $dataDTO, $user);
 
             // Succès
             ResponseHelper::success(null, MessageHelper::MSG_CREATION_SUCCESS);
         } catch (Exception $e) {
             // Exception
-            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$editionId, json_encode($data)]);
+            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$campaignId, json_encode($data)]);
         }
     }
 
     /**
      * Modification d'un enregistrement
      */
-    public function updateGift(?string $token, int $giftId, array $data): void
+    public function updateStory(?string $token, int $storyId, array $data): void
     {
         try {
             // Conversion DTO
-            $dataDTO = GiftInputDTO::fromArray($data);
+            $dataDTO = StoryInputDTO::fromArray($data);
 
             // Contrôle authentification et niveau utilisateur
-            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::ADMIN->value);
+            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
 
             // Modification d'un enregistrement
-            $this->giftsService->updateGift($giftId, $dataDTO, $user);
+            $this->storiesService->updateStory($storyId, $dataDTO, $user);
 
             // Succès
             ResponseHelper::success(null, MessageHelper::MSG_UPDATE_SUCCESS);
         } catch (Exception $e) {
             // Exception
-            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$giftId, json_encode($data)]);
+            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$storyId, json_encode($data)]);
         }
     }
 
     /**
      * Suppression logique d'un enregistrement
      */
-    public function deleteGift(?string $token, int $giftId): void
+    public function deleteStory(?string $token, int $storyId): void
     {
         try {
             // Contrôle authentification et niveau utilisateur
-            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::SUPERADMIN->value);
+            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
 
             // Suppression logique d'un enregistrement
-            $this->giftsService->deleteGift($giftId, $user->id);
+            $this->storiesService->deleteStory($storyId, $user->id);
 
             // Succès
             ResponseHelper::success(null, MessageHelper::MSG_DELETION_SUCCESS);
         } catch (Exception $e) {
             // Exception
-            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$giftId]);
+            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$storyId]);
         }
     }
 }

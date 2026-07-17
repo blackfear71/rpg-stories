@@ -1,6 +1,4 @@
-export { default as EditionsService } from './editionsService';
-export { default as GiftsService } from './giftsService';
-export { default as PlayersService } from './playersService';
-export { default as RewardsService } from './rewardsService';
+export { default as CampaignsService } from './campaignsService';
 export { default as SseService } from './sseService';
+export { default as StoriesService } from './storiesService';
 export { default as UsersService } from './usersService';

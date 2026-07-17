@@ -1,11 +1,11 @@
 import { ajax } from 'rxjs/ajax';
 
-const API_URL = import.meta.env.VITE_API_URL + '/editions';
+const API_URL = import.meta.env.VITE_API_URL + '/campaigns';
 
 /**
- * Service appel API éditions
+ * Service appel API campagnes
  */
-class EditionsService {
+class CampaignsService {
     /**
      * Constructeur du service
      */
@@ -17,40 +17,40 @@ class EditionsService {
     }
 
     /**
-     * Récupération de toutes les éditions
-     * @returns Liste des éditions
+     * Récupération de toutes les campagnes
+     * @returns Liste des campagnes
      */
-    getAllEditions = () => {
+    getCampaigns = () => {
         const url = `${this.apiUrl}/all`;
         return ajax.get(url, this.headers);
     };
 
     /**
-     * Récupération d'une édition
-     * @param {*} editionId Identifiant édition
-     * @returns Edition
+     * Récupération d'une campagne
+     * @param {*} campaignId Identifiant campagne
+     * @returns Campagne
      */
-    getEdition = (editionId) => {
-        const url = `${this.apiUrl}/edition/${editionId}`;
+    getCampaign = (campaignId) => {
+        const url = `${this.apiUrl}/campaign/${campaignId}`;
         return ajax.get(url, this.headers);
     };
 
     /**
-     * Récupération des éditions recherchées
+     * Récupération des campagnes recherchées
      * @param {*} body Saisie
-     * @returns Liste des éditions recherchées
+     * @returns Liste des campagnes recherchées
      */
-    getSearchEditions = (body) => {
+    getSearchCampaigns = (body) => {
         const url = `${this.apiUrl}/search`;
         return ajax.post(url, body, this.headers);
     };
 
     /**
-     * Création édition
-     * @param {*} body Données édition
+     * Création campagne
+     * @param {*} body Données campagne
      * @returns Message retour
      */
-    createEdition = (body) => {
+    createCampaign = (body) => {
         const url = `${this.apiUrl}/create`;
         return ajax({
             url,
@@ -62,13 +62,13 @@ class EditionsService {
     };
 
     /**
-     * Mise à jour édition
-     * @param {*} editionId Identifiant édition
-     * @param {*} body Données édition
-     * @returns Données édition à jour
+     * Mise à jour campagne
+     * @param {*} campaignId Identifiant campagne
+     * @param {*} body Données campagne
+     * @returns Message retour
      */
-    updateEdition = (editionId, body) => {
-        const url = `${this.apiUrl}/update/${editionId}`;
+    updateCampaign = (campaignId, body) => {
+        const url = `${this.apiUrl}/update/${campaignId}`;
         return ajax({
             url,
             method: 'POST', // La méthode doit être POST pour remplir $_POST et $_FILES côté back
@@ -79,12 +79,12 @@ class EditionsService {
     };
 
     /**
-     * Suppression édition
-     * @param {*} editionId Identifiant édition
+     * Suppression campagne
+     * @param {*} campaignId Identifiant campagne
      * @returns Message retour
      */
-    deleteEdition = (editionId) => {
-        const url = `${this.apiUrl}/delete/${editionId}`;
+    deleteCampaign = (campaignId) => {
+        const url = `${this.apiUrl}/delete/${campaignId}`;
         return ajax({
             url,
             method: 'DELETE',
@@ -94,4 +94,4 @@ class EditionsService {
     };
 }
 
-export default EditionsService;
+export default CampaignsService;

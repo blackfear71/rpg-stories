@@ -12,7 +12,7 @@ import { FaSearch, FaTimes } from 'react-icons/fa';
 import { TextInput } from '../../../components/inputs';
 import { Message } from '../../../components/shared';
 
-import { EditionsService } from '../../../api';
+import { CampaignsService } from '../../../api';
 
 import './SearchBar.css';
 
@@ -78,7 +78,7 @@ const SearchBar = () => {
             setResults([]);
             setShowResults(false);
         } else if (values.search.length > 2) {
-            const editionsService = new EditionsService();
+            const editionsService = new CampaignsService();
 
             editionsService
                 .getSearchEditions({ search: values.search })

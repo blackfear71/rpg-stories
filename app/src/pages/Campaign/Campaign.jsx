@@ -5,14 +5,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { forkJoin, of, switchMap } from 'rxjs';
+import { combineLatest, of, switchMap } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
 
 import { Image, Spinner, Tab, Tabs } from 'react-bootstrap';
 import { FaComputer } from 'react-icons/fa6';
 
 import { EditionAbout, EditionGifts, EditionPlayers } from '../../components/features';
-import { ConfirmModal, EditionModal, GiftModal, PlayerModal, RewardModal } from '../../components/modals';
+import { CampaignModal, ConfirmModal, GiftModal, PlayerModal, RewardModal } from '../../components/modals';
 import { Message } from '../../components/shared';
 
 import { useAuth } from '../../utils/context/AuthContext';
@@ -20,7 +20,7 @@ import { getDayFromDate, getLocalizedTime } from '../../utils/helpers/dateHelper
 
 import { EnumAction, EnumUserRole } from '../../enums';
 
-import { EditionsService, GiftsService, PlayersService, RewardsService } from '../../api';
+import { CampaignsService, StoriesService } from '../../api';
 
 import './Campaign.css';
 
@@ -238,8 +238,7 @@ const Campaign = () => {
      */
     const formPlayer = useFormik({
         initialValues: initialPlayerValues,
-        validationSchema: playerValidationSchema,
-        onSubmit: (values) => handleSubmitPlayer(values)
+        validationSchema: playerValidationSchema
     });
 
     /**
@@ -247,18 +246,21 @@ const Campaign = () => {
      */
     const formReward = useFormik({
         initialValues: initialRewardValues,
-        validationSchema: rewardValidationSchema,
-        onSubmit: (values) => handleSubmitReward(values)
+        validationSchema: rewardValidationSchema
     });
 
     /**
      * Lancement initial de la page (à chaque changement d'id)
      */
     useEffect(() => {
-        const editionsService = new EditionsService();
+        const campaignsService = new CampaignsService();
+        const storiesService = new StoriesService();
 
-        editionsService
-            .getEdition(id)
+        const subscriptionCampaigns = campaignsService.getCampaign(id);
+        const subscriptionStories = storiesService.getCampaignStories(id);
+
+        // TODO : avec un combineLatest, appeler le service campagnes et histoires en même temps pour éviter de passer par un CampaignResponseDTO
+        combineLatest([subscriptionCampaigns, subscriptionStories])
             .pipe(
                 map((dataEdition) => {
                     setEdition(dataEdition.response.data.edition);
@@ -432,7 +434,7 @@ const Campaign = () => {
      * Ouverture/fermeture de la modale de modification d'édition
      * @param {*} action Action à réaliser
      */
-    const openCloseEditionModal = (action = null) => {
+    const openCloseCampaignModal = (action = null) => {
         // Ouverture ou fermeture
         setModalOptionsEdition((prev) => ({
             ...prev,
@@ -454,7 +456,7 @@ const Campaign = () => {
         // Formatage des données
         const body = formatDataEdition(values);
 
-        const editionsService = new EditionsService();
+        const editionsService = new CampaignsService();
 
         editionsService
             .updateEdition(edition.id, body)
@@ -464,7 +466,7 @@ const Campaign = () => {
                 }),
                 switchMap(() => editionsService.getEdition(edition.id)),
                 map((newDataEdition) => {
-                    openCloseEditionModal();
+                    openCloseCampaignModal();
                     setEdition(newDataEdition.response.data.edition);
                 }),
                 take(1),
@@ -522,65 +524,6 @@ const Campaign = () => {
     };
 
     /**
-     * Création ou modification d'un participant
-     * @param {*} values Données du formulaire
-     */
-    const handleSubmitPlayer = (values) => {
-        setMessage(null);
-
-        const playersService = new PlayersService();
-
-        let subscriptionPlayers = null;
-
-        switch (modalOptionsPlayer?.action) {
-            case EnumAction.CREATE:
-                setIsSubmitting(true);
-                setModalOptionsPlayer((prev) => ({ ...prev, message: null }));
-
-                subscriptionPlayers = playersService.createPlayer(edition.id, {
-                    name: values.name,
-                    points: values.points
-                });
-                break;
-            case EnumAction.UPDATE:
-                setIsSubmitting(true);
-                setModalOptionsPlayer((prev) => ({ ...prev, message: null }));
-
-                subscriptionPlayers = playersService.updatePlayer(values.id, {
-                    name: values.name,
-                    points: values.points,
-                    giveaway: values.giveaway,
-                    giveawayPlayerId: values.giveawayPlayerId
-                });
-                break;
-        }
-
-        subscriptionPlayers
-            ?.pipe(
-                map((dataPlayer) => {
-                    setMessage({ code: dataPlayer.response.message, type: dataPlayer.response.status });
-                }),
-                switchMap(() => playersService.getEditionPlayers(edition.id)),
-                map((dataPlayers) => {
-                    openClosePlayerModal();
-                    setPlayers(processPlayersData(dataPlayers.response.data));
-                }),
-                take(1),
-                catchError((err) => {
-                    setModalOptionsPlayer((prev) => ({
-                        ...prev,
-                        message: { code: err?.response?.message, type: err?.response?.status }
-                    }));
-                    return of();
-                }),
-                finalize(() => {
-                    setIsSubmitting(false);
-                })
-            )
-            .subscribe();
-    };
-
-    /**
      * Ouverture/fermeture de la modale de modification de cadeau
      * @param {*} action Action à réaliser
      * @param {*} giftId Identifiant cadeau
@@ -603,7 +546,7 @@ const Campaign = () => {
     const handleSubmitGift = (values) => {
         setMessage(null);
 
-        const giftsService = new GiftsService();
+        const storiesService = new StoriesService();
 
         let subscriptionGifts = null;
 
@@ -612,7 +555,7 @@ const Campaign = () => {
                 setIsSubmitting(true);
                 setModalOptionsGift((prev) => ({ ...prev, message: null }));
 
-                subscriptionGifts = giftsService.createGift(edition.id, {
+                subscriptionGifts = storiesService.createGift(edition.id, {
                     name: values.name,
                     value: values.value,
                     quantity: values.quantity
@@ -622,7 +565,7 @@ const Campaign = () => {
                 setIsSubmitting(true);
                 setModalOptionsGift((prev) => ({ ...prev, message: null }));
 
-                subscriptionGifts = giftsService.updateGift(values.id, {
+                subscriptionGifts = storiesService.updateGift(values.id, {
                     name: values.name,
                     value: values.value,
                     quantity: values.quantity
@@ -635,7 +578,7 @@ const Campaign = () => {
                 map((dataGift) => {
                     setMessage({ code: dataGift.response.message, type: dataGift.response.status });
                 }),
-                switchMap(() => giftsService.getEditionGifts(edition.id)),
+                switchMap(() => storiesService.getEditionGifts(edition.id)),
                 map((dataGifts) => {
                     openCloseGiftModal();
                     setGifts(processGiftsData(dataGifts.response.data));
@@ -667,49 +610,6 @@ const Campaign = () => {
             isOpen: !prev.isOpen,
             message: null
         }));
-    };
-
-    /**
-     * Attribution d'un cadeau à un participant
-     * @param {*} values Données du formulaire
-     */
-    const handleSubmitReward = (values) => {
-        setMessage(null);
-        setIsSubmitting(true);
-        setModalOptionsReward((prev) => ({ ...prev, message: null }));
-
-        const rewardsService = new RewardsService();
-        const giftsService = new GiftsService();
-        const playersService = new PlayersService();
-
-        const subscriptionRewards = rewardsService.createReward(values.giftId, values.playerId);
-        const subscriptionGifts = giftsService.getEditionGifts(edition.id);
-        const subscriptionPlayers = playersService.getEditionPlayers(edition.id);
-
-        subscriptionRewards
-            .pipe(
-                map((dataReward) => {
-                    setMessage({ code: dataReward.response.message, type: dataReward.response.status });
-                }),
-                switchMap(() => forkJoin([subscriptionGifts, subscriptionPlayers])),
-                map(([dataGifts, dataPlayers]) => {
-                    openCloseRewardModal();
-                    setGifts(processGiftsData(dataGifts.response.data));
-                    setPlayers(processPlayersData(dataPlayers.response.data));
-                }),
-                take(1),
-                catchError((err) => {
-                    setModalOptionsReward((prev) => ({
-                        ...prev,
-                        message: { code: err?.response?.message, type: err?.response?.status }
-                    }));
-                    return of();
-                }),
-                finalize(() => {
-                    setIsSubmitting(false);
-                })
-            )
-            .subscribe();
     };
 
     /**
@@ -757,14 +657,10 @@ const Campaign = () => {
      */
     const handleConfirmAction = () => {
         switch (modalOptionsConfirm?.action) {
-            case 'deleteEdition':
+            case 'deleteCampaign':
                 return handleDeleteEdition();
-            case 'deleteGift':
+            case 'deleteStory':
                 return handleDeleteGift(modalOptionsConfirm.data);
-            case 'deletePlayer':
-                return handleDeletePlayer(modalOptionsConfirm.data);
-            case 'deleteReward':
-                return handleDeleteReward(modalOptionsConfirm.data);
             default:
                 return;
         }
@@ -778,7 +674,7 @@ const Campaign = () => {
         setIsSubmitting(true);
         setModalOptionsConfirm((prev) => ({ ...prev, message: null }));
 
-        const editionsService = new EditionsService();
+        const editionsService = new CampaignsService();
 
         editionsService
             .deleteEdition(edition.id)
@@ -818,98 +714,18 @@ const Campaign = () => {
         setIsSubmitting(true);
         setModalOptionsConfirm((prev) => ({ ...prev, message: null }));
 
-        const giftsService = new GiftsService();
+        const storiesService = new StoriesService();
 
-        giftsService
+        storiesService
             .deleteGift(giftId)
             .pipe(
                 map((dataGift) => {
                     setMessage({ code: dataGift.response.message, type: dataGift.response.status });
                 }),
-                switchMap(() => giftsService.getEditionGifts(edition.id)),
+                switchMap(() => storiesService.getCampaignStories(edition.id)),
                 map((dataGifts) => {
                     openCloseConfirmModal();
                     setGifts(processGiftsData(dataGifts.response.data));
-                }),
-                take(1),
-                catchError((err) => {
-                    setModalOptionsConfirm((prev) => ({
-                        ...prev,
-                        message: { code: err?.response?.message, type: err?.response?.status }
-                    }));
-                    return of();
-                }),
-                finalize(() => {
-                    setIsSubmitting(false);
-                })
-            )
-            .subscribe();
-    };
-
-    /**
-     * Suppression d'un participant
-     * @param {*} playerId Identifiant participant
-     */
-    const handleDeletePlayer = (playerId) => {
-        setMessage(null);
-        setIsSubmitting(true);
-        setModalOptionsConfirm((prev) => ({ ...prev, message: null }));
-
-        const playersService = new PlayersService();
-
-        playersService
-            .deletePlayer(playerId)
-            .pipe(
-                map((dataPlayer) => {
-                    setMessage({ code: dataPlayer.response.message, type: dataPlayer.response.status });
-                }),
-                switchMap(() => playersService.getEditionPlayers(edition.id)),
-                map((dataPlayers) => {
-                    openCloseConfirmModal();
-                    setPlayers(processPlayersData(dataPlayers.response.data));
-                }),
-                take(1),
-                catchError((err) => {
-                    setModalOptionsConfirm((prev) => ({
-                        ...prev,
-                        message: { code: err?.response?.message, type: err?.response?.status }
-                    }));
-                    return of();
-                }),
-                finalize(() => {
-                    setIsSubmitting(false);
-                })
-            )
-            .subscribe();
-    };
-
-    /**
-     * Suppression d'un cadeau d'un participant
-     * @param {*} rewardId Identifiant récompense
-     */
-    const handleDeleteReward = (rewardId) => {
-        setMessage(null);
-        setIsSubmitting(true);
-        setModalOptionsConfirm((prev) => ({ ...prev, message: null }));
-
-        const rewardsService = new RewardsService();
-        const giftsService = new GiftsService();
-        const playersService = new PlayersService();
-
-        const subscriptionRewards = rewardsService.deleteReward(rewardId);
-        const subscriptionGifts = giftsService.getEditionGifts(edition.id);
-        const subscriptionPlayers = playersService.getEditionPlayers(edition.id);
-
-        subscriptionRewards
-            .pipe(
-                map((dataReward) => {
-                    setMessage({ code: dataReward.response.message, type: dataReward.response.status });
-                }),
-                switchMap(() => forkJoin([subscriptionGifts, subscriptionPlayers])),
-                map(([dataGifts, dataPlayers]) => {
-                    openCloseConfirmModal();
-                    setGifts(processGiftsData(dataGifts.response.data));
-                    setPlayers(processPlayersData(dataPlayers.response.data));
                 }),
                 take(1),
                 catchError((err) => {
@@ -998,7 +814,7 @@ const Campaign = () => {
                                         <EditionAbout
                                             rights={rights}
                                             edition={edition}
-                                            onOpen={openCloseEditionModal}
+                                            onOpen={openCloseCampaignModal}
                                             onConfirm={handleConfirmDeleteEdition}
                                             isSubmitting={isSubmitting}
                                         />
@@ -1007,11 +823,11 @@ const Campaign = () => {
 
                                 {/* Modale de modification/suppression d'édition */}
                                 {rights.isSuperAdmin && formEdition && modalOptionsEdition.isOpen && (
-                                    <EditionModal
+                                    <CampaignModal
                                         formData={formEdition}
                                         modalOptions={modalOptionsEdition}
                                         setModalOptions={setModalOptionsEdition}
-                                        onClose={openCloseEditionModal}
+                                        onClose={openCloseCampaignModal}
                                         isSubmitting={isSubmitting}
                                     />
                                 )}

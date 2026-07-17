@@ -76,14 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // Dispatch vers le bon groupe de routes
 $router = new Router();
 
-if (str_starts_with($uri, '/editions')) {
-    require_once __DIR__ . '/routes/editions.php';
-} elseif (str_starts_with($uri, '/gifts')) {
-    require_once __DIR__ . '/routes/gifts.php';
-} elseif (str_starts_with($uri, '/players')) {
-    require_once __DIR__ . '/routes/players.php';
-} elseif (str_starts_with($uri, '/rewards')) {
-    require_once __DIR__ . '/routes/rewards.php';
+if (str_starts_with($uri, '/campaigns')) {
+    require_once __DIR__ . '/routes/campaigns.php';
+} elseif (str_starts_with($uri, '/stories')) {
+    require_once __DIR__ . '/routes/stories.php';
 } elseif (str_starts_with($uri, '/serve-file')) {
     require_once __DIR__ . '/routes/serve-file.php';
 } elseif (str_starts_with($uri, '/sse')) {

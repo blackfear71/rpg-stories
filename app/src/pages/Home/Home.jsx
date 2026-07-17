@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -22,16 +22,18 @@ const initialConnectionValues = {
     password: ''
 };
 
+// TODO : de manière générale chercher "superadmin", "dition", "cadeau" et "gift", il ne doit pas en rester (front+back+fichiers)
+// TODO : revoir les droits, SUPERADMIN disparait, et donc USER a tous les droits sur ses actions, l'ADMIN servira à de la gestion
+
 /**
  * Page d'accueil
  */
 const Home = () => {
     // Router
-    const location = useLocation();
     const navigate = useNavigate();
 
     // Contexte
-    const { auth, authMessage, login, refreshAuth, setAuthMessage } = useAuth();
+    const { auth, authMessage, login, setAuthMessage } = useAuth();
 
     // Traductions
     const { t } = useTranslation();
@@ -65,9 +67,6 @@ const Home = () => {
      * Lancement initial de la page
      */
     useEffect(() => {
-        // Rafraichissement du contexte d'authentification
-        refreshAuth(true);
-
         // Redirection vers les campagnes si connecté, sinon on affiche le formulaire de connexion
         if (auth && auth.isLoggedIn) {
             navigate('/campaigns');
@@ -86,15 +85,7 @@ const Home = () => {
             setMessage(authMessage);
             setAuthMessage(null);
         }
-
-        // Message venant du navigate() (déconnexion depuis une page admin, suppression édition)
-        if (location.state?.navMessage) {
-            setMessage(location.state.navMessage);
-
-            // Nettoyage du state React Router
-            navigate(location.pathname, { replace: true, state: {} });
-        }
-    }, [authMessage, setAuthMessage, location.state, location.pathname, navigate]);
+    }, [authMessage, setAuthMessage]);
 
     /**
      * Connexion

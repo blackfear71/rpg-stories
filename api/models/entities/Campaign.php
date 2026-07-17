@@ -1,17 +1,19 @@
 <?php
+
 /**
- * Représente un participant en base
+ * Représente une campagne en base
  */
-class Player
+class Campaign
 {
     /**
      * Constructeur
      */
     public function __construct(
         public readonly int                 $id        = 0,
-        public readonly int                 $editionId = 0,
         public readonly string              $name      = '',
-        public readonly int                 $points    = 0,
+        public readonly ?string             $universe  = '',
+        public readonly int                 $players   = 0,
+        public readonly ?string             $picture   = null,
         public readonly \DateTimeImmutable  $createdAt = new DateTimeImmutable(),
         public readonly int                 $createdBy = 0,
         public readonly ?\DateTimeImmutable $updatedAt = null,

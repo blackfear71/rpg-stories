@@ -5,15 +5,15 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { FaFlagCheckered, FaRegClock, FaScroll, FaWandMagicSparkles } from 'react-icons/fa6';
 import { IoCalendarNumberOutline, IoImageOutline, IoLocationOutline } from 'react-icons/io5';
 
-import { DateInput, PictureInput, TextareaInput, TextInput, TimeInput } from '../../../components/inputs';
-import { Message, SpinnerButton } from '../../../components/shared';
-
 import { EnumAction } from '../../../enums';
+
+import { DateInput, PictureInput, TextareaInput, TextInput, TimeInput } from '../../inputs';
+import { Message, SpinnerButton } from '../../shared';
 
 /**
  * Modale édition
  */
-const EditionModal = ({ formData, modalOptions, setModalOptions, onClose, isSubmitting }) => {
+const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSubmitting }) => {
     // Traductions
     const { t } = useTranslation();
 
@@ -206,4 +206,4 @@ const EditionModal = ({ formData, modalOptions, setModalOptions, onClose, isSubm
     );
 };
 
-export default EditionModal;
+export default CampaignModal;

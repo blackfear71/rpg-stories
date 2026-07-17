@@ -1,6 +1,8 @@
 <?php
 class MessageHelper
 {
+    // TODO : supprimer les messages inutiles
+
     /*****************/
     /* Codes erreurs */
     /*****************/
@@ -33,6 +35,14 @@ class MessageHelper
     const MSG_CREATION_SUCCESS = 'MSG_CREATION_SUCCESS';
     const MSG_DELETION_SUCCESS = 'MSG_DELETION_SUCCESS';
     const MSG_UPDATE_SUCCESS   = 'MSG_UPDATE_SUCCESS';
+
+    // Campagnes
+    const ERR_CAMPAIGN_NOT_FOUND = 'ERR_CAMPAIGN_NOT_FOUND';
+    const ERR_INVALID_PLAYERS    = 'ERR_INVALID_PLAYERS';
+
+    // Histoires
+    const ERR_STORY_NOT_FOUND = 'ERR_STORY_NOT_FOUND';
+    const ERR_INVALID_STORY   = 'ERR_INVALID_STORY';
 
     // Editions
     const ERR_EDITION_NOT_FOUND  = 'ERR_EDITION_NOT_FOUND';
@@ -117,6 +127,14 @@ class MessageHelper
         self::MSG_CREATION_SUCCESS       => ['http' => 201, 'message' => 'Création effectuée avec succès'],
         self::MSG_DELETION_SUCCESS       => ['http' => 204, 'message' => 'Suppression effectuée avec succès'],
         self::MSG_UPDATE_SUCCESS         => ['http' => 200, 'message' => 'Modification effectuée avec succès'],
+
+        // Campagnes
+        self::ERR_CAMPAIGN_NOT_FOUND => ['http' => 404, 'message' => 'Erreur lors de la récupération de la campagne'],
+        self::ERR_INVALID_PLAYERS    => ['http' => 400, 'message' => 'Le nombre de participants est invalide'],
+
+        // Histoires
+        self::ERR_STORY_NOT_FOUND => ['http' => 404, 'message' => 'Erreur lors de la récupération de l\'histoire'],
+        self::ERR_INVALID_STORY   => ['http' => 400, 'message' => 'L\histoire doit être renseignée'],
 
         // Editions
         self::ERR_EDITION_NOT_FOUND  => ['http' => 404, 'message' => 'Erreur lors de la récupération de l\'édition'],

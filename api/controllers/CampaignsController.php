@@ -1,16 +1,16 @@
 <?php
 // Imports
-require_once 'models/dtos/EditionInputDTO.php';
+require_once 'models/dtos/CampaignInputDTO.php';
 
-require_once 'services/EditionsService.php';
+require_once 'services/CampaignsService.php';
 require_once 'services/UsersService.php';
 
-class EditionsController
+class CampaignsController
 {
-    private const controllerName = 'EditionsController';
+    private const controllerName = 'CampaignsController';
 
     private PDO $db;
-    private EditionsService $editionsService;
+    private CampaignsService $campaignsService;
     private ?UsersService $usersService = null;
 
     /**
@@ -19,7 +19,7 @@ class EditionsController
     public function __construct(PDO $db)
     {
         $this->db = $db;
-        $this->editionsService = new EditionsService($db);
+        $this->campaignsService = new CampaignsService($db);
     }
 
     /**
@@ -37,14 +37,14 @@ class EditionsController
     /**
      * Lecture de tous les enregistrements
      */
-    public function getAllEditions(): void
+    public function getCampaigns(): void
     {
         try {
             // Lecture de tous les enregistrements
-            $editions = $this->editionsService->getAllEditions();
+            $campaigns = $this->campaignsService->getCampaigns();
 
             // Succès
-            ResponseHelper::success($editions);
+            ResponseHelper::success($campaigns);
         } catch (Exception $e) {
             // Exception
             ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, []);
@@ -54,31 +54,31 @@ class EditionsController
     /**
      * Lecture d'un enregistrement
      */
-    public function getEdition(int $editionId): void
+    public function getCampaign(int $campaignId): void
     {
         try {
             // Lecture d'un enregistrement
-            $edition = $this->editionsService->getEdition($editionId);
+            $campaign = $this->campaignsService->getCampaign($campaignId);
 
             // Succès
-            ResponseHelper::success($edition);
+            ResponseHelper::success($campaign);
         } catch (Exception $e) {
             // Exception
-            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$editionId]);
+            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$campaignId]);
         }
     }
 
     /**
-     * Lecture des éditions recherchées
+     * Lecture des campagnes recherchées
      */
-    public function getSearchEditions(string $search): void
+    public function getSearchCampaigns(string $search): void
     {
         try {
             // Lecture de tous les enregistrements recherchés
-            $editions = $this->editionsService->getSearchEditions($search);
+            $campaigns = $this->campaignsService->getSearchCampaigns($search);
 
             // Succès
-            ResponseHelper::success($editions);
+            ResponseHelper::success($campaigns);
         } catch (Exception $e) {
             // Exception
             ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$search]);
@@ -88,17 +88,17 @@ class EditionsController
     /**
      * Insertion d'un enregistrement
      */
-    public function createEdition(?string $token, array $data, array $file): void
+    public function createCampaign(?string $token, array $data, array $file): void
     {
         try {
             // Conversion DTO
-            $dataDTO = EditionInputDTO::fromArray($data);
+            $dataDTO = CampaignInputDTO::fromArray($data);
 
             // Contrôle authentification et niveau utilisateur
-            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::SUPERADMIN->value);
+            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
 
             // Insertion d'un enregistrement
-            $this->editionsService->createEdition($dataDTO, $file, $user->id);
+            $this->campaignsService->createCampaign($dataDTO, $file, $user->id);
 
             // Succès
             ResponseHelper::success(null, MessageHelper::MSG_CREATION_SUCCESS);
@@ -111,43 +111,43 @@ class EditionsController
     /**
      * Modification d'un enregistrement
      */
-    public function updateEdition(?string $token, int $editionId, array $data, array $file): void
+    public function updateCampaign(?string $token, int $campaignId, array $data, array $file): void
     {
         try {
             // Conversion DTO
-            $dataDTO = EditionInputDTO::fromArray($data);
+            $dataDTO = CampaignInputDTO::fromArray($data);
 
             // Contrôle authentification et niveau utilisateur
-            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::SUPERADMIN->value);
+            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
 
             // Modification d'un enregistrement
-            $this->editionsService->updateEdition($editionId, $dataDTO, $file, $user->id);
+            $this->campaignsService->updateCampaign($campaignId, $dataDTO, $file, $user->id);
 
             // Succès
             ResponseHelper::success(null, MessageHelper::MSG_UPDATE_SUCCESS);
         } catch (Exception $e) {
             // Exception
-            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$editionId, json_encode($data), json_encode($file)]);
+            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$campaignId, json_encode($data), json_encode($file)]);
         }
     }
 
     /**
      * Suppression logique d'un enregistrement
      */
-    public function deleteEdition(?string $token, int $editionId): void
+    public function deleteCampaign(?string $token, int $campaignId): void
     {
         try {
             // Contrôle authentification et niveau utilisateur
-            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::SUPERADMIN->value);
+            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
 
             // Suppression logique d'un enregistrement
-            $this->editionsService->deleteEdition($editionId, $user->id);
+            $this->campaignsService->deleteCampaign($campaignId, $user->id);
 
             // Succès
             ResponseHelper::success(null, MessageHelper::MSG_DELETION_SUCCESS);
         } catch (Exception $e) {
             // Exception
-            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$editionId]);
+            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$campaignId]);
         }
     }
 }
