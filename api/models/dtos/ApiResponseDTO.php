@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Enveloppe de réponse API (DTO)
  */
@@ -10,7 +11,7 @@ class ApiResponseDTO implements \JsonSerializable
     public function __construct(
         public readonly string $status  = '',
         public readonly mixed  $data    = null,
-        public readonly string $message = '',
+        public readonly string $message = ''
     ) {}
 
     /**
@@ -21,7 +22,7 @@ class ApiResponseDTO implements \JsonSerializable
         return [
             'status'  => $this->status,
             'message' => $this->message,
-            'data'    => $this->data,
+            'data'    => $this->data
         ];
     }
 }

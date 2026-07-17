@@ -9,6 +9,7 @@ export const getMessageTranslationKey = (code, params, t) => {
     // Mapping des messages entre BACK et FRONT
     const map = {
         // Erreurs
+        ERR_CAMPAIGN_NOT_FOUND: 'errors.TODO',
         ERR_CREATION_FAILED: 'errors.creationFailed',
         ERR_CREATION_FOLDER_FAILED: 'errors.creationFailed',
         ERR_CREATION_IMAGE_FAILED: 'errors.creationImageFailed',
@@ -36,9 +37,11 @@ export const getMessageTranslationKey = (code, params, t) => {
         ERR_INVALID_PARAMETER: 'errors.unknownError',
         ERR_INVALID_PASSWORD: 'errors.invalidPassword',
         ERR_INVALID_PASSWORD_MATCH: 'errors.passwordMatch',
+        ERR_INVALID_PLAYERS: 'errors.TODO',
         ERR_INVALID_POINTS: 'errors.invalidPoints',
         ERR_INVALID_QUANTITY: 'errors.invalidQuantity',
         ERR_INVALID_START_TIME: 'errors.invalidStartTime',
+        ERR_INVALID_STORY: 'errors.TODO',
         ERR_INVALID_TOKEN: 'errors.unknownError',
         ERR_INVALID_VALUE: 'errors.invalidValue',
         ERR_LOGIN_FAILED: 'errors.loginFailed',
@@ -53,6 +56,7 @@ export const getMessageTranslationKey = (code, params, t) => {
         ERR_ROUTE_NOT_FOUND: 'errors.unknownError',
         ERR_SSE_GIFTS: 'errors.unknownError',
         ERR_SSE_PLAYERS: 'errors.unknownError',
+        ERR_STORY_NOT_FOUND: 'errors.TODO',
         ERR_UNAUTHORIZED_ACTION: 'errors.unauthorizedAction',
         ERR_UNKNOWN_ENDPOINT: 'errors.unknownError',
         ERR_UNKNOWN_ERROR: 'errors.unknownError',
