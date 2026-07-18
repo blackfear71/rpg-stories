@@ -9,7 +9,7 @@ import { of, switchMap } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
 
 import { Button, Spinner } from 'react-bootstrap';
-import { IoAddCircleOutline } from 'react-icons/io5';
+import { FaPlus } from 'react-icons/fa6';
 
 import { CampaignModal } from '../../components/modals';
 import { Message } from '../../components/shared';
@@ -225,21 +225,19 @@ const Campaigns = () => {
                     <Spinner animation="border" role="status" variant="light" />
                 </div>
             ) : (
-                <>
+                <div className="campaigns-container">
                     {/* Message */}
                     {message && <Message code={message.code} params={message.params} type={message.type} setMessage={setMessage} />}
 
-                    {/* Grille */}
-                    <div className="gap-2 mt-3 home-grid">
+                    {/* Liste des campagnes */}
+                    <div className="gap-3 campaigns-grid">
                         {/* Ajout */}
                         <Button
-                            variant="outline-action"
-                            className="d-flex align-items-center home-grid-btn-action"
+                            className="d-flex flex-column align-items-center justify-content-center gap-3 campaigns-button"
                             onClick={() => openCloseCampaignModal(EnumAction.CREATE)}
                             disabled={isSubmitting}
                         >
-                            {/* TODO : changer icône + trads "home" */}
-                            <IoAddCircleOutline size={30} />
+                            <FaPlus size={30} />
                             {t('campaign.createCampaign')}
                         </Button>
 
@@ -249,14 +247,20 @@ const Campaigns = () => {
                             campaigns.map((campaign) => (
                                 <Button
                                     key={campaign.id}
-                                    variant="action"
-                                    className="home-grid-btn-location"
+                                    className="d-flex flex-column align-items-start justify-content-center gap-2 campaigns-button"
+                                    style={
+                                        campaign.picture
+                                            ? {
+                                                  backgroundImage: `url(${import.meta.env.VITE_API_URL}/serve-file/images?file=${encodeURIComponent(campaign.picture)})`
+                                              }
+                                            : undefined
+                                    }
                                     onClick={() => navigate(`/campaign/${campaign.id}`)}
                                     disabled={isSubmitting}
                                 >
-                                    <span className="home-grid-btn-label">{campaign.name}</span>
-                                    <span className="home-grid-btn-badge">
-                                        {t(campaign.players === 1 ? 'home.countPlayer' : 'home.countPlayers', {
+                                    <span className="py-1 px-2 rounded campaigns-button-label">{campaign.name}</span>
+                                    <span className="py-1 px-2 rounded campaigns-button-badge">
+                                        {t(campaign.players === 1 ? 'campaign.countPlayer' : 'campaign.countPlayers', {
                                             count: campaign.players
                                         })}
                                     </span>
@@ -274,7 +278,7 @@ const Campaigns = () => {
                             isSubmitting={isSubmitting}
                         />
                     )}
-                </>
+                </div>
             )}
         </>
     );

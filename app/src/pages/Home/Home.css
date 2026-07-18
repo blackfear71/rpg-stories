@@ -1,14 +1,16 @@
 .home-form-container {
-    height: calc(100vh - 70px); /* 20px padding-top + 20px padding-bottom + 30px footer */
+    min-height: calc(100vh - 70px); /* 20px padding-top + 20px padding-bottom + 30px footer */
+    align-content: center;
+}
+
+.home-form-message {
+    position: absolute;
+    top: 20px;
+    width: calc(100% - 40px);
 }
 
 .home-logo {
     height: 100px;
-}
-
-.home-form {
-    background-color: var(--color-bg-secondary);
-    border-radius: var(--bs-border-radius);
 }
 
 .home-title-1 {
@@ -23,4 +25,16 @@
     font-weight: bold;
     line-height: 29px;
     color: var(--color-text-white);
+}
+
+.home-form {
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--bs-border-radius);
+    width: 300px;
+}
+
+@media (max-width: 616px) {
+    .home-form {
+        width: 100%;
+    }
 }

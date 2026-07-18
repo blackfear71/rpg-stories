@@ -24,6 +24,7 @@ const initialConnectionValues = {
 
 // TODO : de manière générale chercher "superadmin", "dition", "cadeau" et "gift", il ne doit pas en rester (front+back+fichiers)
 // TODO : revoir les droits, SUPERADMIN disparait, et donc USER a tous les droits sur ses actions, l'ADMIN servira à de la gestion
+// TODO : finir / nettoyer le style
 
 /**
  * Page d'accueil
@@ -114,13 +115,17 @@ const Home = () => {
                     <Spinner animation="border" role="status" variant="light" />
                 </div>
             ) : (
-                <>
+                <div className="home-form-container">
                     {/* Message */}
                     {/* TODO : faire en sorte qu'il ait une position fixed sous la navbar (attention à la page de connexion) => ok mais à voir ailleurs que sur la page de connexion */}
-                    {message && <Message code={message.code} params={message.params} type={message.type} setMessage={setMessage} />}
+                    {message && (
+                        <div className="home-form-message">
+                            <Message code={message.code} params={message.params} type={message.type} setMessage={setMessage} />
+                        </div>
+                    )}
 
                     {/* Contenu */}
-                    <div className="d-flex flex-column align-items-center justify-content-center gap-3 home-form-container">
+                    <div className="d-flex flex-column align-items-center justify-content-center gap-3">
                         {/* Logo & titre */}
                         <div className="d-flex align-items-center gap-3">
                             {/* Logo */}
@@ -135,13 +140,10 @@ const Home = () => {
 
                         {/* Connexion */}
                         {/* TODO : changer la police du site */}
-                        {/* TODO : prendre une largeur fixe sur PC, toute la largeur sur mobile */}
-                        {/* TODO : finir / nettoyer le style */}
-                        {/* TODO : si on ne renseigne rien et qu'on valide, la zone de saisie s'agrandit en largeur => à fixer */}
-                        <Form onSubmit={formConnection.handleSubmit}>
+                        <Form onSubmit={formConnection.handleSubmit} className="home-form">
                             <fieldset disabled={isSubmitting}>
                                 {/* Formulaire */}
-                                <div className="d-flex flex-column gap-3 p-3 home-form input-container">
+                                <div className="d-flex flex-column gap-3 p-3 input-container">
                                     <TextInput
                                         title={t('navbar.login')}
                                         name={'login'}
@@ -171,7 +173,7 @@ const Home = () => {
                             </fieldset>
                         </Form>
                     </div>
-                </>
+                </div>
             )}
         </>
     );

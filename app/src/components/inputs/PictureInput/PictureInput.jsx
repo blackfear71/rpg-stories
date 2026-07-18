@@ -33,7 +33,7 @@ const PictureInput = ({ title, icon, name, value, onChange, error, isSubmitting,
         if (value) {
             // Si c'est le nom d'un fichier existant sur le serveur
             if (typeof value === 'string') {
-                setPreviewUrl(`${import.meta.env.VITE_API_URL}/serve-file/images?file=${value}`);
+                setPreviewUrl(`${import.meta.env.VITE_API_URL}/serve-file/images?file=${encodeURIComponent(value)}`);
                 setFileName(value);
             }
             // Si c'est un fichier saisi (File object)

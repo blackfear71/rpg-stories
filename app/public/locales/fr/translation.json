@@ -85,6 +85,8 @@
     "campaign": {
         "campaignName": "Nom de la campagne",
         "confirmDeleteCampaign": "Voulez-vous vraiment supprimer la campagne \"{{name}}\" ?",
+        "countPlayer": "{{count}} participant",
+        "countPlayers": "{{count}} participants",
         "createCampaign": "Créer une nouvelle campagne",
         "createStory": "Créer une nouvelle histoire",
         "deleteCampaign": "Supprimer la campagne",
@@ -150,8 +152,6 @@
         "addEdition": "Ajouter une édition",
         "countEdition": "{{count}} édition",
         "countEditions": "{{count}} éditions",
-        "countPlayer": "{{count}} participant",
-        "countPlayers": "{{count}} participants",
         "creationEdition": "Edition créée",
         "editions": "Editions",
         "editionsTitle": "Editions {{year}}",

@@ -9,8 +9,6 @@ import { getLocalizedDate } from '../../../utils/helpers/dateHelper';
 
 import { EnumAction } from '../../../enums';
 
-import './Story.css';
-
 import { SpinnerButton } from '../../shared';
 
 /**

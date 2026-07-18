@@ -7,8 +7,6 @@ import { Alert } from 'react-bootstrap';
 
 import { getMessageTranslationKey } from '../../../utils/helpers/messageHelper';
 
-import './Message.css';
-
 /**
  * Message
  */
@@ -58,12 +56,7 @@ const Message = ({ code, params = {}, type = 'error', setMessage }) => {
 
     return (
         showMessage && (
-            <Alert
-                variant={getVariantFromType(type)}
-                onClose={!autoClose && handleClose}
-                dismissible={type !== 'success'}
-                className="message-container"
-            >
+            <Alert variant={getVariantFromType(type)} onClose={!autoClose && handleClose} dismissible={type !== 'success'}>
                 {/* Message FRONT ou BACK */}
                 {i18next.exists(code) ? t(code, params) : getMessageTranslationKey(code, params, t)}
             </Alert>

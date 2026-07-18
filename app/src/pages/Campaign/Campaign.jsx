@@ -501,7 +501,7 @@ const Campaign = () => {
                     {campaign?.picture && (
                         <div className="edition-picture-wrapper">
                             <Image
-                                src={`${import.meta.env.VITE_API_URL}/serve-file/images?file=${campaign.picture}`}
+                                src={`${import.meta.env.VITE_API_URL}/serve-file/images?file=${encodeURIComponent(campaign.picture)}`}
                                 alt={campaign.picture}
                                 className="edition-picture"
                             />
@@ -511,7 +511,6 @@ const Campaign = () => {
                     {/* Contenu */}
                     <div className="position-relative z-2">
                         {/* Message */}
-                        {/* TODO : voir la position du message fixed */}
                         {/* TODO : trads */}
                         {message && <Message code={message.code} params={message.params} type={message.type} setMessage={setMessage} />}
 
@@ -570,7 +569,6 @@ const Campaign = () => {
                                             <div className="d-flex flex-column ps-2 pe-2 todo-supprimer mb-2 bg-white">
                                                 {/* Date & boutons de contexte */}
                                                 <div className="d-flex align-items-center justify-content-between pt-2 pb-2 table-card-line">
-                                                    {/* TODO : formater JJ/MM/AAAA selon la langue */}
                                                     <span className="table-card-line-label">{getLocalizedDate(new Date())}</span>
                                                     <span className="table-card-line-value">
                                                         <Button disabled={isSubmitting}>EXPLORATION</Button>
@@ -611,6 +609,7 @@ const Campaign = () => {
                                 {/* TODO : définir key pour la liste */}
                                 {stories.map((story) => (
                                     <Story
+                                        key={story.id}
                                         story={story}
                                         formData={formStory}
                                         inputOptions={inputOptionsStory}
