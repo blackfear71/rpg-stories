@@ -55,6 +55,7 @@ const Campaign = () => {
     const { t } = useTranslation();
 
     // Local states
+    const storyInputRef = useRef(null);
     const [inputOptionsStory, setInputOptionsStory] = useState({
         action: null,
         storyId: 0,
@@ -75,7 +76,6 @@ const Campaign = () => {
         isOpen: false,
         message: null
     });
-    const storyInputRef = useRef(null);
 
     // API states
     const [campaign, setCampaign] = useState();

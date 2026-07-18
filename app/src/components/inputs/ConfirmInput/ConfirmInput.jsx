@@ -31,21 +31,21 @@ const ConfirmInput = ({ title, buttonLabel, onConfirm }) => {
     return (
         <div className="d-flex flex-column gap-1">
             {/* Titre */}
-            {title && <div className="modal-group-content-title">{title}</div>}
+            {title && <div className="input-title">{title}</div>}
 
             {!confirmActions ? (
                 <div className="d-flex">
-                    <Button type="button" variant="modal-action" onClick={() => setConfirmActions(true)}>
+                    <Button type="button" variant="input-action" onClick={() => setConfirmActions(true)}>
                         {buttonLabel}
                     </Button>
                 </div>
             ) : (
                 <div className="d-flex gap-2">
-                    <Button type="button" variant="modal-outline-action" onClick={() => setConfirmActions(false)}>
+                    <Button type="button" variant="input-outline-action" onClick={() => setConfirmActions(false)}>
                         {t('common.cancel')}
                     </Button>
 
-                    <Button type="button" variant="modal-action" className="btn-red" onClick={handleConfirm}>
+                    <Button type="button" variant="input-action" className="btn-red" onClick={handleConfirm}>
                         {t('common.confirm')}
                     </Button>
                 </div>

@@ -197,7 +197,7 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
                             </Button>
 
                             <SpinnerButton
-                                variant={'modal-action'}
+                                variant={'input-action'}
                                 label={t(getButtonFromAction(modalOptions.action))}
                                 isSubmitting={isSubmitting}
                             />
