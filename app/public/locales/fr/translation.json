@@ -82,6 +82,17 @@
         "update": "Modifier",
         "validate": "Valider"
     },
+    "campaign": {
+        "campaignName": "Nom de la campagne",
+        "confirmDeleteCampaign": "Voulez-vous vraiment supprimer la campagne \"{{name}}\" ?",
+        "createCampaign": "Créer une nouvelle campagne",
+        "createStory": "Créer une nouvelle histoire",
+        "deleteCampaign": "Supprimer la campagne",
+        "picture": "Image",
+        "playersCount": "Nombre de joueurs (MJ compris)",
+        "universe": "Univers",
+        "updateCampaign": "Modifier la campagne"
+    },
     "edition": {
         "about": "A propos",
         "addGift": "Ajouter un cadeau",
@@ -97,7 +108,6 @@
         "deletePlayer": "Voulez-vous vraiment supprimer le participant \"{{name}}\" ?",
         "deleteReward": "Voulez-vous vraiment supprimer le cadeau \"{{gift}}\" du participant \"{{player}}\" ?",
         "editionDate": "{{date}} à {{time}}",
-        "editionResult": "Edition {{year}}",
         "editionTitle": "Edition {{year}} • {{location}}",
         "end": "Fin (J+1)",
         "gifts": "Cadeaux",

@@ -97,7 +97,6 @@
         "deletePlayer": "Do you really want to delete the participant \"{{name}}\"?",
         "deleteReward": "Do you really want to delete the gift \"{{gift}}\" from the participant \"{{player}}\"?",
         "editionDate": "{{date}} at {{time}}",
-        "editionResult": "Edition {{year}}",
         "editionTitle": "Edition {{year}} • {{location}}",
         "end": "End (D+1)",
         "gifts": "Gifts",

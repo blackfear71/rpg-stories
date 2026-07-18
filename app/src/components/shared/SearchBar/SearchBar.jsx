@@ -78,18 +78,18 @@ const SearchBar = () => {
             setResults([]);
             setShowResults(false);
         } else if (values.search.length > 2) {
-            const editionsService = new CampaignsService();
+            const campaignsService = new CampaignsService();
 
-            editionsService
-                .getSearchEditions({ search: values.search })
+            campaignsService
+                .getSearchCampaigns({ search: values.search })
                 .pipe(
-                    map((dataEditions) => {
-                        if (dataEditions.response.data.length === 0) {
+                    map((dataCampaigns) => {
+                        if (dataCampaigns.response.data.length === 0) {
                             setResultMessage('messages.noResults');
                         }
 
                         setResults(
-                            dataEditions.response.data.map((item) => ({
+                            dataCampaigns.response.data.map((item) => ({
                                 ...item,
                                 year: new Date(item.startDate).getFullYear()
                             }))
@@ -150,15 +150,15 @@ const SearchBar = () => {
 
     /**
      * Redirige vers le résultat de la recherche
-     * @param {*} id Identifiant de l'édition
+     * @param {*} id Identifiant de la campagne
      */
     const handleResultClick = (id) => {
         // Vide les résultats
         setResults([]);
         setShowResults(false);
 
-        // Redirige vers l'édition
-        navigate(`/edition/${id}`);
+        // Redirige vers la campagne
+        navigate(`/campaign/${id}`);
     };
 
     return (
@@ -218,8 +218,8 @@ const SearchBar = () => {
                                     className="d-flex align-items-center justify-content-between p-2 search-result-item"
                                     onClick={() => handleResultClick(item.id)}
                                 >
-                                    <div className="search-result-item-left">{item.location}</div>
-                                    <div className="ms-3 search-result-item-right">{t('edition.editionResult', { year: item.year })}</div>
+                                    <div className="search-result-item-left">{item.name}</div>
+                                    <div className="ms-3 search-result-item-right">{item.universe ?? ''}</div>
                                 </div>
                             ))}
                         </div>

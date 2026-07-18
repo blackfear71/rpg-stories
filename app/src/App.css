@@ -75,6 +75,10 @@ h1 {
     height: 28px;
 }
 
+.input-container .text-input {
+    border: solid 1px var(--color-border-primary);
+}
+
 /* Boutons */
 .btn-action {
     display: flex !important;
@@ -223,7 +227,7 @@ h1 {
     background-color: var(--color-bg-white);
 }
 
-.modal-body .modal-group-content .modal-group-content-title {
+.modal-body .modal-group-content .input-title {
     font-size: small;
     font-weight: 600;
     color: var(--color-text-secondary);
@@ -244,19 +248,19 @@ h1 {
     border: 2px dashed var(--color-border-gray-medium);
 }
 
-.modal-body .modal-group-content .modal-input-icon {
+.modal-body .modal-group-content .input-icon {
     width: 30px;
     height: 30px;
     flex-shrink: 0;
     color: var(--color-bg-gray-bold);
 }
 
-.modal-body .modal-group-content .modal-input-icon svg {
+.modal-body .modal-group-content .input-icon svg {
     width: 28px;
     height: 28px;
 }
 
-.modal-body .modal-group-content .modal-button-delete {
+.modal-body .modal-group-content .input-button-delete {
     background-color: var(--color-bg-cancel);
     border: 2px solid var(--color-border-cancel-hover);
     color: var(--color-bg-white);
@@ -268,14 +272,14 @@ h1 {
     margin-left: auto;
 }
 
-.modal-body .modal-group-content .modal-button-delete svg {
+.modal-body .modal-group-content .input-button-delete svg {
     width: 14px;
     height: 14px;
     flex-shrink: 0;
 }
 
-.modal-body .modal-group-content .modal-button-delete:hover,
-.modal-body .modal-group-content .modal-button-delete:active {
+.modal-body .modal-group-content .input-button-delete:hover,
+.modal-body .modal-group-content .input-button-delete:active {
     background-color: var(--color-bg-cancel-hover);
 }
 

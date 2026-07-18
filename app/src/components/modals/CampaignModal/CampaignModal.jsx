@@ -2,12 +2,13 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Form, Modal } from 'react-bootstrap';
-import { FaFlagCheckered, FaRegClock, FaScroll, FaWandMagicSparkles } from 'react-icons/fa6';
-import { IoCalendarNumberOutline, IoImageOutline, IoLocationOutline } from 'react-icons/io5';
+import { FaRegClock, FaWandMagicSparkles } from 'react-icons/fa6';
+import { IoImageOutline, IoLocationOutline } from 'react-icons/io5';
+
+import { IncrementInput, PictureInput, TextInput } from '../../../components/inputs';
 
 import { EnumAction } from '../../../enums';
 
-import { DateInput, PictureInput, TextareaInput, TextInput, TimeInput } from '../../inputs';
 import { Message, SpinnerButton } from '../../shared';
 
 /**
@@ -18,7 +19,7 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
     const { t } = useTranslation();
 
     // Local states
-    const locationInputRef = useRef(null);
+    const nameInputRef = useRef(null);
 
     /**
      * Met le focus sur le champ "lieu" à l'ouverture de la modale
@@ -26,7 +27,7 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
     useEffect(() => {
         // Focus à la création
         if (modalOptions?.isOpen && modalOptions.action === EnumAction.CREATE) {
-            locationInputRef.current?.focus();
+            nameInputRef.current?.focus();
         }
     }, [modalOptions?.isOpen]);
 
@@ -36,6 +37,29 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
      */
     const setModalMessage = (message) => {
         setModalOptions((prev) => ({ ...prev, message: message }));
+    };
+
+    /**
+     * Met à jour le formulaire à la saisie d'un numérique
+     * @param {*} action Action à réaliser
+     */
+    const handleChangePlayers = (action) => {
+        // Ajoute ou retire un joueur
+        switch (action) {
+            case 'add':
+                formData.setFieldValue('players', (parseInt(formData.values.players) || 0) + 1);
+                break;
+            case 'remove':
+                formData.setValues((prev) => {
+                    const currentPlayers = parseInt(prev.players) || 0;
+
+                    return {
+                        ...prev,
+                        players: currentPlayers <= 0 ? 0 : currentPlayers - 1
+                    };
+                });
+                break;
+        }
     };
 
     /**
@@ -62,8 +86,8 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
      */
     const getTitleFromAction = (action) =>
         ({
-            create: 'home.addEdition',
-            update: 'edition.updateEdition'
+            create: 'campaign.createCampaign',
+            update: 'campaign.updateCampaign'
         })[action] || 'common.unknownLabel';
 
     /**
@@ -87,51 +111,51 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
                     </Modal.Header>
 
                     <Modal.Body>
-                        {/* Lieu */}
+                        {/* Nom */}
                         <div className="modal-group">
                             <div className="modal-group-content">
                                 <TextInput
-                                    title={t('edition.location')}
+                                    title={t('campaign.campaignName')}
                                     icon={<IoLocationOutline />}
-                                    name="location"
-                                    ref={locationInputRef}
-                                    placeholder={t('edition.location')}
-                                    value={formData.values.location}
+                                    name="name"
+                                    ref={nameInputRef}
+                                    placeholder={t('campaign.campaignName')}
+                                    value={formData.values.name}
                                     onChange={formData.handleChange}
-                                    error={formData.submitCount > 0 && formData.errors.location}
+                                    error={formData.submitCount > 0 && formData.errors.name}
                                     maxLength={100}
                                     required={true}
                                 />
                             </div>
                         </div>
 
-                        {/* Date et heures */}
+                        {/* Univers */}
                         <div className="modal-group">
-                            <div className="modal-group-content gap-2">
-                                {/* Date */}
-                                <DateInput
-                                    title={t('edition.startDate')}
-                                    icon={<IoCalendarNumberOutline />}
-                                    name={'startDate'}
-                                    value={formData.values.startDate}
+                            <div className="modal-group-content">
+                                <TextInput
+                                    title={t('campaign.universe')}
+                                    icon={<IoLocationOutline />}
+                                    name="universe"
+                                    placeholder={t('campaign.universe')}
+                                    value={formData.values.universe}
                                     onChange={formData.handleChange}
-                                    error={formData.submitCount > 0 && formData.errors.startDate}
-                                    required={true}
+                                    error={formData.submitCount > 0 && formData.errors.universe}
+                                    maxLength={100}
                                 />
+                            </div>
+                        </div>
 
-                                {/* Heures */}
-                                <TimeInput
-                                    title={t('edition.hours')}
+                        {/* Nombre de joueurs */}
+                        <div className="modal-group">
+                            <div className="modal-group-content">
+                                <IncrementInput
+                                    title={t('campaign.playersCount')}
                                     icon={<FaRegClock />}
-                                    nameStart={'startTime'}
-                                    nameEnd={'endTime'}
-                                    titleStart={t('edition.start')}
-                                    titleEnd={t('edition.end')}
-                                    valueStart={formData.values.startTime}
-                                    valueEnd={formData.values.endTime}
-                                    onChange={formData.handleChange}
-                                    errorStart={formData.submitCount > 0 && formData.errors.startTime}
-                                    errorEnd={formData.submitCount > 0 && formData.errors.endTime}
+                                    name={'players'}
+                                    value={formData.values.players}
+                                    onChangeDown={() => handleChangePlayers('remove')}
+                                    onChangeUp={() => handleChangePlayers('add')}
+                                    error={formData.submitCount > 0 && formData.errors.players}
                                     required={true}
                                 />
                             </div>
@@ -141,38 +165,13 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
                         <div className="modal-group">
                             <div className="modal-group-content">
                                 <PictureInput
-                                    title={t('edition.picture')}
+                                    title={t('campaign.picture')}
                                     icon={<IoImageOutline />}
                                     name={'picture'}
                                     value={formData.values.picture}
                                     onChange={handleChangeFile}
                                     error={formData.submitCount > 0 && formData.errors.picture}
                                     isSubmitting={isSubmitting}
-                                />
-                            </div>
-                        </div>
-
-                        {/* Thème & défi*/}
-                        <div className="modal-group">
-                            <div className="modal-group-content gap-2">
-                                {/* Thème */}
-                                <TextareaInput
-                                    title={t('edition.theme')}
-                                    icon={<FaScroll />}
-                                    name={'theme'}
-                                    placeholder={t('edition.theme')}
-                                    value={formData.values.theme}
-                                    onChange={formData.handleChange}
-                                />
-
-                                {/* Défi */}
-                                <TextareaInput
-                                    title={t('edition.challenge')}
-                                    icon={<FaFlagCheckered />}
-                                    name={'challenge'}
-                                    placeholder={t('edition.challenge')}
-                                    value={formData.values.challenge}
-                                    onChange={formData.handleChange}
                                 />
                             </div>
                         </div>
@@ -197,7 +196,11 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
                                 {t('common.close')}
                             </Button>
 
-                            <SpinnerButton label={t(getButtonFromAction(modalOptions.action))} isSubmitting={isSubmitting} />
+                            <SpinnerButton
+                                variant={'modal-action'}
+                                label={t(getButtonFromAction(modalOptions.action))}
+                                isSubmitting={isSubmitting}
+                            />
                         </div>
                     </Modal.Footer>
                 </fieldset>

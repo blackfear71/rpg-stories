@@ -15,12 +15,12 @@ const IncrementInput = ({ title, icon, name, value, onChangeDown, onChangeUp, er
     return (
         <div className="d-flex flex-column gap-1">
             {/* Titre */}
-            {title && <div className="modal-group-content-title">{title}</div>}
+            {title && <div className="input-title">{title}</div>}
 
             {/* Saisie */}
             <div className="d-flex align-items-center gap-2">
                 {/* Icône */}
-                {icon && <div className="modal-input-icon">{icon}</div>}
+                {icon && <div className="input-icon">{icon}</div>}
 
                 {/* Saisie */}
                 <Form.Group className="w-100" controlId={name}>
@@ -32,7 +32,7 @@ const IncrementInput = ({ title, icon, name, value, onChangeDown, onChangeUp, er
                         </Button>
 
                         <div
-                            className={`d-flex align-items-center justify-content-center increment-input-value ${value > 0 ? 'green' : value < 0 ? 'red' : ''} ${error ? 'is-invalid' : ''}`}
+                            className={`d-flex align-items-center justify-content-center increment-input-value ${error ? 'is-invalid' : ''}`}
                         >
                             {value || 0}
                         </div>

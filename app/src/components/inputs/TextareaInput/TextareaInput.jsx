@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap';
 /**
  * Saisie zone de texte
  */
-const TextareaInput = ({ title, icon, name, placeholder, value, onChange, error, required = false }) => {
+const TextareaInput = ({ title, icon, name, ref, placeholder, value, onChange, error, required = false }) => {
     return (
         <div className="d-flex flex-column gap-1">
             {/* Titre */}
@@ -24,6 +24,7 @@ const TextareaInput = ({ title, icon, name, placeholder, value, onChange, error,
                     <Form.Label className="visually-hidden">{title ?? name}</Form.Label>
 
                     <Form.Control
+                        ref={ref}
                         as="textarea"
                         name={name}
                         placeholder={placeholder}

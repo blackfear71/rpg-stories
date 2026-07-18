@@ -71,7 +71,9 @@ const ConfirmModal = ({ modalOptions, setModalOptions, onClose, onConfirmAction,
                                 {t('common.cancel')}
                             </Button>
 
-                            {onConfirmAction && <SpinnerButton label={t('common.validate')} isSubmitting={isSubmitting} />}
+                            {onConfirmAction && (
+                                <SpinnerButton variant={'modal-action'} label={t('common.validate')} isSubmitting={isSubmitting} />
+                            )}
                         </div>
                     </Modal.Footer>
                 </fieldset>

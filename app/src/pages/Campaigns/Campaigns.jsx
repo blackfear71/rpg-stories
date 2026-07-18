@@ -16,7 +16,7 @@ import { Message } from '../../components/shared';
 
 import { useAuth } from '../../utils/context/AuthContext';
 
-import { EnumAction, EnumUserRole } from '../../enums';
+import { EnumAction } from '../../enums';
 
 import { CampaignsService } from '../../api';
 
@@ -32,7 +32,7 @@ const initialCampaignValues = {
 };
 
 /**
- * Page d'accueil
+ * Page des campagnes
  */
 const Campaigns = () => {
     // Router
@@ -40,7 +40,7 @@ const Campaigns = () => {
     const navigate = useNavigate();
 
     // Contexte
-    const { auth, authMessage, setAuthMessage } = useAuth();
+    const { auth } = useAuth();
 
     // Traductions
     const { t } = useTranslation();
@@ -57,12 +57,6 @@ const Campaigns = () => {
 
     // API states
     const [campaigns, setCampaigns] = useState([]);
-
-    // Constantes
-    const rights = {
-        isUser: auth.isLoggedIn && auth.level === EnumUserRole.USER,
-        isAdmin: auth.isLoggedIn && auth.level === EnumUserRole.ADMIN
-    };
 
     /**
      * Schéma de validation Yup de la campagne
@@ -137,7 +131,7 @@ const Campaigns = () => {
             // Nettoyage du state React Router
             navigate(location.pathname, { replace: true, state: {} });
         }
-    }, [authMessage, setAuthMessage, location.state, location.pathname, navigate]);
+    }, [location.state, location.pathname, navigate]);
 
     /**
      * Mise à jour du formulaire de la campagne aux changements de sa modale
@@ -238,18 +232,16 @@ const Campaigns = () => {
                     {/* Grille */}
                     <div className="gap-2 mt-3 home-grid">
                         {/* Ajout */}
-                        {rights.isSuperAdmin && (
-                            <Button
-                                variant="outline-action"
-                                className="d-flex align-items-center home-grid-btn-action"
-                                onClick={() => openCloseCampaignModal(EnumAction.CREATE)}
-                                disabled={isSubmitting}
-                            >
-                                {/* TODO : changer icône + trads "home" */}
-                                <IoAddCircleOutline size={30} />
-                                {t('home.addEdition')}
-                            </Button>
-                        )}
+                        <Button
+                            variant="outline-action"
+                            className="d-flex align-items-center home-grid-btn-action"
+                            onClick={() => openCloseCampaignModal(EnumAction.CREATE)}
+                            disabled={isSubmitting}
+                        >
+                            {/* TODO : changer icône + trads "home" */}
+                            <IoAddCircleOutline size={30} />
+                            {t('campaign.createCampaign')}
+                        </Button>
 
                         {/* Campagnes */}
                         {campaigns &&
@@ -273,7 +265,7 @@ const Campaigns = () => {
                     </div>
 
                     {/* Modale de création de campagne */}
-                    {rights.isSuperAdmin && formCampaign && modalOptionsCampaign.isOpen && (
+                    {formCampaign && modalOptionsCampaign.isOpen && (
                         <CampaignModal
                             formData={formCampaign}
                             modalOptions={modalOptionsCampaign}

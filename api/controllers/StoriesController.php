@@ -42,7 +42,7 @@ class StoriesController
         try {
             // Lecture de tous les enregistrements
             $stories = $this->storiesService->getCampaignStories($campaignId);
-
+            
             // Succès
             ResponseHelper::success($stories);
         } catch (Exception $e) {

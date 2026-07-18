@@ -100,7 +100,7 @@ const PictureInput = ({ title, icon, name, value, onChange, error, isSubmitting,
         <div className="d-flex flex-column gap-1">
             {/* Titre */}
             {title && (
-                <div className="modal-group-content-title">
+                <div className="input-title">
                     {title}
                     {required && <span className="required-star">*</span>}
                 </div>
@@ -108,7 +108,7 @@ const PictureInput = ({ title, icon, name, value, onChange, error, isSubmitting,
 
             <div className="d-flex align-items-center gap-2">
                 {/* Icône */}
-                {icon && <div className="modal-input-icon">{icon}</div>}
+                {icon && <div className="input-icon">{icon}</div>}
 
                 {/* Parcourir */}
                 <Form.Group controlId={isSubmitting ? undefined : name}>
@@ -142,7 +142,7 @@ const PictureInput = ({ title, icon, name, value, onChange, error, isSubmitting,
                             {/* Suppression */}
                             <Button
                                 onClick={handleFileRemove}
-                                className="d-flex align-items-center justify-content-center modal-button-delete"
+                                className="d-flex align-items-center justify-content-center input-button-delete"
                             >
                                 <FaTrashCan />
                             </Button>

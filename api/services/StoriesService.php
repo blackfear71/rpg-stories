@@ -52,7 +52,8 @@ class StoriesService
         return array_map(fn($story) => new StoryOutputDTO(
             id: $story->id,
             campaignId: $story->campaignId,
-            story: $story->story
+            story: $story->story,
+            createdAt: $story->createdAt
         ), $stories);
     }
 

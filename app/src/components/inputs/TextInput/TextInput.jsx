@@ -2,8 +2,6 @@ import { useTranslation } from 'react-i18next';
 
 import { Form } from 'react-bootstrap';
 
-import './TextInput.css';
-
 /**
  * Saisie ligne de texte
  */

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -8,53 +8,40 @@ import * as Yup from 'yup';
 import { combineLatest, of, switchMap } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
 
-import { Image, Spinner, Tab, Tabs } from 'react-bootstrap';
+import { Button, Form, Image, Spinner } from 'react-bootstrap';
 import { FaComputer } from 'react-icons/fa6';
+import { IoAddCircleOutline } from 'react-icons/io5';
 
-import { EditionAbout, EditionGifts, EditionPlayers } from '../../components/features';
-import { CampaignModal, ConfirmModal, GiftModal, PlayerModal, RewardModal } from '../../components/modals';
-import { Message } from '../../components/shared';
+import { Story } from '../../components/features';
+import { TextareaInput } from '../../components/inputs';
+import { CampaignModal, ConfirmModal } from '../../components/modals';
+import { Message, SpinnerButton } from '../../components/shared';
 
 import { useAuth } from '../../utils/context/AuthContext';
-import { getDayFromDate, getLocalizedTime } from '../../utils/helpers/dateHelper';
+import { getLocalizedDate } from '../../utils/helpers/dateHelper';
 
-import { EnumAction, EnumUserRole } from '../../enums';
+import { EnumAction } from '../../enums';
 
 import { CampaignsService, StoriesService } from '../../api';
 
 import './Campaign.css';
 
 // Valeurs initiales des formulaires
-const initialEditionValues = {
-    location: '',
-    startDate: '',
-    startTime: '',
-    endTime: '',
+const initialCampaignValues = {
+    name: '',
+    universe: '',
+    players: 0,
     picture: null,
-    pictureAction: null,
-    theme: '',
-    challenge: ''
+    pictureAction: null
 };
-const initialGiftValues = {
+// TODO : attention si on peut ouvrir plusieurs stories en même temps (prévoir un message de sauvegarde de l'autre ?)
+const initialStoryValues = {
     id: null,
-    name: '',
-    value: '',
-    quantity: ''
-};
-const initialPlayerValues = {
-    id: null,
-    name: '',
-    points: 0,
-    giveaway: 0,
-    giveawayPlayerId: ''
-};
-const initialRewardValues = {
-    giftId: '',
-    playerId: null
+    story: ''
 };
 
 /**
- * Page détail édition
+ * Page détail campagne
  */
 const Campaign = () => {
     // Router
@@ -62,15 +49,25 @@ const Campaign = () => {
     const navigate = useNavigate();
 
     // Contexte
-    const { auth, authMessage, setAuthMessage } = useAuth();
+    const { auth } = useAuth();
 
     // Traductions
     const { t } = useTranslation();
 
     // Local states
+    const [inputOptionsStory, setInputOptionsStory] = useState({
+        action: null,
+        storyId: 0,
+        isOpen: false
+    });
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState(null);
+    const [modalOptionsCampaign, setModalOptionsCampaign] = useState({
+        action: null,
+        isOpen: false,
+        message: null
+    });
     const [modalOptionsConfirm, setModalOptionsConfirm] = useState({
         content: '',
         action: null,
@@ -78,53 +75,23 @@ const Campaign = () => {
         isOpen: false,
         message: null
     });
-    const [modalOptionsEdition, setModalOptionsEdition] = useState({
-        action: null,
-        isOpen: false,
-        message: null
-    });
-    const [modalOptionsGift, setModalOptionsGift] = useState({
-        action: null,
-        giftId: null,
-        isOpen: false,
-        message: null
-    });
-    const [modalOptionsPlayer, setModalOptionsPlayer] = useState({
-        action: null,
-        playerId: null,
-        isOpen: false,
-        message: null
-    });
-    const [modalOptionsReward, setModalOptionsReward] = useState({
-        playerId: null,
-        isOpen: false,
-        message: null
-    });
+    const storyInputRef = useRef(null);
 
     // API states
-    const [edition, setEdition] = useState();
-    const [gifts, setGifts] = useState([]);
-    const [players, setPlayers] = useState([]);
-
-    // Constantes
-    const rights = {
-        isUser: auth.isLoggedIn && auth.level === EnumUserRole.USER,
-        isAdmin: auth.isLoggedIn && auth.level === EnumUserRole.ADMIN,
-        isSuperAdmin: auth.isLoggedIn && auth.level >= EnumUserRole.SUPERADMIN,
-        isAdminOrSuperAdminOnEdition:
-            auth.isLoggedIn &&
-            ((auth.level === EnumUserRole.ADMIN && new Date() <= new Date(edition?.endDate)) || auth.level >= EnumUserRole.SUPERADMIN)
-    };
+    const [campaign, setCampaign] = useState();
+    const [stories, setStories] = useState([]);
 
     /**
-     * Schéma de validation Yup de l'édition
+     * Schéma de validation Yup de la campagne
      */
-    const editionValidationSchema = useMemo(() => {
+    const campaignValidationSchema = useMemo(() => {
         return Yup.object({
-            startDate: Yup.string().required('errors.invalidStartDate'),
-            startTime: Yup.string().required('errors.invalidStartTime'),
-            endTime: Yup.string().required('errors.invalidEndTime'),
-            location: Yup.string().required('errors.invalidLocation'),
+            name: Yup.string().required('errors.invalidName'), // TODO : trad
+            players: Yup.number()
+                .integer('errors.invalidPlayers')
+                .min(1, 'errors.invalidPlayers')
+                .typeError('errors.invalidPlayers')
+                .required('errors.invalidPlayers'), // TODO : trad
             picture: Yup.mixed()
                 .nullable()
                 .test('file-type', 'errors.invalidFileType', (value) => {
@@ -138,134 +105,53 @@ const Campaign = () => {
     }, []);
 
     /**
-     * Schéma de validation Yup des cadeaux
+     * Schéma de validation Yup des histoires
      */
-    const giftValidationSchema = useMemo(() => {
-        const currentGift = gifts.find((g) => g.id === modalOptionsGift.giftId);
-
+    const storyValidationSchema = useMemo(() => {
         return Yup.object({
-            name: Yup.string().required('errors.invalidName'),
-            value: Yup.number()
-                .typeError('errors.invalidValue')
-                .required('errors.invalidValue')
-                .integer('errors.invalidValue')
-                .positive('errors.invalidValue'),
-            quantity: Yup.number()
-                .typeError('errors.invalidQuantity')
-                .required('errors.invalidQuantity')
-                .min(0, 'errors.invalidQuantity')
-                .test('gift-reward-count', 'errors.quantityAttribution', (value) => !currentGift || value >= currentGift.rewardCount)
+            story: Yup.string().required('errors.invalidStory') // TODO : trad
         });
-    }, [modalOptionsGift.giftId, gifts]);
+    }, [inputOptionsStory.storyId]);
 
     /**
-     * Schéma de validation Yup des participants
+     * Formik campagne
      */
-    const playerValidationSchema = useMemo(() => {
-        const currentPlayer = players.find((p) => p.id === modalOptionsPlayer.playerId);
-
-        return Yup.object({
-            name: Yup.string().required('errors.invalidName'),
-            points: Yup.number()
-                .typeError('errors.invalidPoints')
-                .required('errors.invalidPoints')
-                .min(
-                    !rights.isSuperAdmin || modalOptionsPlayer.action === EnumAction.CREATE ? 0 : -currentPlayer?.points,
-                    'errors.invalidPoints'
-                ),
-            ...(modalOptionsPlayer.action === EnumAction.UPDATE && {
-                giveaway: Yup.number()
-                    .nullable()
-                    // Don > 0 si un joueur est sélectionné
-                    .test('giveaway-pair', 'errors.invalidGiveaway', function (value) {
-                        const { giveawayPlayerId } = this.parent;
-                        return !giveawayPlayerId || value > 0;
-                    })
-                    // Points restants
-                    .test('giveaway-remaining', 'errors.invalidGiveawayRemaining', function (value) {
-                        const { points } = this.parent;
-                        const delta = parseInt(points, 10);
-                        const giveaway = parseInt(value, 10) || 0;
-                        return currentPlayer.points + delta - giveaway >= 0;
-                    }),
-                giveawayPlayerId: Yup.mixed()
-                    .nullable()
-                    // Joueur sélectionné si don > 0
-                    .test('giveawayPlayerId-pair', 'errors.invalidGiveawayPlayer', function (value) {
-                        const { giveaway } = this.parent;
-                        return !(giveaway > 0) || !!value;
-                    })
-            })
-        });
-    }, [modalOptionsPlayer.playerId, modalOptionsPlayer.action, players, auth]);
-
-    /**
-     * Schéma de validation Yup des récompenses
-     */
-    const rewardValidationSchema = useMemo(() => {
-        const currentPlayer = players.find((p) => p.id === modalOptionsReward.playerId);
-
-        return Yup.object({
-            giftId: Yup.mixed()
-                .required('errors.invalidGift')
-                // Nombre de points suffisant
-                .test('gift-points', 'errors.invalidGiftPoints', (value) =>
-                    gifts.some((g) => g.id === value && g.remainingQuantity > 0 && g.value <= currentPlayer.points)
-                )
-        });
-    }, [modalOptionsReward.playerId, gifts, players]);
-
-    /**
-     * Formik édition
-     */
-    const formEdition = useFormik({
-        initialValues: initialEditionValues,
-        validationSchema: editionValidationSchema,
-        onSubmit: (values) => handleSubmitEdition(values)
+    const formCampaign = useFormik({
+        initialValues: initialCampaignValues,
+        validationSchema: campaignValidationSchema,
+        onSubmit: (values) => handleSubmitCampaign(values)
     });
 
     /**
-     * Formik cadeau
+     * Formik histoire
      */
-    const formGift = useFormik({
-        initialValues: initialGiftValues,
-        validationSchema: giftValidationSchema,
-        onSubmit: (values) => handleSubmitGift(values)
-    });
-
-    /**
-     * Formik participant
-     */
-    const formPlayer = useFormik({
-        initialValues: initialPlayerValues,
-        validationSchema: playerValidationSchema
-    });
-
-    /**
-     * Formik récompense
-     */
-    const formReward = useFormik({
-        initialValues: initialRewardValues,
-        validationSchema: rewardValidationSchema
+    const formStory = useFormik({
+        initialValues: initialStoryValues,
+        validationSchema: storyValidationSchema,
+        onSubmit: (values) => handleSubmitStory(values)
     });
 
     /**
      * Lancement initial de la page (à chaque changement d'id)
      */
     useEffect(() => {
+        // Redirection vers l'accueil si non connecté
+        if (!auth || !auth.isLoggedIn) {
+            navigate('/');
+        }
+
+        // Récupération de la campagne et de ses histoires
         const campaignsService = new CampaignsService();
         const storiesService = new StoriesService();
 
-        const subscriptionCampaigns = campaignsService.getCampaign(id);
+        const subscriptionCampaign = campaignsService.getCampaign(id);
         const subscriptionStories = storiesService.getCampaignStories(id);
 
-        // TODO : avec un combineLatest, appeler le service campagnes et histoires en même temps pour éviter de passer par un CampaignResponseDTO
-        combineLatest([subscriptionCampaigns, subscriptionStories])
+        combineLatest([subscriptionCampaign, subscriptionStories])
             .pipe(
-                map((dataEdition) => {
-                    setEdition(dataEdition.response.data.edition);
-                    setGifts(processGiftsData(dataEdition.response.data.gifts));
-                    setPlayers(processPlayersData(dataEdition.response.data.players));
+                map(([dataCampaign, dataStories]) => {
+                    setCampaign(dataCampaign.response.data);
+                    setStories(dataStories.response.data);
                 }),
                 take(1),
                 catchError((err) => {
@@ -280,163 +166,57 @@ const Campaign = () => {
     }, [id]);
 
     /**
-     * Si un message d'authentification est défini on l'affiche
-     */
-    useEffect(() => {
-        // Message venant du AuthContext (connexion / déconnexion)
-        if (authMessage && authMessage.target === 'page') {
-            setMessage(authMessage);
-            setAuthMessage(null);
-        }
-    }, [authMessage, setAuthMessage]);
-
-    /**
-     * Mise à jour du formulaire de l'édition aux changements de sa modale
+     * Mise à jour du formulaire de la campagne aux changements de sa modale
      */
     useEffect(() => {
         // Initialisation à l'ouverture de la modale
-        if (modalOptionsEdition.isOpen && edition) {
-            formEdition.setValues({
-                location: edition.location,
-                startDate: getDayFromDate(edition.startDate),
-                startTime: getLocalizedTime(edition.startDate),
-                endTime: getLocalizedTime(edition.endDate),
-                picture: edition.picture,
-                pictureAction: null,
-                theme: edition.theme,
-                challenge: edition.challenge
+        if (modalOptionsCampaign.isOpen && campaign) {
+            formCampaign.setValues({
+                name: campaign.name,
+                universe: campaign.universe,
+                players: campaign.players,
+                picture: campaign.picture,
+                pictureAction: null
             });
         }
 
         // Réinitialisation à la fermeture de la modale
-        if (!modalOptionsEdition.isOpen) {
-            formEdition.resetForm();
+        if (!modalOptionsCampaign.isOpen) {
+            formCampaign.resetForm();
         }
-    }, [modalOptionsEdition.isOpen, edition]);
+    }, [modalOptionsCampaign.isOpen, campaign]);
 
     /**
-     * Mise à jour du formulaire du cadeau aux changements de sa modale
+     * Mise à jour du formulaire de l'histoire aux changements de sa saisie
      */
     useEffect(() => {
-        // Initialisation à l'ouverture de la modale
-        if (modalOptionsGift.isOpen && modalOptionsGift.giftId) {
-            const currentGift = gifts.find((g) => g.id === modalOptionsGift.giftId);
+        // Focus à la création
+        inputOptionsStory.isOpen && inputOptionsStory.action === EnumAction.CREATE && storyInputRef.current?.focus();
 
-            currentGift &&
-                formGift.setValues({
-                    id: currentGift.id,
-                    name: currentGift.name,
-                    value: currentGift.value,
-                    quantity: currentGift.quantity
+        // Initialisation à l'ouverture de la saisie en modification
+        if (inputOptionsStory.isOpen && inputOptionsStory.action === EnumAction.UPDATE && inputOptionsStory.storyId) {
+            const currentStory = stories.find((g) => g.id === inputOptionsStory.storyId);
+
+            currentStory &&
+                formStory.setValues({
+                    id: currentStory.id,
+                    story: currentStory.story
                 });
         }
 
         // Réinitialisation à la fermeture de la modale
-        if (!modalOptionsGift.isOpen) {
-            formGift.resetForm();
+        if (!inputOptionsStory.isOpen || inputOptionsStory.action === EnumAction.CREATE) {
+            formStory.resetForm();
         }
-    }, [modalOptionsGift.isOpen, modalOptionsGift.giftId]);
+    }, [inputOptionsStory.isOpen, inputOptionsStory.storyId]);
 
     /**
-     * Mise à jour du formulaire du participant aux changements de sa modale
-     */
-    useEffect(() => {
-        // Initialisation à l'ouverture de la modale
-        if (modalOptionsPlayer.isOpen && modalOptionsPlayer.playerId) {
-            const currentPlayer = players.find((g) => g.id === modalOptionsPlayer.playerId);
-
-            currentPlayer &&
-                formPlayer.setValues({
-                    id: currentPlayer.id,
-                    name: currentPlayer.name,
-                    points: 0,
-                    giveaway: 0,
-                    giveawayPlayerId: ''
-                });
-        }
-
-        // Réinitialisation à la fermeture de la modale
-        if (!modalOptionsPlayer.isOpen) {
-            formPlayer.resetForm();
-        }
-    }, [modalOptionsPlayer.isOpen, modalOptionsPlayer.playerId]);
-
-    /**
-     * Mise à jour du formulaire de récompense aux changements de sa modale
-     */
-    useEffect(() => {
-        // Initialisation à l'ouverture de la modale
-        if (modalOptionsReward.isOpen && modalOptionsReward.playerId) {
-            const currentPlayer = players.find((g) => g.id === modalOptionsReward.playerId);
-
-            currentPlayer &&
-                formReward.setValues({
-                    giftId: '',
-                    playerId: currentPlayer.id
-                });
-        }
-
-        // Réinitialisation à la fermeture de la modale
-        if (!modalOptionsReward.isOpen) {
-            formReward.resetForm();
-        }
-    }, [modalOptionsReward.isOpen, modalOptionsReward.playerId]);
-
-    /**
-     * Enrichit les données participants avec la couleur
-     * @param {*} playersData Données participants
-     * @returns Données participants enrichies
-     */
-    const processPlayersData = (playersData) => {
-        return playersData.map((player) => ({
-            ...player,
-            color: getIconColor(player.name)
-        }));
-    };
-
-    /**
-     * Enrichit les données cadeaux avec la couleur
-     * @param {*} giftsData Données cadeaux
-     * @returns Données cadeaux enrichies
-     */
-    const processGiftsData = (giftsData) => {
-        return giftsData.map((gift) => ({
-            ...gift,
-            color: getIconColor(gift.name)
-        }));
-    };
-
-    /**
-     * Détermine une couleur d'icône en fonction du texte fourni
-     * @param {*} text Texte
-     * @returns Couleur
-     */
-    const getIconColor = (text) => {
-        const colors = [
-            '#2563eb',
-            '#7c3aed',
-            '#059669',
-            '#dc2626',
-            '#d97706',
-            '#0891b2',
-            '#9333ea',
-            '#16a34a',
-            '#e11d48',
-            '#0369a1',
-            '#b45309',
-            '#1d4ed8'
-        ];
-
-        return colors[text.charCodeAt(0) % colors.length];
-    };
-
-    /**
-     * Ouverture/fermeture de la modale de modification d'édition
+     * Ouverture/fermeture de la modale de modification de campagne
      * @param {*} action Action à réaliser
      */
     const openCloseCampaignModal = (action = null) => {
         // Ouverture ou fermeture
-        setModalOptionsEdition((prev) => ({
+        setModalOptionsCampaign((prev) => ({
             ...prev,
             action: action,
             isOpen: !prev.isOpen,
@@ -445,33 +225,33 @@ const Campaign = () => {
     };
 
     /**
-     * Modification de l'édition
+     * Modification de la campagne
      * @param {*} values Données du formulaire
      */
-    const handleSubmitEdition = (values) => {
+    const handleSubmitCampaign = (values) => {
         setMessage(null);
         setIsSubmitting(true);
-        setModalOptionsEdition((prev) => ({ ...prev, message: null }));
+        setModalOptionsCampaign((prev) => ({ ...prev, message: null }));
 
         // Formatage des données
-        const body = formatDataEdition(values);
+        const body = formatDataCampaign(values);
 
-        const editionsService = new CampaignsService();
+        const campaignsService = new CampaignsService();
 
-        editionsService
-            .updateEdition(edition.id, body)
+        campaignsService
+            .updateCampaign(campaign.id, body)
             .pipe(
-                map((dataEdition) => {
-                    setMessage({ code: dataEdition.response.message, type: dataEdition.response.status });
+                map((dataCampaign) => {
+                    setMessage({ code: dataCampaign.response.message, type: dataCampaign.response.status });
                 }),
-                switchMap(() => editionsService.getEdition(edition.id)),
-                map((newDataEdition) => {
+                switchMap(() => campaignsService.getCampaign(campaign.id)),
+                map((newDataCampaign) => {
                     openCloseCampaignModal();
-                    setEdition(newDataEdition.response.data.edition);
+                    setCampaign(newDataCampaign.response.data);
                 }),
                 take(1),
                 catchError((err) => {
-                    setModalOptionsEdition((prev) => ({
+                    setModalOptionsCampaign((prev) => ({
                         ...prev,
                         message: { code: err?.response?.message, type: err?.response?.status }
                     }));
@@ -485,11 +265,11 @@ const Campaign = () => {
     };
 
     /**
-     * Formate les données édition
+     * Formate les données campagne
      * @param {*} values Données du formulaire
      * @returns Données formatées
      */
-    const formatDataEdition = (values) => {
+    const formatDataCampaign = (values) => {
         const formData = new FormData();
 
         // Champs textes
@@ -508,87 +288,57 @@ const Campaign = () => {
     };
 
     /**
-     * Ouverture/fermeture de la modale de modification de participant
+     * Ouverture/fermeture de la saisie d'histoire
      * @param {*} action Action à réaliser
-     * @param {*} playerId Identifiant participant
+     * @param {*} storyId Identifiant histoire
      */
-    const openClosePlayerModal = (action = null, playerId = null) => {
+    const openCloseStoryInput = (action = null, storyId = null) => {
         // Ouverture ou fermeture
-        setModalOptionsPlayer((prev) => ({
+        setInputOptionsStory((prev) => ({
             ...prev,
             action: action,
-            playerId: playerId,
-            isOpen: !prev.isOpen,
-            message: null
+            storyId: storyId,
+            isOpen: !prev.isOpen
         }));
     };
 
     /**
-     * Ouverture/fermeture de la modale de modification de cadeau
-     * @param {*} action Action à réaliser
-     * @param {*} giftId Identifiant cadeau
-     */
-    const openCloseGiftModal = (action = null, giftId = null) => {
-        // Ouverture ou fermeture
-        setModalOptionsGift((prev) => ({
-            ...prev,
-            action: action,
-            giftId: giftId,
-            isOpen: !prev.isOpen,
-            message: null
-        }));
-    };
-
-    /**
-     * Création ou modification d'un cadeau
+     * Création ou modification d'une histoire
      * @param {*} values Données du formulaire
      */
-    const handleSubmitGift = (values) => {
+    const handleSubmitStory = (values) => {
         setMessage(null);
 
         const storiesService = new StoriesService();
 
-        let subscriptionGifts = null;
+        let subscriptionStory = null;
 
-        switch (modalOptionsGift?.action) {
+        switch (inputOptionsStory?.action) {
             case EnumAction.CREATE:
                 setIsSubmitting(true);
-                setModalOptionsGift((prev) => ({ ...prev, message: null }));
 
-                subscriptionGifts = storiesService.createGift(edition.id, {
-                    name: values.name,
-                    value: values.value,
-                    quantity: values.quantity
-                });
+                subscriptionStory = storiesService.createStory(campaign.id, { story: values.story });
                 break;
             case EnumAction.UPDATE:
                 setIsSubmitting(true);
-                setModalOptionsGift((prev) => ({ ...prev, message: null }));
 
-                subscriptionGifts = storiesService.updateGift(values.id, {
-                    name: values.name,
-                    value: values.value,
-                    quantity: values.quantity
-                });
+                subscriptionStory = storiesService.updateStory(values.id, { story: values.story });
                 break;
         }
 
-        subscriptionGifts
+        subscriptionStory
             ?.pipe(
-                map((dataGift) => {
-                    setMessage({ code: dataGift.response.message, type: dataGift.response.status });
+                map((dataStory) => {
+                    setMessage({ code: dataStory.response.message, type: dataStory.response.status });
                 }),
-                switchMap(() => storiesService.getEditionGifts(edition.id)),
-                map((dataGifts) => {
-                    openCloseGiftModal();
-                    setGifts(processGiftsData(dataGifts.response.data));
+                switchMap(() => storiesService.getCampaignStories(campaign.id)),
+                map((dataStories) => {
+                    openCloseStoryInput();
+                    setStories(dataStories.response.data);
                 }),
                 take(1),
                 catchError((err) => {
-                    setModalOptionsGift((prev) => ({
-                        ...prev,
-                        message: { code: err?.response?.message, type: err?.response?.status }
-                    }));
+                    setMessage({ code: err?.response?.message, type: err?.response?.status });
                     return of();
                 }),
                 finalize(() => {
@@ -599,17 +349,43 @@ const Campaign = () => {
     };
 
     /**
-     * Ouverture/fermeture de la modale d'attribution de cadeau
-     * @param {*} playerId Identifiant participant
+     * Méthode centralisée d'action à la confirmation
      */
-    const openCloseRewardModal = (playerId = null) => {
-        // Ouverture ou fermeture
-        setModalOptionsReward((prev) => ({
-            ...prev,
-            playerId: playerId,
-            isOpen: !prev.isOpen,
-            message: null
-        }));
+    const handleConfirmAction = () => {
+        switch (modalOptionsConfirm?.action) {
+            case 'deleteCampaign':
+                return handleDeleteCampaign();
+            case 'deleteStory':
+                return handleDeleteStory(modalOptionsConfirm.data);
+            default:
+                return;
+        }
+    };
+
+    /**
+     * Ouvre la modale de suppression de campagne
+     */
+    const handleConfirmDeleteCampaign = () => {
+        // Ouverture de la modale de confirmation
+        openCloseConfirmModal({
+            // TODO : trad
+            content: t('campaign.confirmDeleteCampaign', { name: campaign.name }),
+            action: 'deleteCampaign',
+            data: null
+        });
+    };
+
+    /**
+     * Ouvre la modale de suppression d'histoire
+     */
+    const handleConfirmDeleteStory = (date) => {
+        // Ouverture de la modale de confirmation
+        openCloseConfirmModal({
+            // TODO : trad
+            content: t('edition.deleteStory', { date: date, name: campaign.name }),
+            action: 'deleteStory',
+            data: null
+        });
     };
 
     /**
@@ -638,55 +414,26 @@ const Campaign = () => {
     };
 
     /**
-     * Ouvre la modale de suppression d'édition
+     * Suppression de la campagne
      */
-    const handleConfirmDeleteEdition = () => {
-        // Ouverture de la modale de confirmation
-        openCloseConfirmModal({
-            content: t('edition.deleteEdition', {
-                year: new Date(edition.startDate).getFullYear(),
-                location: edition.location
-            }),
-            action: 'deleteEdition',
-            data: null
-        });
-    };
-
-    /**
-     * Méthode centralisée d'action à la confirmation
-     */
-    const handleConfirmAction = () => {
-        switch (modalOptionsConfirm?.action) {
-            case 'deleteCampaign':
-                return handleDeleteEdition();
-            case 'deleteStory':
-                return handleDeleteGift(modalOptionsConfirm.data);
-            default:
-                return;
-        }
-    };
-
-    /**
-     * Suppression de l'édition
-     */
-    const handleDeleteEdition = () => {
+    const handleDeleteCampaign = () => {
         setMessage(null);
         setIsSubmitting(true);
         setModalOptionsConfirm((prev) => ({ ...prev, message: null }));
 
-        const editionsService = new CampaignsService();
+        const campaignsService = new CampaignsService();
 
-        editionsService
-            .deleteEdition(edition.id)
+        campaignsService
+            .deleteCampaign(campaign.id)
             .pipe(
-                map((dataEdition) => {
+                map((dataCampaign) => {
                     // Fermeture modale de confirmation
                     openCloseConfirmModal();
 
                     // Redirection avec message
                     navigate('/', {
                         state: {
-                            navMessage: { code: dataEdition.response.message, type: dataEdition.response.status }
+                            navMessage: { code: dataCampaign.response.message, type: dataCampaign.response.status }
                         }
                     });
                 }),
@@ -706,10 +453,10 @@ const Campaign = () => {
     };
 
     /**
-     * Suppression d'un cadeau
-     * @param {*} giftId Identifiant cadeau
+     * Suppression d'une histoire
+     * @param {*} storyId Identifiant histoire
      */
-    const handleDeleteGift = (giftId) => {
+    const handleDeleteStory = (storyId) => {
         setMessage(null);
         setIsSubmitting(true);
         setModalOptionsConfirm((prev) => ({ ...prev, message: null }));
@@ -717,15 +464,15 @@ const Campaign = () => {
         const storiesService = new StoriesService();
 
         storiesService
-            .deleteGift(giftId)
+            .deleteStory(storyId)
             .pipe(
-                map((dataGift) => {
-                    setMessage({ code: dataGift.response.message, type: dataGift.response.status });
+                map((dataStory) => {
+                    setMessage({ code: dataStory.response.message, type: dataStory.response.status });
                 }),
-                switchMap(() => storiesService.getCampaignStories(edition.id)),
-                map((dataGifts) => {
+                switchMap(() => storiesService.getCampaignStories(campaign.id)),
+                map((dataStories) => {
                     openCloseConfirmModal();
-                    setGifts(processGiftsData(dataGifts.response.data));
+                    setStories(dataStories.response.data);
                 }),
                 take(1),
                 catchError((err) => {
@@ -750,12 +497,12 @@ const Campaign = () => {
                 </div>
             ) : (
                 <>
-                    {/* Thème */}
-                    {edition?.picture && (
+                    {/* Entête */}
+                    {campaign?.picture && (
                         <div className="edition-picture-wrapper">
                             <Image
-                                src={`${import.meta.env.VITE_API_URL}/serve-file/images?file=${edition.picture}`}
-                                alt={edition.picture}
+                                src={`${import.meta.env.VITE_API_URL}/serve-file/images?file=${campaign.picture}`}
+                                alt={campaign.picture}
                                 className="edition-picture"
                             />
                         </div>
@@ -764,117 +511,128 @@ const Campaign = () => {
                     {/* Contenu */}
                     <div className="position-relative z-2">
                         {/* Message */}
+                        {/* TODO : voir la position du message fixed */}
+                        {/* TODO : trads */}
                         {message && <Message code={message.code} params={message.params} type={message.type} setMessage={setMessage} />}
 
                         {/* Edition */}
-                        {edition && (
+                        {campaign && (
                             <>
                                 {/* Titre */}
+                                {/* TODO : image + nom + univers + joueurs + bouon modif + bouton delete */}
                                 <h1 className="d-flex align-items-center gap-2">
                                     <FaComputer size={30} />
-                                    {t('edition.editionTitle', {
-                                        year: new Date(edition.startDate).getFullYear(),
-                                        location: edition.location
-                                    })}
+                                    {campaign.name}
                                 </h1>
 
-                                {/* Onglets */}
-                                <Tabs
-                                    variant="underline"
-                                    defaultActiveKey="players"
-                                    id="justify-tab-example"
-                                    className="mb-3 page-tabs"
-                                    justify
+                                {/* Modification */}
+                                <Button
+                                    variant="outline-action"
+                                    className="d-flex align-items-center home-grid-btn-action"
+                                    onClick={() => openCloseCampaignModal(EnumAction.UPDATE)}
+                                    disabled={isSubmitting}
                                 >
-                                    {/* Participants */}
-                                    <Tab eventKey="players" title={t('edition.players')}>
-                                        <EditionPlayers
-                                            rights={rights}
-                                            players={players}
-                                            onOpenPlayerModal={openClosePlayerModal}
-                                            onOpenRewardModal={openCloseRewardModal}
-                                            onConfirm={openCloseConfirmModal}
-                                            isSubmitting={isSubmitting}
-                                        />
-                                    </Tab>
+                                    {/* TODO : changer icône + trads "home" */}
+                                    <IoAddCircleOutline size={30} />
+                                    {t('campaign.updateCampaign')}
+                                </Button>
 
-                                    {/* Cadeaux */}
-                                    <Tab eventKey="gifts" title={t('edition.gifts')}>
-                                        <EditionGifts
-                                            rights={rights}
-                                            gifts={gifts}
-                                            onOpen={openCloseGiftModal}
-                                            onConfirm={openCloseConfirmModal}
-                                            isSubmitting={isSubmitting}
-                                        />
-                                    </Tab>
+                                {/* Suppression */}
+                                <Button
+                                    variant="outline-action"
+                                    className="d-flex align-items-center home-grid-btn-action"
+                                    onClick={handleConfirmDeleteCampaign}
+                                    disabled={isSubmitting}
+                                >
+                                    {/* TODO : changer icône + trads "home" */}
+                                    <IoAddCircleOutline size={30} />
+                                    {t('campaign.deleteCampaign')}
+                                </Button>
 
-                                    {/* A propos */}
-                                    <Tab eventKey="about" title={t('edition.about')}>
-                                        <EditionAbout
-                                            rights={rights}
-                                            edition={edition}
-                                            onOpen={openCloseCampaignModal}
-                                            onConfirm={handleConfirmDeleteEdition}
-                                            isSubmitting={isSubmitting}
-                                        />
-                                    </Tab>
-                                </Tabs>
+                                {/* TODO : bouton ajout nouvelle histoire (disparait si la saisie est ouverte) */}
+                                {/* TODO : modification à bien gérer, si on créé ou modifie une histoire, les boutons de création et de modifications disparaissent */}
+                                {/* TODO : à mettre dans un composant, puis faire un composant commun pour la saisie */}
+                                {/* Nouvelle histoire */}
+                                {!inputOptionsStory.isOpen && (
+                                    <Button
+                                        variant="outline-action"
+                                        onClick={() => openCloseStoryInput(EnumAction.CREATE)}
+                                        disabled={isSubmitting}
+                                    >
+                                        <IoAddCircleOutline size={25} />
+                                        {t('campaign.createStory')}
+                                    </Button>
+                                )}
 
-                                {/* Modale de modification/suppression d'édition */}
-                                {rights.isSuperAdmin && formEdition && modalOptionsEdition.isOpen && (
+                                {inputOptionsStory.isOpen && inputOptionsStory.action === EnumAction.CREATE && (
+                                    <Form onSubmit={formStory.handleSubmit}>
+                                        <fieldset disabled={isSubmitting}>
+                                            <div className="d-flex flex-column ps-2 pe-2 todo-supprimer mb-2 bg-white">
+                                                {/* Date & boutons de contexte */}
+                                                <div className="d-flex align-items-center justify-content-between pt-2 pb-2 table-card-line">
+                                                    {/* TODO : formater JJ/MM/AAAA selon la langue */}
+                                                    <span className="table-card-line-label">{getLocalizedDate(new Date())}</span>
+                                                    <span className="table-card-line-value">
+                                                        <Button disabled={isSubmitting}>EXPLORATION</Button>
+                                                        <Button disabled={isSubmitting}>COMBAT</Button>
+                                                    </span>
+                                                </div>
+
+                                                {/* Histoire */}
+                                                <div className="d-flex align-items-center justify-content-between pt-2 pb-2 table-card-line">
+                                                    <span className="table-card-line-label">
+                                                        <TextareaInput
+                                                            name={'story'}
+                                                            ref={storyInputRef}
+                                                            placeholder={t('campaign.story')}
+                                                            value={formStory.values.story}
+                                                            onChange={formStory.handleChange}
+                                                        />
+                                                    </span>
+                                                </div>
+
+                                                {/* Annuler & Valider */}
+                                                <div className="d-flex align-items-center justify-content-between pt-2 pb-2 table-card-line">
+                                                    <span className="table-card-line-value">
+                                                        <Button onClick={openCloseStoryInput} disabled={isSubmitting}>
+                                                            ANNULER
+                                                        </Button>
+                                                        <SpinnerButton variant={'action'} label={'VALIDER'} isSubmitting={isSubmitting} />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </Form>
+                                )}
+
+                                {/* Histoires */}
+                                {/* TODO : à mettre dans un composant Story + prévoir le cas édition */}
+                                {/* TODO : gérer affichage liste vide */}
+                                {/* TODO : définir key pour la liste */}
+                                {stories.map((story) => (
+                                    <Story
+                                        story={story}
+                                        formData={formStory}
+                                        inputOptions={inputOptionsStory}
+                                        onConfirm={handleConfirmDeleteStory}
+                                        onOpenClose={openCloseStoryInput}
+                                        isSubmitting={isSubmitting}
+                                    />
+                                ))}
+
+                                {/* Modale de modification de campagne */}
+                                {formCampaign && modalOptionsCampaign.isOpen && (
                                     <CampaignModal
-                                        formData={formEdition}
-                                        modalOptions={modalOptionsEdition}
-                                        setModalOptions={setModalOptionsEdition}
+                                        formData={formCampaign}
+                                        modalOptions={modalOptionsCampaign}
+                                        setModalOptions={setModalOptionsCampaign}
                                         onClose={openCloseCampaignModal}
                                         isSubmitting={isSubmitting}
                                     />
                                 )}
 
-                                {/* Modale de création/modification de cadeau */}
-                                {rights.isAdminOrSuperAdminOnEdition && formGift && modalOptionsGift.isOpen && (
-                                    <GiftModal
-                                        gift={gifts.find((g) => g.id === modalOptionsGift.giftId)}
-                                        formData={formGift}
-                                        modalOptions={modalOptionsGift}
-                                        setModalOptions={setModalOptionsGift}
-                                        onClose={openCloseGiftModal}
-                                        isSubmitting={isSubmitting}
-                                    />
-                                )}
-
-                                {/* Modale de création/modification de participant */}
-                                {rights.isAdminOrSuperAdminOnEdition && formPlayer && modalOptionsPlayer.isOpen && (
-                                    <PlayerModal
-                                        rights={rights}
-                                        player={players.find((p) => p.id === modalOptionsPlayer.playerId)}
-                                        players={players}
-                                        formData={formPlayer}
-                                        modalOptions={modalOptionsPlayer}
-                                        setModalOptions={setModalOptionsPlayer}
-                                        onClose={openClosePlayerModal}
-                                        isSubmitting={isSubmitting}
-                                    />
-                                )}
-
-                                {/* Modale d'attribution de cadeau à un participant */}
-                                {formReward && modalOptionsReward.isOpen && (
-                                    <RewardModal
-                                        rights={rights}
-                                        player={players.find((p) => p.id === modalOptionsReward.playerId)}
-                                        gifts={gifts}
-                                        formData={formReward}
-                                        modalOptions={modalOptionsReward}
-                                        setModalOptions={setModalOptionsReward}
-                                        onClose={openCloseRewardModal}
-                                        onConfirm={openCloseConfirmModal}
-                                        isSubmitting={isSubmitting}
-                                    />
-                                )}
-
                                 {/* Modale de confirmation */}
-                                {rights.isSuperAdmin && modalOptionsConfirm.isOpen && (
+                                {modalOptionsConfirm.isOpen && (
                                     <ConfirmModal
                                         modalOptions={modalOptionsConfirm}
                                         setModalOptions={setModalOptionsConfirm}

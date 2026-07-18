@@ -78,6 +78,7 @@ export default [
                         ['pages'],
                         ['components'],
                         ['utils'],
+                        ['inputs'],
                         ['enum'],
                         ['api'],
                         ['js', 'css'],

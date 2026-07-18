@@ -166,7 +166,7 @@ const Home = () => {
                                     />
 
                                     {/* Boutons d'action */}
-                                    <SpinnerButton label={t('navbar.connect')} isSubmitting={isSubmitting} />
+                                    <SpinnerButton variant={'action'} label={t('navbar.connect')} isSubmitting={isSubmitting} />
                                 </div>
                             </fieldset>
                         </Form>
