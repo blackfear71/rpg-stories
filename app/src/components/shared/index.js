@@ -4,3 +4,4 @@ export { default as Message } from './Message/Message';
 export { default as NavBar } from './NavBar/NavBar';
 export { default as SearchBar } from './SearchBar/SearchBar';
 export { default as SpinnerButton } from './SpinnerButton/SpinnerButton';
+export { default as TooltipButton } from './TooltipButton/TooltipButton';

@@ -1,0 +1,80 @@
+import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { Button, Form } from 'react-bootstrap';
+
+import { getLocalizedDate } from '../../../utils/helpers/dateHelper';
+
+import { TextareaInput } from '../../inputs';
+
+import { EnumAction } from '../../../enums';
+
+import { SpinnerButton } from '../../shared';
+
+/**
+ * Liste des histoires
+ */
+const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmitting }) => {
+    // Traductions
+    const { t } = useTranslation();
+
+    // Local states
+    const storyInputRef = useRef(null);
+
+    /**
+     * Met le focus sur le champ "histoire" à l'ouverture de la saisie
+     */
+    useEffect(() => {
+        // Focus à la création
+        inputOptions?.isOpen && storyInputRef.current?.focus();
+    }, [inputOptions?.isOpen]);
+
+    return (
+        <>
+            <Form onSubmit={formData.handleSubmit}>
+                <fieldset disabled={isSubmitting}>
+                    <div className="d-flex flex-column ps-2 pe-2 todo-supprimer mb-2 bg-white">
+                        {/* Date & boutons de contexte */}
+                        <div className="d-flex align-items-center justify-content-between pt-2 pb-2 table-card-line">
+                            <span className="table-card-line-label">
+                                {getLocalizedDate(story && inputOptions.action === EnumAction.UPDATE ? story.createdAt : new Date())}
+                            </span>
+
+                            <span className="table-card-line-value">
+                                <Button disabled={isSubmitting}>EXPLORATION</Button>
+                                <Button disabled={isSubmitting}>COMBAT</Button>
+                            </span>
+                        </div>
+
+                        {/* Histoire */}
+                        <div className="d-flex align-items-center justify-content-between pt-2 pb-2 table-card-line">
+                            <span className="table-card-line-label">
+                                <TextareaInput
+                                    name={'story'}
+                                    ref={storyInputRef}
+                                    placeholder={t('campaign.story')}
+                                    value={formData.values.story}
+                                    onChange={formData.handleChange}
+                                />
+                            </span>
+                        </div>
+
+                        {/* Annuler & Valider */}
+                        <div className="d-flex align-items-center justify-content-between pt-2 pb-2 table-card-line">
+                            <span className="table-card-line-value">
+                                {/* TODO : trads */}
+                                <Button onClick={onOpenClose} disabled={isSubmitting}>
+                                    ANNULER
+                                </Button>
+
+                                <SpinnerButton variant={'action'} label={'VALIDER'} isSubmitting={isSubmitting} />
+                            </span>
+                        </div>
+                    </div>
+                </fieldset>
+            </Form>
+        </>
+    );
+};
+
+export default StoryEntry;

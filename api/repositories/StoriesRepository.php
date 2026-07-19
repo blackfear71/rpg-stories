@@ -40,34 +40,6 @@ class StoriesRepository
     }
 
     /**
-     * Lecture d'un enregistrement par Id
-     */
-    // TODO : utile ?
-    public function getStory(int $storyId): ?Story
-    {
-        $sql = "SELECT id, story, created_at
-            FROM {$this->storiesTable}
-            WHERE id = :id AND is_active = 1";
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([
-            'id' => $storyId
-        ]);
-
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$row) {
-            return null;
-        }
-
-        return new Story(
-            id: (int) $row['id'],
-            story: $row['story'],
-            createdAt: new \DateTimeImmutable($row['created_at'])
-        );
-    }
-
-    /**
      * Insertion d'une histoire
      */
     public function createStory(Story $story): bool

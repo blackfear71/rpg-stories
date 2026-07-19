@@ -58,31 +58,6 @@ class StoriesService
     }
 
     /**
-     * Lecture d'un enregistrement
-     */
-    // TODO : utile ?
-    public function getStory(int $storyId): StoryOutputDTO
-    {
-        // Contrôle des données
-        if (!$storyId) {
-            throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
-        }
-
-        // Lecture de l'histoire
-        $story = $this->storiesRepository->getStory($storyId);
-
-        if (!$story) {
-            throw new \RuntimeException(MessageHelper::ERR_STORY_NOT_FOUND);
-        }
-
-        // Récupération des données histoire
-        return new StoryOutputDTO(
-            id: $story->id,
-            story: $story->story
-        );
-    }
-
-    /**
      * Création d'une histoire
      */
     public function createStory(int $campaignId, StoryInputDTO $data, UserOutputDTO $user): void
@@ -102,7 +77,7 @@ class StoriesService
             throw new \RuntimeException(MessageHelper::ERR_CREATION_FAILED);
         }
     }
-                
+
     /**
      * Modification d'une histoire
      */

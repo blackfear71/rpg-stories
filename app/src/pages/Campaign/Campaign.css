@@ -1,79 +1,33 @@
-.edition-picture-wrapper {
-    position: absolute;
-    top: 60px;
-    left: 0;
-    width: 100vw;
-    max-height: calc(100vh - 89.5px); /* Navbar + footer = 60px + 29.5px */
-    overflow: hidden;
-    z-index: 0;
+.campaign-header-container {
+    width: 100%;
+    min-height: 200px;
+    background-color: var(--color-bg-secondary);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-.edition-picture {
-    width: 100vw;
-    height: auto;
-    display: block;
-    opacity: 0.8;
-    mask-image: linear-gradient(to bottom, var(--color-bg-black) 30%, transparent 100%);
+.campaign-header-title {
+    font-size: xx-large;
+    background-color: var(--color-transparent-bg-primary);
+    color: var(--color-text-white);
 }
 
-.edition-subtitle-badge {
-    font-size: large;
+.campaign-header-universe {
+    font-size: medium;
     font-style: italic;
-    background-color: var(--color-bg-badge-title) !important;
-    border: 2px solid var(--color-border-badge-title) !important;
-    color: var(--color-bg-icon) !important;
-    word-wrap: break-word;
-    white-space: normal;
-    text-align: left;
-    flex-shrink: 1;
-    min-width: 0;
+    background-color: var(--color-transparent-bg-white);
+    color: var(--color-text-primary);
 }
 
-.edition-item {
-    background-color: var(--color-bg-item);
-    border: 1px solid var(--color-border-item);
-    border-radius: var(--bs-border-radius);
+.campaign-header-players {
+    font-size: medium;
+    background-color: var(--color-transparent-bg-white);
+    color: var(--color-text-primary);
 }
 
-.edition-item-icon {
-    flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-weight: 600;
+.campaign-stories-empty {
+    background-color: var(--color-bg-secondary);
     color: var(--color-text-white);
-}
-
-.edition-item-name {
-    color: var(--color-text-white);
-    min-width: 0;
-}
-
-.edition-item-ellipsis-text {
-    overflow-x: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    min-width: 0;
-    font-size: large;
-}
-
-.edition-item-counter {
-    font-size: small;
-}
-
-.edition-item-button {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background-color: var(--color-bg-item-button) !important;
-    color: var(--color-text-white) !important;
-    border: none !important;
-    height: 36px;
-    width: 36px;
-    cursor: pointer;
-}
-
-.edition-item-button:hover,
-.edition-item-button:active {
-    background-color: var(--color-border-item) !important;
+    text-align: center;
 }

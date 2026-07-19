@@ -53,9 +53,9 @@ class MessageHelper
     const ERR_INVALID_START_TIME = 'ERR_INVALID_START_TIME';
 
     // Participants
-    const ERR_INVALID_POINTS    = 'ERR_INVALID_POINTS';
-    const ERR_PLAYER_GIVEAWAY   = 'ERR_PLAYER_GIVEAWAY';
-    const ERR_PLAYER_NOT_FOUND  = 'ERR_PLAYER_NOT_FOUND';
+    const ERR_INVALID_POINTS   = 'ERR_INVALID_POINTS';
+    const ERR_PLAYER_GIVEAWAY  = 'ERR_PLAYER_GIVEAWAY';
+    const ERR_PLAYER_NOT_FOUND = 'ERR_PLAYER_NOT_FOUND';
 
     // Cadeaux
     const ERR_GIFT_NOT_FOUND       = 'ERR_GIFT_NOT_FOUND';
@@ -124,9 +124,9 @@ class MessageHelper
         self::ERR_UPLOAD_FAILED          => ['http' => 400, 'message' => 'Envoi échoué dans le dossier de destination'],
         self::ERR_WEBP_CONVERSION_FAILED => ['http' => 400, 'message' => 'Conversion WebP échouée'],
 
-        self::MSG_CREATION_SUCCESS       => ['http' => 201, 'message' => 'Création effectuée avec succès'],
-        self::MSG_DELETION_SUCCESS       => ['http' => 204, 'message' => 'Suppression effectuée avec succès'],
-        self::MSG_UPDATE_SUCCESS         => ['http' => 200, 'message' => 'Modification effectuée avec succès'],
+        self::MSG_CREATION_SUCCESS => ['http' => 201, 'message' => 'Création effectuée avec succès'],
+        self::MSG_DELETION_SUCCESS => ['http' => 200, 'message' => 'Suppression effectuée avec succès'],
+        self::MSG_UPDATE_SUCCESS   => ['http' => 200, 'message' => 'Modification effectuée avec succès'],
 
         // Campagnes
         self::ERR_CAMPAIGN_NOT_FOUND => ['http' => 404, 'message' => 'Erreur lors de la récupération de la campagne'],
@@ -158,7 +158,7 @@ class MessageHelper
         self::ERR_INVALID_GIFT_POINTS => ['http' => 400, 'message' => 'Le nombre de points est insuffisant pour le cadeau'],
         self::ERR_REWARD_NOT_FOUND    => ['http' => 404, 'message' => 'Erreur lors de la récupération de la récompense'],
 
-        self::MSG_REWARD_SUCCESS      => ['http' => 200, 'message' => 'Récompense attribuée avec succès'],
+        self::MSG_REWARD_SUCCESS => ['http' => 200, 'message' => 'Récompense attribuée avec succès'],
 
         // Utilisateurs
         self::ERR_INVALID_AUTH           => ['http' => 401, 'message' => 'Authentification invalide'],
@@ -175,8 +175,8 @@ class MessageHelper
         self::ERR_USER_NOT_FOUND         => ['http' => 404, 'message' => 'Erreur lors de la récupération de l\'utilisateur'],
         self::ERR_USER_PASSWORD_INVALID  => ['http' => 401, 'message' => 'Le mot de passe saisi est incorrect'],
 
-        self::WRN_LAST_ADMIN             => ['http' => 403, 'message' => 'Il doit rester au moins un Super Administrateur actif'],
-        self::WRN_USER_EXISTS            => ['http' => 409, 'message' => 'L\'identifiant existe déjà'],
+        self::WRN_LAST_ADMIN  => ['http' => 403, 'message' => 'Il doit rester au moins un Super Administrateur actif'],
+        self::WRN_USER_EXISTS => ['http' => 409, 'message' => 'L\'identifiant existe déjà'],
 
         self::MSG_LOGIN_SUCCESS          => ['http' => 200, 'message' => 'Connexion réussie'],
         self::MSG_LOGOUT_SUCCESS         => ['http' => 200, 'message' => 'Déconnexion réussie'],

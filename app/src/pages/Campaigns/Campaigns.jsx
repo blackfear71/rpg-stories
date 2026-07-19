@@ -247,7 +247,7 @@ const Campaigns = () => {
                             campaigns.map((campaign) => (
                                 <Button
                                     key={campaign.id}
-                                    className="d-flex flex-column align-items-start justify-content-center gap-2 campaigns-button"
+                                    className="d-flex flex-column align-items-start justify-content-center p-3 gap-2 campaigns-button"
                                     style={
                                         campaign.picture
                                             ? {
@@ -259,11 +259,14 @@ const Campaigns = () => {
                                     disabled={isSubmitting}
                                 >
                                     <span className="py-1 px-2 rounded campaigns-button-label">{campaign.name}</span>
-                                    <span className="py-1 px-2 rounded campaigns-button-badge">
-                                        {t(campaign.players === 1 ? 'campaign.countPlayer' : 'campaign.countPlayers', {
-                                            count: campaign.players
-                                        })}
-                                    </span>
+                                    <div className="d-flex flex-row gap-2 campaigns-button-badges-wrapper">
+                                        <span className="py-1 px-2 rounded campaigns-button-badge">{campaign.universe}</span>
+                                        <span className="py-1 px-2 rounded campaigns-button-badge">
+                                            {t(campaign.players === 1 ? 'campaign.countPlayer' : 'campaign.countPlayers', {
+                                                count: campaign.players
+                                            })}
+                                        </span>
+                                    </div>
                                 </Button>
                             ))}
                     </div>

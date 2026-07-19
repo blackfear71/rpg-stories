@@ -117,7 +117,6 @@ const Home = () => {
             ) : (
                 <div className="home-form-container">
                     {/* Message */}
-                    {/* TODO : faire en sorte qu'il ait une position fixed sous la navbar (attention à la page de connexion) => ok mais à voir ailleurs que sur la page de connexion */}
                     {message && (
                         <div className="home-form-message">
                             <Message code={message.code} params={message.params} type={message.type} setMessage={setMessage} />

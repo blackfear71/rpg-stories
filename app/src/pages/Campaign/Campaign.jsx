@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -8,17 +8,15 @@ import * as Yup from 'yup';
 import { combineLatest, of, switchMap } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
 
-import { Button, Form, Image, Spinner } from 'react-bootstrap';
-import { FaComputer } from 'react-icons/fa6';
-import { IoAddCircleOutline } from 'react-icons/io5';
+import { Spinner } from 'react-bootstrap';
+import { FaPlus } from 'react-icons/fa6';
+import { MdDelete, MdEdit } from 'react-icons/md';
 
-import { Story } from '../../components/features';
-import { TextareaInput } from '../../components/inputs';
+import { Story, StoryEntry } from '../../components/features';
 import { CampaignModal, ConfirmModal } from '../../components/modals';
-import { Message, SpinnerButton } from '../../components/shared';
+import { Message, TooltipButton } from '../../components/shared';
 
 import { useAuth } from '../../utils/context/AuthContext';
-import { getLocalizedDate } from '../../utils/helpers/dateHelper';
 
 import { EnumAction } from '../../enums';
 
@@ -34,7 +32,6 @@ const initialCampaignValues = {
     picture: null,
     pictureAction: null
 };
-// TODO : attention si on peut ouvrir plusieurs stories en même temps (prévoir un message de sauvegarde de l'autre ?)
 const initialStoryValues = {
     id: null,
     story: ''
@@ -55,7 +52,6 @@ const Campaign = () => {
     const { t } = useTranslation();
 
     // Local states
-    const storyInputRef = useRef(null);
     const [inputOptionsStory, setInputOptionsStory] = useState({
         action: null,
         storyId: 0,
@@ -190,9 +186,6 @@ const Campaign = () => {
      * Mise à jour du formulaire de l'histoire aux changements de sa saisie
      */
     useEffect(() => {
-        // Focus à la création
-        inputOptionsStory.isOpen && inputOptionsStory.action === EnumAction.CREATE && storyInputRef.current?.focus();
-
         // Initialisation à l'ouverture de la saisie en modification
         if (inputOptionsStory.isOpen && inputOptionsStory.action === EnumAction.UPDATE && inputOptionsStory.storyId) {
             const currentStory = stories.find((g) => g.id === inputOptionsStory.storyId);
@@ -204,7 +197,7 @@ const Campaign = () => {
                 });
         }
 
-        // Réinitialisation à la fermeture de la modale
+        // Réinitialisation à la fermeture de la modale ou à l'ouverture de la saisie en création
         if (!inputOptionsStory.isOpen || inputOptionsStory.action === EnumAction.CREATE) {
             formStory.resetForm();
         }
@@ -377,14 +370,16 @@ const Campaign = () => {
 
     /**
      * Ouvre la modale de suppression d'histoire
+     * @param {*} storyId Identifiant histoire
+     * @param {*} date Date histoire
      */
-    const handleConfirmDeleteStory = (date) => {
+    const handleConfirmDeleteStory = (storyId, date) => {
         // Ouverture de la modale de confirmation
         openCloseConfirmModal({
             // TODO : trad
             content: t('edition.deleteStory', { date: date, name: campaign.name }),
             action: 'deleteStory',
-            data: null
+            data: storyId
         });
     };
 
@@ -497,117 +492,78 @@ const Campaign = () => {
                 </div>
             ) : (
                 <>
-                    {/* Entête */}
-                    {campaign?.picture && (
-                        <div className="edition-picture-wrapper">
-                            <Image
-                                src={`${import.meta.env.VITE_API_URL}/serve-file/images?file=${encodeURIComponent(campaign.picture)}`}
-                                alt={campaign.picture}
-                                className="edition-picture"
-                            />
-                        </div>
-                    )}
+                    {/* Message */}
+                    {/* TODO : trads */}
+                    {message && <Message code={message.code} params={message.params} type={message.type} setMessage={setMessage} />}
 
-                    {/* Contenu */}
-                    <div className="position-relative z-2">
-                        {/* Message */}
-                        {/* TODO : trads */}
-                        {message && <Message code={message.code} params={message.params} type={message.type} setMessage={setMessage} />}
+                    {/* Campagne */}
+                    {campaign && (
+                        <div className="d-flex flex-column gap-3">
+                            {/* Entete */}
+                            <div
+                                className="d-flex flex-row align-items-center p-3 gap-3 rounded campaign-header-container"
+                                style={
+                                    campaign.picture
+                                        ? {
+                                              backgroundImage: `url(${import.meta.env.VITE_API_URL}/serve-file/images?file=${encodeURIComponent(campaign.picture)})`
+                                          }
+                                        : undefined
+                                }
+                            >
+                                {/* Infos */}
+                                <div className="d-flex flex-column align-items-start gap-2">
+                                    <div className="py-1 px-2 rounded campaign-header-title">{campaign.name}</div>
+                                    <div className="py-1 px-2 rounded campaign-header-universe">{campaign.universe}</div>
+                                    <div className="py-1 px-2 rounded campaign-header-players">
+                                        {t(campaign.players === 1 ? 'campaign.countPlayer' : 'campaign.countPlayers', {
+                                            count: campaign.players
+                                        })}
+                                    </div>
+                                </div>
 
-                        {/* Edition */}
-                        {campaign && (
-                            <>
-                                {/* Titre */}
-                                {/* TODO : image + nom + univers + joueurs + bouon modif + bouton delete */}
-                                <h1 className="d-flex align-items-center gap-2">
-                                    <FaComputer size={30} />
-                                    {campaign.name}
-                                </h1>
+                                {/* Actions */}
+                                <div className="d-flex flex-row gap-2 ms-auto">
+                                    {/* Ajout histoire */}
+                                    {!inputOptionsStory?.isOpen && (
+                                        <TooltipButton
+                                            tooltip={t('campaign.createStory')}
+                                            icon={<FaPlus size={25} />}
+                                            onClick={() => openCloseStoryInput(EnumAction.CREATE)}
+                                            isSubmitting={isSubmitting}
+                                        />
+                                    )}
 
-                                {/* Modification */}
-                                <Button
-                                    variant="outline-action"
-                                    className="d-flex align-items-center home-grid-btn-action"
-                                    onClick={() => openCloseCampaignModal(EnumAction.UPDATE)}
-                                    disabled={isSubmitting}
-                                >
-                                    {/* TODO : changer icône + trads "home" */}
-                                    <IoAddCircleOutline size={30} />
-                                    {t('campaign.updateCampaign')}
-                                </Button>
+                                    {/* Modification */}
+                                    <TooltipButton
+                                        tooltip={t('campaign.updateCampaign')}
+                                        icon={<MdEdit size={25} />}
+                                        onClick={() => openCloseCampaignModal(EnumAction.UPDATE)}
+                                        isSubmitting={isSubmitting}
+                                    />
 
-                                {/* Suppression */}
-                                <Button
-                                    variant="outline-action"
-                                    className="d-flex align-items-center home-grid-btn-action"
-                                    onClick={handleConfirmDeleteCampaign}
-                                    disabled={isSubmitting}
-                                >
-                                    {/* TODO : changer icône + trads "home" */}
-                                    <IoAddCircleOutline size={30} />
-                                    {t('campaign.deleteCampaign')}
-                                </Button>
+                                    {/* Suppression */}
+                                    <TooltipButton
+                                        tooltip={t('campaign.deleteCampaign')}
+                                        icon={<MdDelete size={25} />}
+                                        onClick={handleConfirmDeleteCampaign}
+                                        isSubmitting={isSubmitting}
+                                    />
+                                </div>
+                            </div>
 
-                                {/* TODO : bouton ajout nouvelle histoire (disparait si la saisie est ouverte) */}
-                                {/* TODO : modification à bien gérer, si on créé ou modifie une histoire, les boutons de création et de modifications disparaissent */}
-                                {/* TODO : à mettre dans un composant, puis faire un composant commun pour la saisie */}
-                                {/* Nouvelle histoire */}
-                                {!inputOptionsStory.isOpen && (
-                                    <Button
-                                        variant="outline-action"
-                                        onClick={() => openCloseStoryInput(EnumAction.CREATE)}
-                                        disabled={isSubmitting}
-                                    >
-                                        <IoAddCircleOutline size={25} />
-                                        {t('campaign.createStory')}
-                                    </Button>
-                                )}
+                            {/* Nouvelle histoire */}
+                            {inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE && (
+                                <StoryEntry
+                                    formData={formStory}
+                                    inputOptions={inputOptionsStory}
+                                    onOpenClose={openCloseStoryInput}
+                                    isSubmitting={isSubmitting}
+                                />
+                            )}
 
-                                {inputOptionsStory.isOpen && inputOptionsStory.action === EnumAction.CREATE && (
-                                    <Form onSubmit={formStory.handleSubmit}>
-                                        <fieldset disabled={isSubmitting}>
-                                            <div className="d-flex flex-column ps-2 pe-2 todo-supprimer mb-2 bg-white">
-                                                {/* Date & boutons de contexte */}
-                                                <div className="d-flex align-items-center justify-content-between pt-2 pb-2 table-card-line">
-                                                    <span className="table-card-line-label">{getLocalizedDate(new Date())}</span>
-                                                    <span className="table-card-line-value">
-                                                        <Button disabled={isSubmitting}>EXPLORATION</Button>
-                                                        <Button disabled={isSubmitting}>COMBAT</Button>
-                                                    </span>
-                                                </div>
-
-                                                {/* Histoire */}
-                                                <div className="d-flex align-items-center justify-content-between pt-2 pb-2 table-card-line">
-                                                    <span className="table-card-line-label">
-                                                        <TextareaInput
-                                                            name={'story'}
-                                                            ref={storyInputRef}
-                                                            placeholder={t('campaign.story')}
-                                                            value={formStory.values.story}
-                                                            onChange={formStory.handleChange}
-                                                        />
-                                                    </span>
-                                                </div>
-
-                                                {/* Annuler & Valider */}
-                                                <div className="d-flex align-items-center justify-content-between pt-2 pb-2 table-card-line">
-                                                    <span className="table-card-line-value">
-                                                        <Button onClick={openCloseStoryInput} disabled={isSubmitting}>
-                                                            ANNULER
-                                                        </Button>
-                                                        <SpinnerButton variant={'action'} label={'VALIDER'} isSubmitting={isSubmitting} />
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                    </Form>
-                                )}
-
-                                {/* Histoires */}
-                                {/* TODO : à mettre dans un composant Story + prévoir le cas édition */}
-                                {/* TODO : gérer affichage liste vide */}
-                                {/* TODO : définir key pour la liste */}
-                                {stories.map((story) => (
+                            {/* Histoires */}
+                            {stories && stories.length > 0 ? (
+                                stories.map((story) => (
                                     <Story
                                         key={story.id}
                                         story={story}
@@ -617,32 +573,34 @@ const Campaign = () => {
                                         onOpenClose={openCloseStoryInput}
                                         isSubmitting={isSubmitting}
                                     />
-                                ))}
+                                ))
+                            ) : (
+                                <div className="p-5 rounded campaign-stories-empty">{t('campaign.emptyStories')}</div>
+                            )}
 
-                                {/* Modale de modification de campagne */}
-                                {formCampaign && modalOptionsCampaign.isOpen && (
-                                    <CampaignModal
-                                        formData={formCampaign}
-                                        modalOptions={modalOptionsCampaign}
-                                        setModalOptions={setModalOptionsCampaign}
-                                        onClose={openCloseCampaignModal}
-                                        isSubmitting={isSubmitting}
-                                    />
-                                )}
+                            {/* Modale de modification de campagne */}
+                            {formCampaign && modalOptionsCampaign.isOpen && (
+                                <CampaignModal
+                                    formData={formCampaign}
+                                    modalOptions={modalOptionsCampaign}
+                                    setModalOptions={setModalOptionsCampaign}
+                                    onClose={openCloseCampaignModal}
+                                    isSubmitting={isSubmitting}
+                                />
+                            )}
 
-                                {/* Modale de confirmation */}
-                                {modalOptionsConfirm.isOpen && (
-                                    <ConfirmModal
-                                        modalOptions={modalOptionsConfirm}
-                                        setModalOptions={setModalOptionsConfirm}
-                                        onClose={openCloseConfirmModal}
-                                        onConfirmAction={handleConfirmAction}
-                                        isSubmitting={isSubmitting}
-                                    />
-                                )}
-                            </>
-                        )}
-                    </div>
+                            {/* Modale de confirmation */}
+                            {modalOptionsConfirm.isOpen && (
+                                <ConfirmModal
+                                    modalOptions={modalOptionsConfirm}
+                                    setModalOptions={setModalOptionsConfirm}
+                                    onClose={openCloseConfirmModal}
+                                    onConfirmAction={handleConfirmAction}
+                                    isSubmitting={isSubmitting}
+                                />
+                            )}
+                        </div>
+                    )}
                 </>
             )}
         </div>
