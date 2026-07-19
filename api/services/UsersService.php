@@ -213,7 +213,7 @@ class UsersService
         }
 
         // Contrôle dernier admin actif si changement de rôle
-        if ($currentUser->level == EnumUserRole::SUPERADMIN->value && $data->level !== EnumUserRole::SUPERADMIN->value && $this->usersRepository->isLastAdmin()) {
+        if ($currentUser->level == EnumUserRole::ADMIN->value && $data->level !== EnumUserRole::ADMIN->value && $this->usersRepository->isLastAdmin()) {
             throw new \WarningException(MessageHelper::WRN_LAST_ADMIN);
         }
 
@@ -246,7 +246,7 @@ class UsersService
         }
 
         // Contrôle dernier admin actif si suppression
-        if ($user->level == EnumUserRole::SUPERADMIN->value && $this->usersRepository->isLastAdmin()) {
+        if ($user->level == EnumUserRole::ADMIN->value && $this->usersRepository->isLastAdmin()) {
             throw new \WarningException(MessageHelper::WRN_LAST_ADMIN);
         }
 

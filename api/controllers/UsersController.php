@@ -50,7 +50,7 @@ class UsersController
     {
         try {
             // Contrôle authentification et niveau utilisateur
-            $this->usersService->checkAuthAndLevel($token, EnumUserRole::SUPERADMIN->value);
+            $this->usersService->checkAuthAndLevel($token, EnumUserRole::ADMIN->value);
 
             // Lecture de tous les enregistrements
             $users = $this->usersService->getAllUsers();
@@ -139,7 +139,7 @@ class UsersController
             $dataDTO = UserInputDTO::fromArray($data);
 
             // Contrôle authentification et niveau utilisateur
-            $user = $this->usersService->checkAuthAndLevel($token, EnumUserRole::SUPERADMIN->value);
+            $user = $this->usersService->checkAuthAndLevel($token, EnumUserRole::ADMIN->value);
 
             // Insertion d'un enregistrement
             $this->usersService->createUser($dataDTO, $user->id);
@@ -185,7 +185,7 @@ class UsersController
     {
         try {
             // Contrôle authentification et niveau utilisateur
-            $user = $this->usersService->checkAuthAndLevel($token, EnumUserRole::SUPERADMIN->value);
+            $user = $this->usersService->checkAuthAndLevel($token, EnumUserRole::ADMIN->value);
 
             // Modification d'un enregistrement
             $newPassword = $this->usersService->resetPassword($userId, $user->id);
@@ -208,7 +208,7 @@ class UsersController
             $dataDTO = UserInputDTO::fromArray($data);
 
             // Contrôle authentification et niveau utilisateur
-            $user = $this->usersService->checkAuthAndLevel($token, EnumUserRole::SUPERADMIN->value);
+            $user = $this->usersService->checkAuthAndLevel($token, EnumUserRole::ADMIN->value);
 
             // Modification d'un enregistrement
             $this->usersService->updateUser($userId, $dataDTO, $user->id);
@@ -231,7 +231,7 @@ class UsersController
     {
         try {
             // Contrôle authentification et niveau utilisateur
-            $user = $this->usersService->checkAuthAndLevel($token, EnumUserRole::SUPERADMIN->value);
+            $user = $this->usersService->checkAuthAndLevel($token, EnumUserRole::ADMIN->value);
 
             // Suppression logique d'un enregistrement
             $this->usersService->deleteUser($userId, $user->id);

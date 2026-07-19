@@ -136,7 +136,7 @@ class UsersRepository
     }
 
     /**
-     * Vérifie si l'utilisateur est le dernier super admin actif
+     * Vérifie si l'utilisateur est le dernier admin actif
      */
     public function isLastAdmin(): bool
     {
@@ -145,7 +145,7 @@ class UsersRepository
             WHERE level = :level AND is_active = 1";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(['level' => EnumUserRole::SUPERADMIN->value]);
+        $stmt->execute(['level' => EnumUserRole::ADMIN->value]);
 
         return (int) $stmt->fetchColumn() === 1;
     }

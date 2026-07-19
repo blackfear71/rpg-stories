@@ -47,7 +47,7 @@ const UserList = ({ users, onOpen, onConfirm, isSubmitting }) => {
                     </div>
 
                     {/* Supression */}
-                    {(u.level !== EnumUserRole.SUPERADMIN || u.login !== auth.login) && (
+                    {(u.level !== EnumUserRole.ADMIN || u.login !== auth.login) && (
                         <Button
                             onClick={() => handleDelete(u)}
                             className="settings-item-button"

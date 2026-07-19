@@ -10,7 +10,7 @@ import { catchError, finalize, map, take } from 'rxjs/operators';
 
 import { Spinner, Tab, Tabs } from 'react-bootstrap';
 import { FaQuestionCircle } from 'react-icons/fa';
-import { FaStar, FaUser, FaUserPlus } from 'react-icons/fa6';
+import { FaStar, FaUser } from 'react-icons/fa6';
 import { IoSettingsOutline } from 'react-icons/io5';
 
 import { SettingsUser, SettingsUsers } from '../../components/features';
@@ -82,8 +82,7 @@ const Settings = () => {
     // Constantes
     const rights = {
         isUser: auth.isLoggedIn && auth.level === EnumUserRole.USER,
-        isAdmin: auth.isLoggedIn && auth.level === EnumUserRole.ADMIN,
-        isSuperAdmin: auth.isLoggedIn && auth.level >= EnumUserRole.SUPERADMIN
+        isAdmin: auth.isLoggedIn && auth.level === EnumUserRole.ADMIN
     };
 
     /**
@@ -160,7 +159,7 @@ const Settings = () => {
         }
 
         // Récupération des données utilisateurs
-        if (rights.isSuperAdmin) {
+        if (rights.isAdmin) {
             const usersService = new UsersService();
 
             usersService
@@ -261,8 +260,6 @@ const Settings = () => {
             case EnumUserRole.USER:
                 return { label: t(`settings.level${level}`), icon: <FaUser size={18} /> };
             case EnumUserRole.ADMIN:
-                return { label: t(`settings.level${level}`), icon: <FaUserPlus size={18} /> };
-            case EnumUserRole.SUPERADMIN:
                 return { label: t(`settings.level${level}`), icon: <FaStar size={18} /> };
             default:
                 return { label: t('settings.unknownLevel'), icon: <FaQuestionCircle size={18} /> };
@@ -522,7 +519,7 @@ const Settings = () => {
                                 {t('settings.settingsTitle')}
                             </h1>
 
-                            {rights.isSuperAdmin && connectedUser && users ? (
+                            {rights.isAdmin && connectedUser && users ? (
                                 <Tabs
                                     variant="underline"
                                     defaultActiveKey="user"
@@ -569,7 +566,7 @@ const Settings = () => {
                     )}
 
                     {/* Modale de modification d'utilisateur */}
-                    {rights.isSuperAdmin && formUser && modalOptionsUser.isOpen && (
+                    {rights.isAdmin && formUser && modalOptionsUser.isOpen && (
                         <SettingsModal
                             user={users.find((u) => u.id === modalOptionsUser.userId)}
                             formData={formUser}
@@ -582,7 +579,7 @@ const Settings = () => {
                     )}
 
                     {/* Modale de confirmation */}
-                    {rights.isSuperAdmin && modalOptionsConfirm.isOpen && (
+                    {rights.isAdmin && modalOptionsConfirm.isOpen && (
                         <ConfirmModal
                             modalOptions={modalOptionsConfirm}
                             setModalOptions={setModalOptionsConfirm}

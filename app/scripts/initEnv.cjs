@@ -14,7 +14,7 @@ VITE_API_URL=http://localhost/rpg-stories/api
     {
         path: path.resolve('.env.production'),
         label: 'Front (prod)',
-        content: `VITE_APP_URL=https://rpg-stories.ddns.net
+        content: `VITE_APP_URL=https://rpg-stories.dedyn.io
 VITE_API_URL=/api
 `
     },

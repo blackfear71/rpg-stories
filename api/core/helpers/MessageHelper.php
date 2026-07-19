@@ -175,7 +175,7 @@ class MessageHelper
         self::ERR_USER_NOT_FOUND         => ['http' => 404, 'message' => 'Erreur lors de la récupération de l\'utilisateur'],
         self::ERR_USER_PASSWORD_INVALID  => ['http' => 401, 'message' => 'Le mot de passe saisi est incorrect'],
 
-        self::WRN_LAST_ADMIN  => ['http' => 403, 'message' => 'Il doit rester au moins un Super Administrateur actif'],
+        self::WRN_LAST_ADMIN  => ['http' => 403, 'message' => 'Il doit rester au moins un Administrateur actif'],
         self::WRN_USER_EXISTS => ['http' => 409, 'message' => 'L\'identifiant existe déjà'],
 
         self::MSG_LOGIN_SUCCESS          => ['http' => 200, 'message' => 'Connexion réussie'],

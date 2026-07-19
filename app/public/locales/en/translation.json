@@ -60,7 +60,7 @@
         "updateSuccess": "Update successful"
     },
     "warnings": {
-        "lastAdmin": "At least one active Super Administrator must remain",
+        "lastAdmin": "At least one active Administrator must remain",
         "userExists": "The username has already been used"
     },
     "common": {
@@ -165,9 +165,7 @@
         "level0": "User",
         "levelDescription0": "The user has limited read-only access to content. No actions are allowed.",
         "level1": "Administrator",
-        "levelDescription1": "The administrator can manage participants and gifts during the Nuit de l'Info.",
-        "level2": "Super Administrator",
-        "levelDescription2": "The super administrator has full rights on the application; he can fully manage editions, participants, gifts and users.",
+        "levelDescription1": "The administrator has full rights on the application; he can manage users on the website.",
         "login": "Username",
         "manageUser": "Manage user",
         "manageUsers": "Management",

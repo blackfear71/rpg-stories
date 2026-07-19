@@ -60,7 +60,7 @@
         "updateSuccess": "Modification réussie"
     },
     "warnings": {
-        "lastAdmin": "Il doit rester au moins un Super Administrateur actif",
+        "lastAdmin": "Il doit rester au moins un Administrateur actif",
         "userExists": "L'identifiant a déjà été utilisé"
     },
     "common": {
@@ -177,9 +177,7 @@
         "level0": "Utilisateur",
         "levelDescription0": "L'utilisateur a un accès limité en consultation au contenu. Aucune action n'est possible.",
         "level1": "Administrateur",
-        "levelDescription1": "L'administrateur peut gérer les participants et les cadeaux lors de la Nuit de l'Info.",
-        "level2": "Super administrateur",
-        "levelDescription2": "Le super administrateur possède tous les droits sur l'application, il peut gérer de manière étendue les éditions, les participants, les cadeaux et les utilisateurs.",
+        "levelDescription1": "L'administrateur possède tous les droits sur l'application, il peut gérer les utilisateurs du site.",
         "login": "Identifiant",
         "manageUser": "Gérer l'utilisateur",
         "manageUsers": "Gestion",

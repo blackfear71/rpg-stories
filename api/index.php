@@ -36,8 +36,8 @@ $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 $allowedOrigins = [
     'http://localhost:3000',        // CRA
     'http://localhost:5173',        // Vite
-    'http://rpg-stories.ddns.net',  // HTTP
-    'https://rpg-stories.ddns.net', // HTTPS
+    'http://rpg-stories.dedyn.io',  // HTTP
+    'https://rpg-stories.dedyn.io', // HTTPS
 ];
 
 // Headers de sécurité inconditionnels (sauf SSE)
