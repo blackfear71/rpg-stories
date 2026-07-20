@@ -54,7 +54,7 @@ const SettingsModal = ({ user, formData, modalOptions, setModalOptions, onReset,
      * Renvoie une liste de rôles sélectionnables
      */
     const getLevelOptions = () => {
-        return [0, 1, 2].map((r) => ({
+        return [0, 1].map((r) => ({
             key: r,
             value: r,
             label: t(`settings.level${r}`)

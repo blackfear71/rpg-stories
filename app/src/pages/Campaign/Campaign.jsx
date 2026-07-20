@@ -377,7 +377,7 @@ const Campaign = () => {
         // Ouverture de la modale de confirmation
         openCloseConfirmModal({
             // TODO : trad
-            content: t('edition.deleteStory', { date: date, name: campaign.name }),
+            content: t('campaign.deleteStory', { date: date, name: campaign.name }),
             action: 'deleteStory',
             data: storyId
         });
@@ -523,7 +523,7 @@ const Campaign = () => {
                                 </div>
 
                                 {/* Actions */}
-                                <div className="d-flex flex-row gap-2 ms-auto">
+                                <div className="d-flex flex-column gap-2 ms-auto">
                                     {/* Ajout histoire */}
                                     {!inputOptionsStory?.isOpen && (
                                         <TooltipButton

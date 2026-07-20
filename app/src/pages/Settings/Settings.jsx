@@ -500,6 +500,7 @@ const Settings = () => {
     };
 
     return (
+        // TODO : style à revoir
         <>
             {isLoading ? (
                 <div className="d-flex align-items-center justify-content-center layout-spinner-centered">

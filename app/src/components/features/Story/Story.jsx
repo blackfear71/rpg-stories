@@ -110,7 +110,7 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
                             <TooltipButton
                                 tooltip={t('common.delete')}
                                 icon={<MdDelete size={20} />}
-                                onClick={() => onConfirm(story.id, story.createdAt)}
+                                onClick={() => onConfirm(story.id, getLocalizedDate(story.createdAt))}
                                 isSubmitting={isSubmitting}
                             />
 

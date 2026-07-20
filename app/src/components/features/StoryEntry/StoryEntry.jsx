@@ -75,14 +75,14 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
                 <fieldset disabled={isSubmitting}>
                     <div className="d-flex flex-column rounded story-container">
                         {/* Entête */}
-                        <div className="d-flex align-items-center justify-content-between story-header">
+                        <div className="story-header">
                             {/* Date */}
                             <span className="px-3 py-2 story-header-date">
                                 {getLocalizedDate(story && inputOptions.action === EnumAction.UPDATE ? story.createdAt : new Date())}
                             </span>
 
                             {/* Boutons de contexte */}
-                            <span className="d-flex flex-row align-items-center px-3 py-2 gap-2">
+                            <span className="px-3 py-2 gap-2 story-header-actions">
                                 {tags.map((tag) => (
                                     <Button
                                         key={tag.code}

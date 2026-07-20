@@ -13,7 +13,7 @@ const DateInput = ({ title, icon, name, value, onChange, error, required = false
         <div className="d-flex flex-column gap-1">
             {/* Titre */}
             {title && (
-                <div className="modal-group-content-title">
+                <div className="input-title">
                     {title}
                     {required && <span className="required-star">*</span>}
                 </div>
@@ -21,7 +21,7 @@ const DateInput = ({ title, icon, name, value, onChange, error, required = false
 
             <div className="d-flex align-items-center gap-2">
                 {/* Icône */}
-                {icon && <div className="modal-input-icon">{icon}</div>}
+                {icon && <div className="input-icon">{icon}</div>}
 
                 {/* Saisie */}
                 <Form.Group className="d-flex flex-column w-100" controlId={name}>

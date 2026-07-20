@@ -163,7 +163,7 @@
         "createUser": "Create user",
         "deleteUser": "Do you really want to delete the user \"{{name}}\"?",
         "level0": "User",
-        "levelDescription0": "The user has limited read-only access to content. No actions are allowed.",
+        "levelDescription0": "The user has access to campaigns; he can manage his own parameters.",
         "level1": "Administrator",
         "levelDescription1": "The administrator has full rights on the application; he can manage users on the website.",
         "login": "Username",

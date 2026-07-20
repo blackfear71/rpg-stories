@@ -28,7 +28,7 @@ const TimeInput = ({
         <div className="d-flex flex-column gap-1">
             {/* Titre */}
             {title && (
-                <div className="modal-group-content-title">
+                <div className="input-title">
                     {title}
                     {required && <span className="required-star">*</span>}
                 </div>
@@ -37,7 +37,7 @@ const TimeInput = ({
             {/* Saisies */}
             <div className="d-flex align-items-center gap-2 time-input-wrapper">
                 {/* Icône */}
-                {icon && <div className="modal-input-icon">{icon}</div>}
+                {icon && <div className="input-icon">{icon}</div>}
 
                 <div className="d-flex align-items-start gap-2 time-input-fields">
                     {/* Début */}

@@ -9,9 +9,8 @@ const TextareaInput = ({ title, icon, name, ref, placeholder, value, onChange, e
     return (
         <div className="d-flex flex-column gap-1">
             {/* Titre */}
-            {/* TODO : reste à nettoyer les "modal-xxx" */}
             {title && (
-                <div className="modal-group-content-title">
+                <div className="input-title">
                     {title}
                     {required && <span className="required-star">*</span>}
                 </div>
@@ -20,7 +19,7 @@ const TextareaInput = ({ title, icon, name, ref, placeholder, value, onChange, e
             {/* Saisie */}
             <div className="d-flex align-items-center gap-2">
                 {/* Icône */}
-                {icon && <div className="modal-input-icon">{icon}</div>}
+                {icon && <div className="input-icon">{icon}</div>}
 
                 {/* Saisie */}
                 <Form.Group className="w-100" controlId={name}>
