@@ -4,9 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { HiKey, HiOutlineKey } from 'react-icons/hi2';
 
-import { PasswordInput } from '../../inputs';
-
-import { Message, SpinnerButton } from '../../shared';
+import { PasswordInput } from '../../../components/inputs';
+import { Message, SpinnerButton } from '../../../components/shared';
 
 /**
  * Modale mot de passe

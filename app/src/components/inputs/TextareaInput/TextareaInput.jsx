@@ -1,5 +1,7 @@
 import { Form } from 'react-bootstrap';
 
+import './TextareaInput.css';
+
 /**
  * Saisie zone de texte
  */
@@ -7,6 +9,7 @@ const TextareaInput = ({ title, icon, name, ref, placeholder, value, onChange, e
     return (
         <div className="d-flex flex-column gap-1">
             {/* Titre */}
+            {/* TODO : reste à nettoyer les "modal-xxx" */}
             {title && (
                 <div className="modal-group-content-title">
                     {title}
@@ -28,6 +31,7 @@ const TextareaInput = ({ title, icon, name, ref, placeholder, value, onChange, e
                         as="textarea"
                         name={name}
                         placeholder={placeholder}
+                        className="textarea-input"
                         value={value}
                         onChange={onChange}
                         isInvalid={!!error}

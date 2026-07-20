@@ -500,6 +500,7 @@ const Campaign = () => {
                     {campaign && (
                         <div className="d-flex flex-column gap-3">
                             {/* Entete */}
+                            {/* TODO : composant ? */}
                             <div
                                 className="d-flex flex-row align-items-center p-3 gap-3 rounded campaign-header-container"
                                 style={

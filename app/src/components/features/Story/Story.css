@@ -1,0 +1,27 @@
+.story-container {
+    border: 2px solid var(--color-border-secondary);
+    overflow: hidden;
+}
+
+.story-header {
+    background-color: var(--color-bg-tertiary);
+}
+
+.story-header-date {
+    color: var(--color-text-white);
+}
+
+.btn.story-header-tag {
+    font-size: small !important;
+}
+
+.story-text {
+    color: var(--color-text-white);
+    text-align: justify;
+    white-space: pre-line;
+}
+
+.story-text-highlight {
+    font-weight: bold;
+    text-decoration: underline;
+}

@@ -84,6 +84,7 @@
     },
     "campaign": {
         "campaignName": "Nom de la campagne",
+        "combat": "Combat",
         "confirmDeleteCampaign": "Voulez-vous vraiment supprimer la campagne \"{{name}}\" ?",
         "countPlayer": "{{count}} joueur",
         "countPlayers": "{{count}} joueurs",
@@ -91,8 +92,10 @@
         "createStory": "Créer une nouvelle histoire",
         "deleteCampaign": "Supprimer la campagne",
         "emptyStories": "Votre quête commence ici, n'attendez plus pour lancer une nouvelle histoire !",
+        "exploration": "Exploration",
         "picture": "Image",
         "playersCount": "Nombre de joueurs (MJ compris)",
+        "story": "Histoire",
         "universe": "Univers",
         "updateCampaign": "Modifier la campagne"
     },

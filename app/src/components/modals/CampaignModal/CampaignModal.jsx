@@ -6,10 +6,9 @@ import { FaRegClock, FaWandMagicSparkles } from 'react-icons/fa6';
 import { IoImageOutline, IoLocationOutline } from 'react-icons/io5';
 
 import { IncrementInput, PictureInput, TextInput } from '../../../components/inputs';
+import { Message, SpinnerButton } from '../../../components/shared';
 
 import { EnumAction } from '../../../enums';
-
-import { Message, SpinnerButton } from '../../shared';
 
 /**
  * Modale édition
