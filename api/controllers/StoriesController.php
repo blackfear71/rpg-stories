@@ -37,12 +37,15 @@ class StoriesController
     /**
      * Lecture des enregistrements d'une campagne
      */
-    public function getCampaignStories(int $campaignId): void
+    public function getCampaignStories(?string $token, int $campaignId): void
     {
         try {
+            // Contrôle authentification et niveau utilisateur
+            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
+
             // Lecture de tous les enregistrements
-            $stories = $this->storiesService->getCampaignStories($campaignId);
-            
+            $stories = $this->storiesService->getCampaignStories($campaignId, $user->id);
+
             // Succès
             ResponseHelper::success($stories);
         } catch (Exception $e) {

@@ -20,14 +20,17 @@ class CampaignsRepository
     /**
      * Lecture de tous les enregistrements
      */
-    public function getCampaigns(): array
+    public function getCampaigns(int $userId): array
     {
         $sql = "SELECT id, name, universe, players, picture
             FROM {$this->campaignsTable}
-            WHERE is_active = 1
+            WHERE created_by = :created_by AND is_active = 1
             ORDER BY id DESC";
 
-        $stmt = $this->db->query($sql);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'created_by' => $userId
+        ]);
 
         return array_map(fn($row) => new Campaign(
             id: (int) $row['id'],
@@ -41,15 +44,16 @@ class CampaignsRepository
     /**
      * Lecture d'un enregistrement par Id
      */
-    public function getCampaign(int $campaignId): ?Campaign
+    public function getCampaign(int $campaignId, int $userId): ?Campaign
     {
         $sql = "SELECT id, name, universe, players, picture
             FROM {$this->campaignsTable}
-            WHERE id = :id AND is_active = 1";
+            WHERE id = :id AND created_by = :created_by AND is_active = 1";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
-            'id' => $campaignId
+            'id' => $campaignId,
+            'created_by' => $userId
         ]);
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -70,16 +74,17 @@ class CampaignsRepository
     /**
      * Lecture des campagnes recherchées
      */
-    public function getSearchCampaigns(string $search): array
+    public function getSearchCampaigns(string $search, int $userId): array
     {
         $sql = "SELECT id, name, universe, players
             FROM {$this->campaignsTable}
-            WHERE (name LIKE :search OR universe LIKE :search) AND is_active = 1
+            WHERE (name LIKE :search OR universe LIKE :search) AND created_by = :created_by AND is_active = 1
             ORDER BY id DESC";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
-            'search' => "%$search%"
+            'search' => "%$search%",
+            'created_by' => $userId
         ]);
 
         return array_map(fn($row) => new Campaign(

@@ -9,30 +9,39 @@ require_once 'controllers/CampaignsController.php';
  * Lecture de tous les enregistrements
  */
 $router->get('/campaigns/all', function () use ($db): void {
+    // Token
+    $token = $_COOKIE['token'] ?? null;
+
     // Appel contrôleur
-    (new CampaignsController($db))->getCampaigns();
+    (new CampaignsController($db))->getCampaigns($token);
 });
 
 /**
  * Lecture d'un enregistrement
  */
 $router->get('/campaigns/campaign/:campaignId', function (array $params) use ($db): void {
+    // Token
+    $token = $_COOKIE['token'] ?? null;
+
     // Paramètres
     $campaignId = DataHelper::parseIntParam($params['campaignId']);
 
     // Appel contrôleur
-    (new CampaignsController($db))->getCampaign($campaignId);
+    (new CampaignsController($db))->getCampaign($token, $campaignId);
 });
 
 /**
  * Lecture des campagnes recherchées
  */
 $router->post('/campaigns/search', function () use ($db): void {
+    // Token
+    $token = $_COOKIE['token'] ?? null;
+    
     // Données d'entrée
     $data = json_decode(file_get_contents('php://input'), true);
 
     // Appel contrôleur
-    (new CampaignsController($db))->getSearchCampaigns($data['search']);
+    (new CampaignsController($db))->getSearchCampaigns($token, $data['search']);
 });
 
 /**

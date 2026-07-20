@@ -22,7 +22,12 @@ class CampaignsService {
      */
     getCampaigns = () => {
         const url = `${this.apiUrl}/all`;
-        return ajax.get(url, this.headers);
+        return ajax({
+            url,
+            method: 'GET',
+            headers: this.headers,
+            withCredentials: true
+        });
     };
 
     /**
@@ -32,7 +37,12 @@ class CampaignsService {
      */
     getCampaign = (campaignId) => {
         const url = `${this.apiUrl}/campaign/${campaignId}`;
-        return ajax.get(url, this.headers);
+        return ajax({
+            url,
+            method: 'GET',
+            headers: this.headers,
+            withCredentials: true
+        });
     };
 
     /**
@@ -42,7 +52,13 @@ class CampaignsService {
      */
     getSearchCampaigns = (body) => {
         const url = `${this.apiUrl}/search`;
-        return ajax.post(url, body, this.headers);
+        return ajax({
+            url,
+            method: 'POST', // La méthode doit être POST pour remplir $_POST côté back pour la recherche
+            headers: this.headers,
+            body,
+            withCredentials: true
+        });
     };
 
     /**

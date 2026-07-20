@@ -38,10 +38,10 @@ class CampaignsService
     /**
      * Lecture de tous les enregistrements
      */
-    public function getCampaigns(): array
+    public function getCampaigns(int $userId): array
     {
         // Lecture des campagnes
-        $campaigns = $this->campaignsRepository->getCampaigns();
+        $campaigns = $this->campaignsRepository->getCampaigns($userId);
 
         return array_map(fn($campaign) => new CampaignOutputDTO(
             id: $campaign->id,
@@ -55,7 +55,7 @@ class CampaignsService
     /**
      * Lecture d'un enregistrement
      */
-    public function getCampaign(int $campaignId): CampaignOutputDTO
+    public function getCampaign(int $campaignId, int $userId): CampaignOutputDTO
     {
         // Contrôle des données
         if (!$campaignId) {
@@ -63,7 +63,7 @@ class CampaignsService
         }
 
         // Lecture de la campagne
-        $dataCampaign = $this->campaignsRepository->getCampaign($campaignId);
+        $dataCampaign = $this->campaignsRepository->getCampaign($campaignId, $userId);
 
         if (!$dataCampaign) {
             throw new \RuntimeException(MessageHelper::ERR_CAMPAIGN_NOT_FOUND);
@@ -85,7 +85,7 @@ class CampaignsService
     /**
      * Lecture des campagnes recherchées
      */
-    public function getSearchCampaigns(string $search): array
+    public function getSearchCampaigns(string $search, int $userId): array
     {
         // Retour vide si pas de recherche saisie
         if (empty($search)) {
@@ -93,7 +93,7 @@ class CampaignsService
         }
 
         // Recherche des campagnes
-        $campaigns = $this->campaignsRepository->getSearchCampaigns(trim($search));
+        $campaigns = $this->campaignsRepository->getSearchCampaigns(trim($search), $userId);
 
         return array_map(fn($campaign) => new CampaignOutputDTO(
             id: $campaign->id,

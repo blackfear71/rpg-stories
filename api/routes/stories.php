@@ -9,8 +9,14 @@ require_once 'controllers/StoriesController.php';
  * Lecture des enregistrements d'une campagne
  */
 $router->get('/stories/campaign/:campaignId', function (array $params) use ($db): void {
+    // Token
+    $token = $_COOKIE['token'] ?? null;
+
+    // Paramètres
+    $campaignId = DataHelper::parseIntParam($params['campaignId']);
+
     // Appel contrôleur
-    (new StoriesController($db))->getCampaignStories($params['campaignId']);
+    (new StoriesController($db))->getCampaignStories($token, $campaignId);
 });
 
 /**

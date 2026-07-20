@@ -39,7 +39,7 @@ class StoriesService
     /**
      * Lecture des enregistrements d'une campagne
      */
-    public function getCampaignStories(int $campaignId): array
+    public function getCampaignStories(int $campaignId, int $userId): array
     {
         // Contrôle des données
         if (!$campaignId) {
@@ -47,7 +47,7 @@ class StoriesService
         }
 
         // Lecture des histoires
-        $stories = $this->storiesRepository->getCampaignStories($campaignId);
+        $stories = $this->storiesRepository->getCampaignStories($campaignId, $userId);
 
         return array_map(fn($story) => new StoryOutputDTO(
             id: $story->id,

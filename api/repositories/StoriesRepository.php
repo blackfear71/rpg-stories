@@ -19,16 +19,17 @@ class StoriesRepository
     /**
      * Lecture des enregistrements d'une campagne
      */
-    public function getCampaignStories(int $campaignId): array
+    public function getCampaignStories(int $campaignId, int $userId): array
     {
         $sql = "SELECT id, campaign_id, story, created_at
             FROM {$this->storiesTable}
-            WHERE campaign_id = :campaign_id AND is_active = 1
+            WHERE campaign_id = :campaign_id AND created_by = :created_by AND is_active = 1
             ORDER BY id DESC";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
-            'campaign_id' => $campaignId
+            'campaign_id' => $campaignId,
+            'created_by' => $userId
         ]);
 
         return array_map(fn($row) => new Story(

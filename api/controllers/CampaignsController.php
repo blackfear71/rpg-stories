@@ -37,11 +37,14 @@ class CampaignsController
     /**
      * Lecture de tous les enregistrements
      */
-    public function getCampaigns(): void
+    public function getCampaigns(?string $token): void
     {
         try {
+            // Contrôle authentification et niveau utilisateur
+            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
+
             // Lecture de tous les enregistrements
-            $campaigns = $this->campaignsService->getCampaigns();
+            $campaigns = $this->campaignsService->getCampaigns($user->id);
 
             // Succès
             ResponseHelper::success($campaigns);
@@ -54,11 +57,14 @@ class CampaignsController
     /**
      * Lecture d'un enregistrement
      */
-    public function getCampaign(int $campaignId): void
+    public function getCampaign(?string $token, int $campaignId): void
     {
         try {
+            // Contrôle authentification et niveau utilisateur
+            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
+
             // Lecture d'un enregistrement
-            $campaign = $this->campaignsService->getCampaign($campaignId);
+            $campaign = $this->campaignsService->getCampaign($campaignId, $user->id);
 
             // Succès
             ResponseHelper::success($campaign);
@@ -71,11 +77,14 @@ class CampaignsController
     /**
      * Lecture des campagnes recherchées
      */
-    public function getSearchCampaigns(string $search): void
+    public function getSearchCampaigns(?string $token, string $search): void
     {
         try {
+            // Contrôle authentification et niveau utilisateur
+            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
+
             // Lecture de tous les enregistrements recherchés
-            $campaigns = $this->campaignsService->getSearchCampaigns($search);
+            $campaigns = $this->campaignsService->getSearchCampaigns($search, $user->id);
 
             // Succès
             ResponseHelper::success($campaigns);

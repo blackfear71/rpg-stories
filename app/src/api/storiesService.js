@@ -23,7 +23,12 @@ class StoriesService {
      */
     getCampaignStories = (campaignId) => {
         const url = `${this.apiUrl}/campaign/${campaignId}`;
-        return ajax.get(url, this.headers);
+        return ajax({
+            url,
+            method: 'GET',
+            headers: this.headers,
+            withCredentials: true
+        });
     };
 
     /**
