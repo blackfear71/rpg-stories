@@ -22,6 +22,6 @@
 }
 
 .story-text-highlight {
+    background-color: var(--color-bg-tertiary);
     font-weight: bold;
-    text-decoration: underline;
 }

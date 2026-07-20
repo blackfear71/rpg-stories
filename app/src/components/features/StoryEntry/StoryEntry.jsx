@@ -2,13 +2,14 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Form } from 'react-bootstrap';
+import { GiAxeSword, GiBed, GiCompass } from 'react-icons/gi';
 
 import { TextareaInput } from '../../../components/inputs';
 import { SpinnerButton } from '../../../components/shared';
 
 import { getLocalizedDate } from '../../../utils/helpers/dateHelper';
 
-import { EnumAction } from '../../../enums';
+import { EnumAction, EnumContext } from '../../../enums';
 
 import '../Story/Story.css';
 
@@ -23,7 +24,11 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
     const storyInputRef = useRef(null);
 
     // Constantes
-    const tags = ['COMBAT', 'EXPLORATION'];
+    const tags = [
+        { code: EnumContext.EXPLORATION, label: 'campaign.exploration', icon: <GiCompass size={20} /> },
+        { code: EnumContext.COMBAT, label: 'campaign.fight', icon: <GiAxeSword size={20} /> },
+        { code: EnumContext.REPOS, label: 'campaign.rest', icon: <GiBed size={20} /> }
+    ];
 
     /**
      * Met le focus sur le champ "histoire" à l'ouverture de la saisie
@@ -69,29 +74,34 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
             <Form onSubmit={formData.handleSubmit}>
                 <fieldset disabled={isSubmitting}>
                     <div className="d-flex flex-column rounded story-container">
-                        {/* Date & boutons de contexte */}
+                        {/* Entête */}
                         <div className="d-flex align-items-center justify-content-between story-header">
+                            {/* Date */}
                             <span className="px-3 py-2 story-header-date">
                                 {getLocalizedDate(story && inputOptions.action === EnumAction.UPDATE ? story.createdAt : new Date())}
                             </span>
 
+                            {/* Boutons de contexte */}
                             <span className="d-flex flex-row align-items-center px-3 py-2 gap-2">
                                 {tags.map((tag) => (
                                     <Button
-                                        key={tag}
+                                        key={tag.code}
                                         variant="outline-action"
                                         className="story-header-tag"
-                                        onClick={() => insertTag(tag)}
+                                        onClick={() => insertTag(tag.code)}
                                         disabled={isSubmitting}
                                     >
-                                        {`<${tag}>`}
+                                        <div className="d-flex flew-row align-items-center rounded gap-1">
+                                            {tag.icon} {t(tag.label)}
+                                        </div>
                                     </Button>
                                 ))}
                             </span>
                         </div>
 
-                        {/* Saisie histoire */}
-                        <div className="p-3">
+                        {/* Saisie */}
+                        <div className="d-flex flex-column gap-2 p-3">
+                            {/* Histoire */}
                             <TextareaInput
                                 name={'story'}
                                 ref={storyInputRef}
@@ -99,18 +109,16 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
                                 value={formData.values.story}
                                 onChange={formData.handleChange}
                             />
-                        </div>
 
-                        {/* Annuler & Valider */}
-                        <div className="d-flex align-items-center justify-content-between pt-2 pb-2 table-card-line">
-                            <span className="table-card-line-value">
+                            {/* Boutons d'action */}
+                            <div className="d-flex flex-row gap-2 justify-content-end">
                                 {/* TODO : trads */}
-                                <Button onClick={onOpenClose} disabled={isSubmitting}>
-                                    ANNULER
+                                <Button variant={'input-action'} onClick={onOpenClose} disabled={isSubmitting}>
+                                    {t('common.cancel')}
                                 </Button>
 
-                                <SpinnerButton variant={'action'} label={'VALIDER'} isSubmitting={isSubmitting} />
-                            </span>
+                                <SpinnerButton variant={'input-action'} label={t('common.validate')} isSubmitting={isSubmitting} />
+                            </div>
                         </div>
                     </div>
                 </fieldset>

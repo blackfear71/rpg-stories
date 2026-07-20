@@ -563,21 +563,21 @@ const Campaign = () => {
                             )}
 
                             {/* Histoires */}
-                            {stories && stories.length > 0 ? (
-                                stories.map((story) => (
-                                    <Story
-                                        key={story.id}
-                                        story={story}
-                                        formData={formStory}
-                                        inputOptions={inputOptionsStory}
-                                        onConfirm={handleConfirmDeleteStory}
-                                        onOpenClose={openCloseStoryInput}
-                                        isSubmitting={isSubmitting}
-                                    />
-                                ))
-                            ) : (
-                                <div className="p-5 rounded campaign-stories-empty">{t('campaign.emptyStories')}</div>
-                            )}
+                            {stories && stories.length > 0
+                                ? stories.map((story) => (
+                                      <Story
+                                          key={story.id}
+                                          story={story}
+                                          formData={formStory}
+                                          inputOptions={inputOptionsStory}
+                                          onConfirm={handleConfirmDeleteStory}
+                                          onOpenClose={openCloseStoryInput}
+                                          isSubmitting={isSubmitting}
+                                      />
+                                  ))
+                                : !inputOptionsStory?.isOpen && (
+                                      <div className="p-5 rounded campaign-stories-empty">{t('campaign.emptyStories')}</div>
+                                  )}
 
                             {/* Modale de modification de campagne */}
                             {formCampaign && modalOptionsCampaign.isOpen && (

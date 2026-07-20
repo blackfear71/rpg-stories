@@ -80,6 +80,7 @@ h1 {
 }
 
 /* Boutons */
+/* TODO : faire le tri dans ces boutons, c'est le bordel */
 .btn-action {
     display: flex !important;
     flex-direction: row;
@@ -165,6 +166,19 @@ h1 {
     background-color: var(--color-bg-cancel-hover) !important;
     border-color: var(--color-border-cancel-hover) !important;
     color: var(--color-bg-white) !important;
+}
+
+.btn-input-action {
+    background-color: var(--color-bg-secondary) !important;
+    border: 2px solid var(--color-bg-tertiary) !important;
+    color: var(--color-text-white) !important;
+    padding: 5px 12px !important;
+}
+
+.btn-input-action:hover,
+.btn-input-action:active {
+    background-color: var(--color-bg-tertiary) !important;
+    color: var(--color-text-white) !important;
 }
 
 .btn-input-outline-action,
