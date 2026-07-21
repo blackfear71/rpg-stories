@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GiAxeSword, GiBed, GiCompass } from 'react-icons/gi';
+import { GiAxeSword, GiCampfire, GiCompass } from 'react-icons/gi';
+import { IoCalendarOutline } from 'react-icons/io5';
 import { MdDelete, MdEdit } from 'react-icons/md';
 
 import { StoryEntry } from '../../../components/features';
@@ -48,7 +49,7 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
         const tags = [
             { code: EnumContext.EXPLORATION, label: 'campaign.exploration', icon: <GiCompass size={20} /> },
             { code: EnumContext.COMBAT, label: 'campaign.fight', icon: <GiAxeSword size={20} /> },
-            { code: EnumContext.REPOS, label: 'campaign.rest', icon: <GiBed size={20} /> }
+            { code: EnumContext.REPOS, label: 'campaign.rest', icon: <GiCampfire size={20} /> }
         ];
 
         // Construit dynamiquement la Regex à partir des codes des tags
@@ -70,7 +71,7 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
                 // Balise reconnue, le titre est formaté
                 if (label) {
                     return (
-                        <div key={index} className="d-flex flew-row align-items-center rounded p-2 mb-1 gap-1 story-text-highlight">
+                        <div key={index} className="d-flex flew-row align-items-center rounded p-2 my-1 gap-1 story-text-highlight">
                             {icon} {t(label)}
                         </div>
                     );
@@ -102,14 +103,19 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
                 />
             ) : (
                 <div className="d-flex flex-column rounded story-container">
-                    {/* Date & boutons d'actions */}
+                    {/* Entête */}
                     <div className="d-flex align-items-center justify-content-between story-header">
-                        <span className="px-3 py-2 story-header-date">{getLocalizedDate(story.createdAt)}</span>
+                        {/* Date */}
+                        <span className="d-flex align-items-center gap-2 px-3 py-2 story-header-date">
+                            <IoCalendarOutline size={20} />
+                            {getLocalizedDate(story.createdAt)}
+                        </span>
 
+                        {/* Boutons d'action */}
                         <span className="d-flex flex-row align-items-center px-3 py-2 gap-2">
                             <TooltipButton
                                 tooltip={t('common.delete')}
-                                icon={<MdDelete size={20} />}
+                                content={<MdDelete size={20} />}
                                 onClick={() => onConfirm(story.id, getLocalizedDate(story.createdAt))}
                                 isSubmitting={isSubmitting}
                             />
@@ -117,7 +123,7 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
                             {!inputOptions.isOpen && (
                                 <TooltipButton
                                     tooltip={t('common.update')}
-                                    icon={<MdEdit size={20} />}
+                                    content={<MdEdit size={20} />}
                                     onClick={() => onOpenClose(EnumAction.UPDATE, story.id)}
                                     isSubmitting={isSubmitting}
                                 />
@@ -126,7 +132,7 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
                     </div>
 
                     {/* Histoire */}
-                    <div className="p-3 story-text">{renderStory(story.story)}</div>
+                    <div className="p-2 story-text">{renderStory(story.story)}</div>
                 </div>
             )}
         </>

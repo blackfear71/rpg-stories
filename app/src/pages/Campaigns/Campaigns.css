@@ -62,7 +62,7 @@
     flex-shrink: 0;
 }
 
-@media (max-width: 616px) {
+@media (max-width: 576px) {
     .campaigns-grid {
         grid-template-columns: 1fr;
     }

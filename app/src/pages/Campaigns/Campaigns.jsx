@@ -141,10 +141,9 @@ const Campaigns = () => {
     }, [location.state, location.pathname, navigate]);
 
     /**
-     * Mise à jour du formulaire de la campagne aux changements de sa modale
+     * Réinitialisation à l'ouverture/fermeture de la modale campagne
      */
     useEffect(() => {
-        // Réinitialisation à l'ouverture/fermeture de la modale
         formCampaign.resetForm();
     }, [modalOptionsCampaign.isOpen]);
 

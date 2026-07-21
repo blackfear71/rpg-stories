@@ -11,7 +11,7 @@ import { Message, SpinnerButton } from '../../../components/shared';
 import { EnumAction } from '../../../enums';
 
 /**
- * Modale édition
+ * Modale campagne
  */
 const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSubmitting }) => {
     // Traductions

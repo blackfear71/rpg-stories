@@ -204,10 +204,9 @@ const Settings = () => {
     }, [authMessage, setAuthMessage]);
 
     /**
-     * Mise à jour du formulaire de l'édition aux changements de sa modale
+     * Réinitialisation à l'ouverture/fermeture de la modale mot de passe
      */
     useEffect(() => {
-        // Réinitialisation à l'ouverture/fermeture de la modale
         formPassword.resetForm();
     }, [modalOptionsPassword.isOpen]);
 

@@ -2,17 +2,17 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Form } from 'react-bootstrap';
-import { GiAxeSword, GiBed, GiCompass } from 'react-icons/gi';
+import { GiAxeSword, GiCampfire, GiCompass } from 'react-icons/gi';
+import { IoCalendarOutline } from 'react-icons/io5';
 
 import { TextareaInput } from '../../../components/inputs';
-import { SpinnerButton } from '../../../components/shared';
+import { SpinnerButton, TooltipButton } from '../../../components/shared';
 
 import { getLocalizedDate } from '../../../utils/helpers/dateHelper';
 
 import { EnumAction, EnumContext } from '../../../enums';
 
-// TODO : revoir cet import (inutile si composant inclus dans un autre qui a déjà ce style)
-import '../Story/Story.css';
+import './StoryEntry.css';
 
 /**
  * Liste des histoires
@@ -28,7 +28,7 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
     const tags = [
         { code: EnumContext.EXPLORATION, label: 'campaign.exploration', icon: <GiCompass size={20} /> },
         { code: EnumContext.COMBAT, label: 'campaign.fight', icon: <GiAxeSword size={20} /> },
-        { code: EnumContext.REPOS, label: 'campaign.rest', icon: <GiBed size={20} /> }
+        { code: EnumContext.REPOS, label: 'campaign.rest', icon: <GiCampfire size={20} /> }
     ];
 
     /**
@@ -74,34 +74,37 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
         <>
             <Form onSubmit={formData.handleSubmit}>
                 <fieldset disabled={isSubmitting}>
-                    <div className="d-flex flex-column rounded story-container">
+                    <div className="d-flex flex-column rounded story-entry-container">
                         {/* Entête */}
-                        <div className="story-header">
+                        <div className="d-flex align-items-center justify-content-between story-entry-header">
                             {/* Date */}
-                            <span className="px-3 py-2 story-header-date">
+                            <span className="d-flex align-items-center gap-2 px-3 py-2 story-entry-header-date">
+                                <IoCalendarOutline size={20} />
                                 {getLocalizedDate(story && inputOptions.action === EnumAction.UPDATE ? story.createdAt : new Date())}
                             </span>
 
                             {/* Boutons de contexte */}
-                            <span className="px-3 py-2 gap-2 story-header-actions">
+                            <span className="px-3 py-2 gap-2 story-entry-header-actions">
                                 {tags.map((tag) => (
-                                    <Button
+                                    <TooltipButton
                                         key={tag.code}
-                                        variant="outline-action"
-                                        className="story-header-tag"
+                                        tooltip={t(tag.label)}
+                                        content={
+                                            <div className="d-flex flew-row align-items-center rounded gap-1">
+                                                {tag.icon}
+                                                <span className="story-entry-header-tag-label">{t(tag.label)}</span>
+                                            </div>
+                                        }
+                                        className="story-entry-header-tag"
                                         onClick={() => insertTag(tag.code)}
-                                        disabled={isSubmitting}
-                                    >
-                                        <div className="d-flex flew-row align-items-center rounded gap-1">
-                                            {tag.icon} {t(tag.label)}
-                                        </div>
-                                    </Button>
+                                        isSubmitting={isSubmitting}
+                                    />
                                 ))}
                             </span>
                         </div>
 
                         {/* Saisie */}
-                        <div className="d-flex flex-column gap-2 p-3">
+                        <div className="d-flex flex-column gap-2 p-2">
                             {/* Histoire */}
                             <TextareaInput
                                 name={'story'}
@@ -113,7 +116,6 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
 
                             {/* Boutons d'action */}
                             <div className="d-flex flex-row gap-2 justify-content-end">
-                                {/* TODO : trads */}
                                 <Button variant={'input-action'} onClick={onOpenClose} disabled={isSubmitting}>
                                     {t('common.cancel')}
                                 </Button>

@@ -5,29 +5,10 @@
 
 .story-header {
     background-color: var(--color-bg-tertiary);
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: center;
 }
 
 .story-header-date {
     color: var(--color-text-white);
-}
-
-.story-header-actions {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    align-items: center;
-    min-width: 0;
-}
-
-.btn.story-header-tag {
-    font-size: small !important;
-    white-space: nowrap;
-    flex: 0 1 auto;
-    width: auto !important;
 }
 
 .story-text {

@@ -1,3 +1,4 @@
+
 /**
  * Fonction de conversion des messages back vers front ou erreur inconnue
  * @param {*} code Code du message back
@@ -8,6 +9,7 @@
 export const getMessageTranslationKey = (code, params, t) => {
     // Mapping des messages entre BACK et FRONT
     const map = {
+        // TODO : supprimer les messages inutiles
         // Erreurs
         ERR_CAMPAIGN_NOT_FOUND: 'errors.TODO',
         ERR_CREATION_FAILED: 'errors.creationFailed',

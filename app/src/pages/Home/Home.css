@@ -33,7 +33,7 @@
     width: 300px;
 }
 
-@media (max-width: 616px) {
+@media (max-width: 576px) {
     .home-form {
         width: 100%;
     }
