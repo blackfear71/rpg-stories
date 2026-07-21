@@ -11,6 +11,7 @@ import { getLocalizedDate } from '../../../utils/helpers/dateHelper';
 
 import { EnumAction, EnumContext } from '../../../enums';
 
+// TODO : revoir cet import (inutile si composant inclus dans un autre qui a déjà ce style)
 import '../Story/Story.css';
 
 /**

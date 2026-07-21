@@ -42,7 +42,7 @@ export const getMessageTranslationKey = (code, params, t) => {
         ERR_INVALID_QUANTITY: 'errors.invalidQuantity',
         ERR_INVALID_START_TIME: 'errors.invalidStartTime',
         ERR_INVALID_STORY: 'errors.TODO',
-        ERR_INVALID_TOKEN: 'errors.unknownError',
+        ERR_INVALID_TOKEN: 'errors.invalidAuth',
         ERR_INVALID_VALUE: 'errors.invalidValue',
         ERR_LOGIN_FAILED: 'errors.loginFailed',
         ERR_LOGOUT_FAILED: 'errors.logoutFailed',

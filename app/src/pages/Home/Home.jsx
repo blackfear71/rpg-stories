@@ -22,8 +22,7 @@ const initialConnectionValues = {
     password: ''
 };
 
-// TODO : de manière générale chercher "superadmin", "dition", "cadeau" et "gift", il ne doit pas en rester (front+back+fichiers)
-// TODO : revoir les droits, SUPERADMIN disparait, et donc USER a tous les droits sur ses actions, l'ADMIN servira à de la gestion
+// TODO : de manière générale chercher "dition", "cadeau" et "gift", il ne doit pas en rester (front+back+fichiers)
 // TODO : finir / nettoyer le style
 
 /**
@@ -34,7 +33,7 @@ const Home = () => {
     const navigate = useNavigate();
 
     // Contexte
-    const { auth, authMessage, login, setAuthMessage } = useAuth();
+    const { auth, authMessage, login, refreshAuth, setAuthMessage } = useAuth();
 
     // Traductions
     const { t } = useTranslation();
@@ -68,14 +67,21 @@ const Home = () => {
      * Lancement initial de la page
      */
     useEffect(() => {
-        // Redirection vers les campagnes si connecté, sinon on affiche le formulaire de connexion
+        // Rafraichissement du contexte d'authentification
+        refreshAuth(true);
+    }, []);
+
+    /**
+     * Redirection vers les campagnes si connecté, sinon affichage du formulaire de connexion
+     */
+    useEffect(() => {
         if (auth && auth.isLoggedIn) {
             navigate('/campaigns');
         } else {
             setIsLoading(false);
             loginInputRef.current?.focus();
         }
-    }, []);
+    }, [auth]);
 
     /**
      * Si un message d'authentification est défini on l'affiche

@@ -70,7 +70,7 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
                 // Balise reconnue, le titre est formaté
                 if (label) {
                     return (
-                        <div key={index} className="d-flex flew-row align-items-center rounded p-2 gap-1 story-text-highlight">
+                        <div key={index} className="d-flex flew-row align-items-center rounded p-2 mb-1 gap-1 story-text-highlight">
                             {icon} {t(label)}
                         </div>
                     );

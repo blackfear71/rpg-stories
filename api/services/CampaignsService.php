@@ -113,7 +113,7 @@ class CampaignsService
         $this->isValidCampaignData($data);
 
         // Traitement de l'image
-        $picture = $this->uploadImage(null, $data->pictureAction, $file['picture'] ?? null);
+        $picture = $this->uploadImage(null, $userId, $data->pictureAction, $file['picture'] ?? null);
 
         // Construction de l'objet
         $campaign = new Campaign(
@@ -143,7 +143,7 @@ class CampaignsService
         $this->isValidCampaignData($data);
 
         // Traitement de l'image
-        $picture = $this->uploadImage($campaignId, $data->pictureAction, $file['picture'] ?? null);
+        $picture = $this->uploadImage($campaignId, $userId, $data->pictureAction, $file['picture'] ?? null);
 
         // Construction de l'objet
         $campaign = new Campaign(
@@ -152,6 +152,7 @@ class CampaignsService
             universe: trim($data->universe),
             players: $data->players,
             picture: $picture,
+            createdBy: $userId,
             updatedBy: $userId
         );
 
@@ -199,10 +200,10 @@ class CampaignsService
     /**
      * Traitement de l'image
      */
-    private function uploadImage(?int $campaignId, ?string $action, ?array $file): ?string
+    private function uploadImage(?int $campaignId, int $userId, ?string $action, ?array $file): ?string
     {
         // Récupération de l'image de la campagne
-        $picture = $campaignId ? $this->campaignsRepository->getCampaignPicture($campaignId) : null;
+        $picture = $campaignId ? $this->campaignsRepository->getCampaignPicture($campaignId, $userId) : null;
 
         // Traitement de l'image
         switch ($action) {

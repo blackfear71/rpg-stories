@@ -151,7 +151,7 @@ const Settings = () => {
      */
     useEffect(() => {
         // Retour à l'accueil si non connecté (on ne fait la navigation que si on n'est pas déjà revenu à l'accueil, après déconnexion par exemple)
-        if (!auth.isLoggedIn) {
+        if (!auth || !auth.isLoggedIn) {
             if (pathname === '/settings') {
                 navigate('/');
             }

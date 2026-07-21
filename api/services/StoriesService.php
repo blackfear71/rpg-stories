@@ -90,6 +90,7 @@ class StoriesService
         $story = new Story(
             id: $storyId,
             story: trim($data->story),
+            createdBy: $user->id,
             updatedBy: $user->id
         );
 

@@ -98,15 +98,16 @@ class CampaignsRepository
     /**
      * Lecture d'un enregistrement par Id
      */
-    public function getCampaignPicture(int $campaignId): ?string
+    public function getCampaignPicture(int $campaignId, int $userId): ?string
     {
         $sql = "SELECT picture
             FROM {$this->campaignsTable}
-            WHERE id = :id AND is_active = 1";
+            WHERE id = :id AND created_by = :created_by AND is_active = 1";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
-            'id' => $campaignId
+            'id' => $campaignId,
+            'created_by' => $userId
         ]);
 
         $result = $stmt->fetchColumn();
@@ -142,7 +143,7 @@ class CampaignsRepository
     {
         $sql = "UPDATE {$this->campaignsTable}
             SET name = :name, universe = :universe, players = :players, picture = :picture, updated_at = :updated_at, updated_by = :updated_by
-            WHERE id = :id";
+            WHERE id = :id AND created_by = :created_by";
 
         $stmt = $this->db->prepare($sql);
 
@@ -152,6 +153,7 @@ class CampaignsRepository
             'universe'   => $campaign->universe,
             'players'    => $campaign->players,
             'picture'    => $campaign->picture,
+            'created_by' => $campaign->createdBy,
             'updated_at' => date('Y-m-d H:i:s'),
             'updated_by' => $campaign->updatedBy
         ]);
@@ -164,12 +166,13 @@ class CampaignsRepository
     {
         $sql = "UPDATE {$this->campaignsTable}
             SET deleted_at = :deleted_at, deleted_by = :deleted_by, is_active = :is_active
-            WHERE id = :id";
+            WHERE id = :id AND created_by = :created_by";
 
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
             'id'         => $campaignId,
+            'created_by' => $userId,
             'deleted_at' => date('Y-m-d H:i:s'),
             'deleted_by' => $userId,
             'is_active'  => 0

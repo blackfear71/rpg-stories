@@ -9,12 +9,10 @@ import { combineLatest, of, switchMap } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
 
 import { Spinner } from 'react-bootstrap';
-import { FaPlus } from 'react-icons/fa6';
-import { MdDelete, MdEdit } from 'react-icons/md';
 
-import { Story, StoryEntry } from '../../components/features';
+import { CampaignHeader, Story, StoryEntry } from '../../components/features';
 import { CampaignModal, ConfirmModal } from '../../components/modals';
-import { Message, TooltipButton } from '../../components/shared';
+import { Message } from '../../components/shared';
 
 import { useAuth } from '../../utils/context/AuthContext';
 
@@ -46,7 +44,7 @@ const Campaign = () => {
     const navigate = useNavigate();
 
     // Contexte
-    const { auth } = useAuth();
+    const { auth, refreshAuth } = useAuth();
 
     // Traductions
     const { t } = useTranslation();
@@ -131,10 +129,8 @@ const Campaign = () => {
      * Lancement initial de la page (à chaque changement d'id)
      */
     useEffect(() => {
-        // Redirection vers l'accueil si non connecté
-        if (!auth || !auth.isLoggedIn) {
-            navigate('/');
-        }
+        // Rafraichissement du contexte d'authentification
+        refreshAuth(false);
 
         // Récupération de la campagne et de ses histoires
         const campaignsService = new CampaignsService();
@@ -160,6 +156,15 @@ const Campaign = () => {
             )
             .subscribe();
     }, [id]);
+
+    /**
+     * Redirection vers l'accueil si non connecté
+     */
+    useEffect(() => {
+        if (!auth || !auth.isLoggedIn) {
+            navigate('/');
+        }
+    }, [auth]);
 
     /**
      * Mise à jour du formulaire de la campagne aux changements de sa modale
@@ -342,26 +347,11 @@ const Campaign = () => {
     };
 
     /**
-     * Méthode centralisée d'action à la confirmation
-     */
-    const handleConfirmAction = () => {
-        switch (modalOptionsConfirm?.action) {
-            case 'deleteCampaign':
-                return handleDeleteCampaign();
-            case 'deleteStory':
-                return handleDeleteStory(modalOptionsConfirm.data);
-            default:
-                return;
-        }
-    };
-
-    /**
      * Ouvre la modale de suppression de campagne
      */
     const handleConfirmDeleteCampaign = () => {
         // Ouverture de la modale de confirmation
         openCloseConfirmModal({
-            // TODO : trad
             content: t('campaign.confirmDeleteCampaign', { name: campaign.name }),
             action: 'deleteCampaign',
             data: null
@@ -376,7 +366,6 @@ const Campaign = () => {
     const handleConfirmDeleteStory = (storyId, date) => {
         // Ouverture de la modale de confirmation
         openCloseConfirmModal({
-            // TODO : trad
             content: t('campaign.deleteStory', { date: date, name: campaign.name }),
             action: 'deleteStory',
             data: storyId
@@ -405,6 +394,20 @@ const Campaign = () => {
                 isOpen: false,
                 message: null
             });
+        }
+    };
+
+    /**
+     * Méthode centralisée d'action à la confirmation
+     */
+    const handleConfirmAction = () => {
+        switch (modalOptionsConfirm?.action) {
+            case 'deleteCampaign':
+                return handleDeleteCampaign();
+            case 'deleteStory':
+                return handleDeleteStory(modalOptionsConfirm.data);
+            default:
+                return;
         }
     };
 
@@ -493,64 +496,19 @@ const Campaign = () => {
             ) : (
                 <>
                     {/* Message */}
-                    {/* TODO : trads */}
                     {message && <Message code={message.code} params={message.params} type={message.type} setMessage={setMessage} />}
 
                     {/* Campagne */}
                     {campaign && (
                         <div className="d-flex flex-column gap-3">
                             {/* Entete */}
-                            {/* TODO : composant ? */}
-                            <div
-                                className="d-flex flex-row align-items-center p-3 gap-3 rounded campaign-header-container"
-                                style={
-                                    campaign.picture
-                                        ? {
-                                              backgroundImage: `url(${import.meta.env.VITE_API_URL}/serve-file/images?file=${encodeURIComponent(campaign.picture)})`
-                                          }
-                                        : undefined
-                                }
-                            >
-                                {/* Infos */}
-                                <div className="d-flex flex-column align-items-start gap-2">
-                                    <div className="py-1 px-2 rounded campaign-header-title">{campaign.name}</div>
-                                    <div className="py-1 px-2 rounded campaign-header-universe">{campaign.universe}</div>
-                                    <div className="py-1 px-2 rounded campaign-header-players">
-                                        {t(campaign.players === 1 ? 'campaign.countPlayer' : 'campaign.countPlayers', {
-                                            count: campaign.players
-                                        })}
-                                    </div>
-                                </div>
-
-                                {/* Actions */}
-                                <div className="d-flex flex-column gap-2 ms-auto">
-                                    {/* Ajout histoire */}
-                                    {!inputOptionsStory?.isOpen && (
-                                        <TooltipButton
-                                            tooltip={t('campaign.createStory')}
-                                            icon={<FaPlus size={25} />}
-                                            onClick={() => openCloseStoryInput(EnumAction.CREATE)}
-                                            isSubmitting={isSubmitting}
-                                        />
-                                    )}
-
-                                    {/* Modification */}
-                                    <TooltipButton
-                                        tooltip={t('campaign.updateCampaign')}
-                                        icon={<MdEdit size={25} />}
-                                        onClick={() => openCloseCampaignModal(EnumAction.UPDATE)}
-                                        isSubmitting={isSubmitting}
-                                    />
-
-                                    {/* Suppression */}
-                                    <TooltipButton
-                                        tooltip={t('campaign.deleteCampaign')}
-                                        icon={<MdDelete size={25} />}
-                                        onClick={handleConfirmDeleteCampaign}
-                                        isSubmitting={isSubmitting}
-                                    />
-                                </div>
-                            </div>
+                            <CampaignHeader
+                                campaign={campaign}
+                                inputOptions={inputOptionsStory}
+                                onOpenInput={openCloseStoryInput}
+                                onOpenModal={openCloseCampaignModal}
+                                onConfirm={handleConfirmDeleteCampaign}
+                            />
 
                             {/* Nouvelle histoire */}
                             {inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE && (

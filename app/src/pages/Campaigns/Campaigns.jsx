@@ -40,7 +40,7 @@ const Campaigns = () => {
     const navigate = useNavigate();
 
     // Contexte
-    const { auth } = useAuth();
+    const { auth, refreshAuth } = useAuth();
 
     // Traductions
     const { t } = useTranslation();
@@ -94,10 +94,8 @@ const Campaigns = () => {
      * Lancement initial de la page
      */
     useEffect(() => {
-        // Redirection vers l'accueil si non connecté
-        if (!auth || !auth.isLoggedIn) {
-            navigate('/');
-        }
+        // Rafraichissement du contexte d'authentification
+        refreshAuth(false);
 
         // Récupération des campagnes
         const campaignsService = new CampaignsService();
@@ -119,6 +117,15 @@ const Campaigns = () => {
             )
             .subscribe();
     }, []);
+
+    /**
+     * Redirection vers l'accueil si non connecté
+     */
+    useEffect(() => {
+        if (!auth || !auth.isLoggedIn) {
+            navigate('/');
+        }
+    }, [auth]);
 
     /**
      * Si un message d'authentification est défini on l'affiche

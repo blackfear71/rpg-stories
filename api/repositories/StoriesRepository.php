@@ -66,13 +66,14 @@ class StoriesRepository
     {
         $sql = "UPDATE {$this->storiesTable} 
             SET story = :story, updated_at = :updated_at, updated_by = :updated_by 
-            WHERE id = :id";
+            WHERE id = :id AND created_by = :created_by";
 
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
             'id'         => $story->id,
             'story'      => $story->story,
+            'created_by' => $story->createdBy,
             'updated_at' => date('Y-m-d H:i:s'),
             'updated_by' => $story->updatedBy
         ]);
@@ -85,12 +86,13 @@ class StoriesRepository
     {
         $sql = "UPDATE {$this->storiesTable}
             SET deleted_at = :deleted_at, deleted_by = :deleted_by, is_active = :is_active
-            WHERE id = :id";
+            WHERE id = :id AND created_by = :created_by";
 
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
             'id'         => $storyId,
+            'created_by' => $userId,
             'deleted_at' => date('Y-m-d H:i:s'),
             'deleted_by' => $userId,
             'is_active'  => 0
@@ -104,12 +106,13 @@ class StoriesRepository
     {
         $sql = "UPDATE {$this->storiesTable}
             SET deleted_at = :deleted_at, deleted_by = :deleted_by, is_active = :is_active
-            WHERE campaign_id = :campaign_id";
+            WHERE campaign_id = :campaign_id AND created_by = :created_by";
 
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
             'campaign_id' => $campaignId,
+            'created_by'  => $userId,
             'deleted_at'  => date('Y-m-d H:i:s'),
             'deleted_by'  => $userId,
             'is_active'   => 0

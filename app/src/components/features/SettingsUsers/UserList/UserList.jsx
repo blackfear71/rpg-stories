@@ -5,7 +5,7 @@ import { FaAngleRight, FaTrashCan } from 'react-icons/fa6';
 
 import { useAuth } from '../../../../utils/context/AuthContext';
 
-import { EnumAction, EnumUserRole } from '../../../../enums';
+import { EnumAction } from '../../../../enums';
 
 /**
  * Liste des utilisateurs
@@ -47,7 +47,7 @@ const UserList = ({ users, onOpen, onConfirm, isSubmitting }) => {
                     </div>
 
                     {/* Supression */}
-                    {(u.level !== EnumUserRole.ADMIN || u.login !== auth.login) && (
+                    {u.login !== auth.login && (
                         <Button
                             onClick={() => handleDelete(u)}
                             className="settings-item-button"
