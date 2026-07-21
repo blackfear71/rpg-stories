@@ -1,8 +1,6 @@
 <?php
 class MessageHelper
 {
-    // TODO : supprimer les messages inutiles
-
     /*****************/
     /* Codes erreurs */
     /*****************/
@@ -22,7 +20,6 @@ class MessageHelper
     const ERR_INVALID_IMAGE          = 'ERR_INVALID_IMAGE';
     const ERR_INVALID_NAME           = 'ERR_INVALID_NAME';
     const ERR_INVALID_PARAMETER      = 'ERR_INVALID_PARAMETER';
-    const ERR_INVALID_QUANTITY       = 'ERR_INVALID_QUANTITY';
     const ERR_MISSING_PARAMS         = 'ERR_MISSING_PARAMS';
     const ERR_ORIGIN_NOT_ALLOWED     = 'ERR_ORIGIN_NOT_ALLOWED';
     const ERR_ROUTE_NOT_FOUND        = 'ERR_ROUTE_NOT_FOUND';
@@ -41,32 +38,7 @@ class MessageHelper
     const ERR_INVALID_PLAYERS    = 'ERR_INVALID_PLAYERS';
 
     // Histoires
-    const ERR_STORY_NOT_FOUND = 'ERR_STORY_NOT_FOUND';
-    const ERR_INVALID_STORY   = 'ERR_INVALID_STORY';
-
-    // Editions
-    const ERR_EDITION_NOT_FOUND  = 'ERR_EDITION_NOT_FOUND';
-    const ERR_EDITION_FINISHED   = 'ERR_EDITION_FINISHED';
-    const ERR_INVALID_DATE       = 'ERR_INVALID_DATE';
-    const ERR_INVALID_END_TIME   = 'ERR_INVALID_END_TIME';
-    const ERR_INVALID_LOCATION   = 'ERR_INVALID_LOCATION';
-    const ERR_INVALID_START_TIME = 'ERR_INVALID_START_TIME';
-
-    // Participants
-    const ERR_INVALID_POINTS   = 'ERR_INVALID_POINTS';
-    const ERR_PLAYER_GIVEAWAY  = 'ERR_PLAYER_GIVEAWAY';
-    const ERR_PLAYER_NOT_FOUND = 'ERR_PLAYER_NOT_FOUND';
-
-    // Cadeaux
-    const ERR_GIFT_NOT_FOUND       = 'ERR_GIFT_NOT_FOUND';
-    const ERR_INVALID_VALUE        = 'ERR_INVALID_VALUE';
-    const ERR_QUANTITY_ATTRIBUTION = 'ERR_QUANTITY_ATTRIBUTION';
-
-    // Récompenses
-    const ERR_INVALID_GIFT_POINTS = 'ERR_INVALID_GIFT_POINTS';
-    const ERR_REWARD_NOT_FOUND    = 'ERR_REWARD_NOT_FOUND';
-
-    const MSG_REWARD_SUCCESS = 'MSG_REWARD_SUCCESS';
+    const ERR_INVALID_STORY = 'ERR_INVALID_STORY';
 
     // Utilisateurs
     const ERR_INVALID_AUTH           = 'ERR_INVALID_AUTH';
@@ -110,7 +82,6 @@ class MessageHelper
         self::ERR_INVALID_IMAGE          => ['http' => 400, 'message' => 'L\'image est invalide'],
         self::ERR_INVALID_NAME           => ['http' => 400, 'message' => 'Le nom est obligatoire'],
         self::ERR_INVALID_PARAMETER      => ['http' => 400, 'message' => 'Paramètre d\'entrée invalide'],
-        self::ERR_INVALID_QUANTITY       => ['http' => 400, 'message' => 'La quantité doit être supérieure à 0'],
         self::ERR_MISSING_PARAMS         => ['http' => 400, 'message' => 'Paramètres manquants'],
         self::ERR_ORIGIN_NOT_ALLOWED     => ['http' => 403, 'message' => 'Origine non autorisée'],
         self::ERR_ROUTE_NOT_FOUND        => ['http' => 404, 'message' => 'Route non trouvée'],
@@ -129,32 +100,7 @@ class MessageHelper
         self::ERR_INVALID_PLAYERS    => ['http' => 400, 'message' => 'Le nombre de participants est invalide'],
 
         // Histoires
-        self::ERR_STORY_NOT_FOUND => ['http' => 404, 'message' => 'Erreur lors de la récupération de l\'histoire'],
         self::ERR_INVALID_STORY   => ['http' => 400, 'message' => 'L\histoire doit être renseignée'],
-
-        // Editions
-        self::ERR_EDITION_NOT_FOUND  => ['http' => 404, 'message' => 'Erreur lors de la récupération de l\'édition'],
-        self::ERR_EDITION_FINISHED   => ['http' => 422, 'message' => 'Edition terminée ou introuvable'],
-        self::ERR_INVALID_DATE       => ['http' => 400, 'message' => 'Le format de la date est invalide'],
-        self::ERR_INVALID_END_TIME   => ['http' => 400, 'message' => 'Le format de l\'heure de fin est invalide'],
-        self::ERR_INVALID_LOCATION   => ['http' => 400, 'message' => 'Le lieu est obligatoire'],
-        self::ERR_INVALID_START_TIME => ['http' => 400, 'message' => 'Le format de l\'heure de début est invalide'],
-
-        // Participants
-        self::ERR_INVALID_POINTS   => ['http' => 400, 'message' => 'Le nombre de points doit être supérieur ou égal à 0'],
-        self::ERR_PLAYER_GIVEAWAY  => ['http' => 400, 'message' => 'Le don de points n\'est pas correctement renseigné'],
-        self::ERR_PLAYER_NOT_FOUND => ['http' => 404, 'message' => 'Erreur lors de la récupération du participant'],
-
-        // Cadeaux
-        self::ERR_GIFT_NOT_FOUND       => ['http' => 404, 'message' => 'Erreur lors de la récupération du cadeau'],
-        self::ERR_INVALID_VALUE        => ['http' => 400, 'message' => 'La valeur doit être supérieure à 0'],
-        self::ERR_QUANTITY_ATTRIBUTION => ['http' => 400, 'message' => 'La quantité doit être supérieure ou égale au nombre de cadeaux déjà attribués'],
-
-        // Récompenses
-        self::ERR_INVALID_GIFT_POINTS => ['http' => 400, 'message' => 'Le nombre de points est insuffisant pour le cadeau'],
-        self::ERR_REWARD_NOT_FOUND    => ['http' => 404, 'message' => 'Erreur lors de la récupération de la récompense'],
-
-        self::MSG_REWARD_SUCCESS => ['http' => 200, 'message' => 'Récompense attribuée avec succès'],
 
         // Utilisateurs
         self::ERR_INVALID_AUTH           => ['http' => 401, 'message' => 'Authentification invalide'],

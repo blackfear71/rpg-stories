@@ -22,8 +22,8 @@ const initialConnectionValues = {
     password: ''
 };
 
-// TODO : de manière générale chercher "dition", "cadeau" et "gift", il ne doit pas en rester (front+back+fichiers)
 // TODO : finir / nettoyer le style
+// TODO : changer la police du site
 
 /**
  * Page d'accueil
@@ -134,17 +134,16 @@ const Home = () => {
                         {/* Logo & titre */}
                         <div className="d-flex align-items-center gap-3">
                             {/* Logo */}
-                            <Image src={rpgStoriesLogo} alt="rpg-stories" title={t('common.home')} className="home-logo" />
+                            <Image src={rpgStoriesLogo} alt="rpg-stories" title={t('home.rpgStories')} className="home-logo" />
 
                             {/* Texte RPG / STORIES centré */}
                             <div className="d-flex flex-column align-items-start">
-                                <span className="home-title-1">RPG</span>
-                                <span className="home-title-2 ms-1">STORIES</span>
+                                <span className="home-title-1">{t('home.rpg')}</span>
+                                <span className="home-title-2 ms-1">{t('home.stories')}</span>
                             </div>
                         </div>
 
                         {/* Connexion */}
-                        {/* TODO : changer la police du site */}
                         <Form onSubmit={formConnection.handleSubmit} className="home-form">
                             <fieldset disabled={isSubmitting}>
                                 {/* Formulaire */}

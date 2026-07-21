@@ -116,7 +116,7 @@ const Settings = () => {
                 .typeError('errors.invalidLevel')
                 .required('errors.invalidLevel')
                 .min(0, 'errors.invalidLevel')
-                .max(2, 'errors.invalidLevel')
+                .max(1, 'errors.invalidLevel')
         });
     }, [modalOptionsUser.action]);
 
