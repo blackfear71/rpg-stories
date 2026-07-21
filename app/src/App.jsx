@@ -4,7 +4,6 @@ import { Campaign, Campaigns, Home, Settings } from './pages';
 
 import { Layout } from './components/shared';
 
-// TODO : si SseProvider inutile, le supprimer de partout
 import { AuthProvider } from './utils/providers';
 
 import './App.css';

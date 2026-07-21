@@ -1,7 +1,6 @@
 <?php
 // Imports
 require_once __DIR__ . '/enums/EnumAction.php';
-require_once __DIR__ . '/enums/EnumSseEvent.php';
 require_once __DIR__ . '/enums/EnumUserRole.php';
 
 require_once __DIR__ . '/models/dtos/ApiResponseDTO.php';
@@ -40,22 +39,13 @@ $allowedOrigins = [
     'https://rpg-stories.dedyn.io', // HTTPS
 ];
 
-// Headers de sécurité inconditionnels (sauf SSE)
-if (!str_starts_with($uri, '/sse')) {
-    header("X-Content-Type-Options: nosniff");
-    header("Content-Security-Policy: default-src 'none'; frame-ancestors 'none'");
-    header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
-}
+// Headers de sécurité inconditionnels
+header("X-Content-Type-Options: nosniff");
+header("Content-Security-Policy: default-src 'none'; frame-ancestors 'none'");
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
 
 // Headers CORS conditionnels selon l'origine
-if (str_starts_with($uri, '/sse')) {
-    // CORS pour SSE (pas de contrôle sur l'origine pour le SSE)
-    header("Access-Control-Allow-Origin: $origin");
-    header("Content-Type: text/event-stream");
-    header("Cache-Control: no-cache");
-    header("Connection: keep-alive");
-    header("X-Accel-Buffering: no");
-} elseif (in_array($origin, $allowedOrigins)) {
+if (in_array($origin, $allowedOrigins)) {
     // CORS pour API classique
     header("Access-Control-Allow-Origin: $origin");
     header("Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS");
@@ -82,8 +72,6 @@ if (str_starts_with($uri, '/campaigns')) {
     require_once __DIR__ . '/routes/stories.php';
 } elseif (str_starts_with($uri, '/serve-file')) {
     require_once __DIR__ . '/routes/serve-file.php';
-} elseif (str_starts_with($uri, '/sse')) {
-    require_once __DIR__ . '/routes/sse.php';
 } elseif (str_starts_with($uri, '/users')) {
     require_once __DIR__ . '/routes/users.php';
 } else {

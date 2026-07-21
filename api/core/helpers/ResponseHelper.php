@@ -42,18 +42,6 @@ class ResponseHelper
     }
 
     /**
-     * Gestion du retour SSE
-     */
-    public static function sse(string $code, string $class = '', string $function = '', array $data = []): void
-    {
-        // Message
-        $logMessage = MessageHelper::message($code, $class, $function, $data);
-
-        // Log
-        LoggerHelper::log($logMessage, 'SSE');
-    }
-
-    /**
      * Gestion du retour en cas de succès
      */
     public static function success(mixed $data = null, string $code = ''): void

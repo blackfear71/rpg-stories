@@ -1,4 +1,3 @@
-
 /**
  * Fonction de conversion des messages back vers front ou erreur inconnue
  * @param {*} code Code du message back
@@ -56,8 +55,6 @@ export const getMessageTranslationKey = (code, params, t) => {
         ERR_RESET_PASSWORD_FAILED: 'errors.resetPasswordFailed',
         ERR_REWARD_NOT_FOUND: 'errors.rewardNotFound',
         ERR_ROUTE_NOT_FOUND: 'errors.unknownError',
-        ERR_SSE_GIFTS: 'errors.unknownError',
-        ERR_SSE_PLAYERS: 'errors.unknownError',
         ERR_STORY_NOT_FOUND: 'errors.TODO',
         ERR_UNAUTHORIZED_ACTION: 'errors.unauthorizedAction',
         ERR_UNKNOWN_ENDPOINT: 'errors.unknownError',

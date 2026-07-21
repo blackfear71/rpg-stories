@@ -90,10 +90,6 @@ class MessageHelper
     const WRN_LAST_ADMIN  = 'WRN_LAST_ADMIN';
     const WRN_USER_EXISTS = 'WRN_USER_EXISTS';
 
-    // SSE
-    const ERR_SSE_GIFTS   = 'ERR_SSE_GIFTS';
-    const ERR_SSE_PLAYERS = 'ERR_SSE_PLAYERS';
-
     /******************************/
     /* Codes HTTP + messages logs */
     /******************************/
@@ -180,11 +176,7 @@ class MessageHelper
 
         self::MSG_LOGIN_SUCCESS          => ['http' => 200, 'message' => 'Connexion réussie'],
         self::MSG_LOGOUT_SUCCESS         => ['http' => 200, 'message' => 'Déconnexion réussie'],
-        self::MSG_RESET_PASSWORD_SUCCESS => ['http' => 200, 'message' => 'Réinitialisation du mot de passe réussie'],
-
-        // SSE
-        self::ERR_SSE_GIFTS   => ['http' => 500, 'message' => 'Erreur SSE lors de la récupération des cadeaux'],
-        self::ERR_SSE_PLAYERS => ['http' => 500, 'message' => 'Erreur SSE lors de la récupération des participants'],
+        self::MSG_RESET_PASSWORD_SUCCESS => ['http' => 200, 'message' => 'Réinitialisation du mot de passe réussie']
     ];
 
     /**

@@ -63,12 +63,12 @@ const Campaigns = () => {
      */
     const campaignValidationSchema = useMemo(() => {
         return Yup.object({
-            name: Yup.string().required('errors.invalidName'), // TODO : trad
+            name: Yup.string().required('errors.invalidName'),
             players: Yup.number()
                 .integer('errors.invalidPlayers')
                 .min(1, 'errors.invalidPlayers')
                 .typeError('errors.invalidPlayers')
-                .required('errors.invalidPlayers'), // TODO : trad
+                .required('errors.invalidPlayers'),
             picture: Yup.mixed()
                 .nullable()
                 .test('file-type', 'errors.invalidFileType', (value) => {

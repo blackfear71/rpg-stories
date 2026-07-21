@@ -28,9 +28,6 @@ class LoggerHelper
                 case 'INFO':
                     $filename = $logDir . '/info_logs_' . date('Y-m-d') . '.log';
                     break;
-                case 'SSE':
-                    $filename = $logDir . '/sse_logs_' . date('Y-m-d') . '.log';
-                    break;
                 case 'WARNING':
                     $filename = $logDir . '/warning_logs_' . date('Y-m-d') . '.log';
                     break;
