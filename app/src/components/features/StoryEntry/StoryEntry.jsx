@@ -52,8 +52,8 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
 
         const tagText = `<${tag}>`;
 
-        // Position du curseur (ou de la sélection) au moment du clic sur le bouton
-        const { selectionStart, selectionEnd, value } = textarea;
+        // Position du curseur (ou de la sélection) au moment du clic sur le bouton, on mémorise aussi le scroll actuel du textarea
+        const { selectionStart, selectionEnd, value, scrollTop } = textarea;
 
         // Reconstruit le texte en insérant la balise entre les deux morceaux découpés à la position du curseur (si du texte était sélectionné, il est remplacé par la balise)
         const newValue = value.slice(0, selectionStart) + tagText + value.slice(selectionEnd);
@@ -64,8 +64,13 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
         // Replace le curseur juste après la balise insérée (après le re-render)
         requestAnimationFrame(() => {
             const cursorPosition = selectionStart + tagText.length;
-            textarea.focus();
+
+            // preventScroll empêche le navigateur de scroller la page/le textarea au focus
+            textarea.focus({ preventScroll: true });
             textarea.setSelectionRange(cursorPosition, cursorPosition);
+
+            // Filet de sécurité pour les navigateurs qui ignorent preventScroll (vieux Safari iOS)
+            textarea.scrollTop = scrollTop;
         });
     };
 
