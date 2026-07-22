@@ -26,6 +26,8 @@
 }
 
 .campaigns-grid .campaigns-button-label {
+    font-family:
+        'Cinzel-Medium', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     font-size: x-large;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -48,7 +50,6 @@
 
 .campaigns-grid .campaigns-button-badges-wrapper .campaigns-button-badge {
     font-size: small;
-    font-style: italic;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -56,6 +57,10 @@
     min-width: 0;
     background-color: var(--color-transparent-bg-white);
     color: var(--color-text-primary);
+}
+
+.campaigns-grid .campaigns-button-badges-wrapper .campaigns-button-badge-universe {
+    font-style: italic;
 }
 
 .campaigns-grid .campaigns-button-badges-wrapper .campaigns-button-badge:last-child {

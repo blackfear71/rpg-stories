@@ -67,8 +67,8 @@
         "confirmDeleteCampaign": "Do you really want to delete the campaign \"{{name}}\"?",
         "countPlayer": "{{count}} player",
         "countPlayers": "{{count}} players",
-        "createCampaign": "Create a new campaign",
-        "createStory": "Create a new story",
+        "createCampaign": "Create campaign",
+        "createStory": "Create story",
         "deleteCampaign": "Delete the campaign",
         "deleteStory": "Delete the story from {{date}} of the campaign \"{{name}}\"",
         "emptyStories": "Your quest begins here, don't wait any longer to start a new story!",
@@ -92,7 +92,7 @@
         "disconnect": "Logout",
         "login": "Username",
         "password": "Password",
-        "search": "Search...",
+        "search": "Search",
         "settings": "Settings"
     },
     "settings": {

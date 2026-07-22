@@ -8,6 +8,8 @@
 }
 
 .campaign-header-title {
+    font-family:
+        'Cinzel-Medium', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     font-size: xx-large;
     background-color: var(--color-transparent-bg-primary);
     color: var(--color-text-white);

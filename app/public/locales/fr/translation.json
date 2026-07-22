@@ -67,8 +67,8 @@
         "confirmDeleteCampaign": "Voulez-vous vraiment supprimer la campagne \"{{name}}\" ?",
         "countPlayer": "{{count}} joueur",
         "countPlayers": "{{count}} joueurs",
-        "createCampaign": "Créer une nouvelle campagne",
-        "createStory": "Créer une nouvelle histoire",
+        "createCampaign": "Créer une campagne",
+        "createStory": "Créer une histoire",
         "deleteCampaign": "Supprimer la campagne",
         "deleteStory": "Supprimer l'histoire du {{date}} de la campagne \"{{name}}\"",
         "emptyStories": "Votre quête commence ici, n'attendez plus pour lancer une nouvelle histoire !",
@@ -92,7 +92,7 @@
         "disconnect": "Déconnexion",
         "login": "Identifiant",
         "password": "Mot de passe",
-        "search": "Rechercher...",
+        "search": "Rechercher",
         "settings": "Paramètres"
     },
     "settings": {

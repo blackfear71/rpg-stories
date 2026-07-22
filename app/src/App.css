@@ -7,6 +7,10 @@ h1 {
     color: var(--color-text-white);
 }
 
+a {
+    text-decoration: none;
+}
+
 .required-star {
     color: var(--color-text-red);
     font-size: medium;
@@ -57,8 +61,9 @@ h1 {
 }
 
 .input-container .input-title {
+    font-family:
+        'Cinzel-Medium', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     font-size: small;
-    font-weight: 600;
     color: var(--color-text-white);
     text-transform: uppercase;
 }
@@ -245,8 +250,9 @@ h1 {
 }
 
 .modal-body .modal-group-content .input-title {
+    font-family:
+        'Cinzel-Medium', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     font-size: small;
-    font-weight: 600;
     color: var(--color-text-secondary);
     text-transform: uppercase;
 }

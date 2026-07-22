@@ -67,9 +67,16 @@ const NavBar = () => {
 
     return (
         <nav className="d-flex align-items-center jusitfy-content-between gap-3 navbar-container">
-            {/* Logo */}
-            <Link to="/">
+            {/* Logo & titre */}
+            <Link to="/" className="d-flex align-items-center gap-2">
+                {/* Logo */}
                 <Image src={rpgStoriesLogo} alt="rpg-stories" title={t('common.home')} className="navbar-logo" />
+
+                {/* Titre */}
+                <div className="d-flex flex-column align-items-start navbar-title">
+                    <span className="navbar-title-1">{t('home.rpg')}</span>
+                    <span className="navbar-title-2">{t('home.stories')}</span>
+                </div>
             </Link>
 
             {/* Barre de recherche */}

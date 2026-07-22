@@ -12,6 +12,23 @@
     width: 40px;
 }
 
+.navbar-title {
+    font-family:
+        'Cinzel-Regular', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-weight: bold;
+    color: var(--color-text-white);
+}
+
+.navbar-title-1 {
+    font-size: 20px;
+    line-height: 20px;
+}
+
+.navbar-title-2 {
+    font-size: 10px;
+    line-height: 10px;
+}
+
 .navbar-user-wrapper {
     position: relative;
     height: 40px;

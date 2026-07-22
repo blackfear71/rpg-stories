@@ -22,8 +22,7 @@ const initialConnectionValues = {
     password: ''
 };
 
-// TODO : finir / nettoyer le style
-// TODO : changer la police du site
+// TODO : finir / nettoyer le style (penser à nettoyer les styles communs)
 
 /**
  * Page d'accueil
@@ -136,8 +135,8 @@ const Home = () => {
                             {/* Logo */}
                             <Image src={rpgStoriesLogo} alt="rpg-stories" title={t('home.rpgStories')} className="home-logo" />
 
-                            {/* Texte RPG / STORIES centré */}
-                            <div className="d-flex flex-column align-items-start">
+                            {/* Titre */}
+                            <div className="d-flex flex-column align-items-start home-title">
                                 <span className="home-title-1">{t('home.rpg')}</span>
                                 <span className="home-title-2 ms-1">{t('home.stories')}</span>
                             </div>

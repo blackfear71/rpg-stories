@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Form, Modal } from 'react-bootstrap';
-import { FaRegClock, FaWandMagicSparkles } from 'react-icons/fa6';
-import { IoImageOutline, IoLocationOutline } from 'react-icons/io5';
+import { FaWandSparkles } from 'react-icons/fa6';
+import { GiGalaxy, GiHills, GiMeepleGroup, GiSpellBook } from 'react-icons/gi';
 
 import { IncrementInput, PictureInput, TextInput } from '../../../components/inputs';
 import { Message, SpinnerButton } from '../../../components/shared';
@@ -104,7 +104,7 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
                 <fieldset disabled={isSubmitting}>
                     <Modal.Header closeButton>
                         <Modal.Title>
-                            <FaWandMagicSparkles />
+                            <FaWandSparkles />
                             {t(getTitleFromAction(modalOptions.action))}
                         </Modal.Title>
                     </Modal.Header>
@@ -115,7 +115,7 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
                             <div className="modal-group-content">
                                 <TextInput
                                     title={t('campaign.campaignName')}
-                                    icon={<IoLocationOutline />}
+                                    icon={<GiSpellBook />}
                                     name="name"
                                     ref={nameInputRef}
                                     placeholder={t('campaign.campaignName')}
@@ -133,7 +133,7 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
                             <div className="modal-group-content">
                                 <TextInput
                                     title={t('campaign.universe')}
-                                    icon={<IoLocationOutline />}
+                                    icon={<GiGalaxy />}
                                     name="universe"
                                     placeholder={t('campaign.universe')}
                                     value={formData.values.universe}
@@ -149,7 +149,7 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
                             <div className="modal-group-content">
                                 <IncrementInput
                                     title={t('campaign.playersCount')}
-                                    icon={<FaRegClock />}
+                                    icon={<GiMeepleGroup />}
                                     name={'players'}
                                     value={formData.values.players}
                                     onChangeDown={() => handleChangePlayers('remove')}
@@ -165,7 +165,7 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
                             <div className="modal-group-content">
                                 <PictureInput
                                     title={t('campaign.picture')}
-                                    icon={<IoImageOutline />}
+                                    icon={<GiHills />}
                                     name={'picture'}
                                     value={formData.values.picture}
                                     onChange={handleChangeFile}

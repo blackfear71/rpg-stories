@@ -13,18 +13,21 @@
     height: 100px;
 }
 
+.home-title {
+    font-family:
+        'Cinzel-Regular', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-weight: bold;
+    color: var(--color-text-white);
+}
+
 .home-title-1 {
     font-size: 60px;
-    font-weight: bold;
     line-height: 60px;
-    color: var(--color-text-white);
 }
 
 .home-title-2 {
     font-size: 29px;
-    font-weight: bold;
     line-height: 29px;
-    color: var(--color-text-white);
 }
 
 .home-form {
