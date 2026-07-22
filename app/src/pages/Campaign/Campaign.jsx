@@ -510,32 +510,36 @@ const Campaign = () => {
                                 onConfirm={handleConfirmDeleteCampaign}
                             />
 
-                            {/* Nouvelle histoire */}
-                            {inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE && (
-                                <StoryEntry
-                                    formData={formStory}
-                                    inputOptions={inputOptionsStory}
-                                    onOpenClose={openCloseStoryInput}
-                                    isSubmitting={isSubmitting}
-                                />
-                            )}
+                            {/* Timeline */}
+                            {(inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE) ||
+                            (stories && stories.length > 0) ? (
+                                <div className="d-flex flex-column gap-2 campaign-stories-timeline">
+                                    {/* Nouvelle histoire */}
+                                    {inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE && (
+                                        <StoryEntry
+                                            formData={formStory}
+                                            inputOptions={inputOptionsStory}
+                                            onOpenClose={openCloseStoryInput}
+                                            isSubmitting={isSubmitting}
+                                        />
+                                    )}
 
-                            {/* Histoires */}
-                            {stories && stories.length > 0
-                                ? stories.map((story) => (
-                                      <Story
-                                          key={story.id}
-                                          story={story}
-                                          formData={formStory}
-                                          inputOptions={inputOptionsStory}
-                                          onConfirm={handleConfirmDeleteStory}
-                                          onOpenClose={openCloseStoryInput}
-                                          isSubmitting={isSubmitting}
-                                      />
-                                  ))
-                                : !inputOptionsStory?.isOpen && (
-                                      <div className="p-5 rounded campaign-stories-empty">{t('campaign.emptyStories')}</div>
-                                  )}
+                                    {/* Histoires */}
+                                    {stories?.map((story) => (
+                                        <Story
+                                            key={story.id}
+                                            story={story}
+                                            formData={formStory}
+                                            inputOptions={inputOptionsStory}
+                                            onConfirm={handleConfirmDeleteStory}
+                                            onOpenClose={openCloseStoryInput}
+                                            isSubmitting={isSubmitting}
+                                        />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="p-5 rounded campaign-stories-empty">{t('campaign.emptyStories')}</div>
+                            )}
 
                             {/* Modale de modification de campagne */}
                             {formCampaign && modalOptionsCampaign.isOpen && (

@@ -1,12 +1,3 @@
-.story-entry-container {
-    border: 2px solid var(--color-border-secondary);
-    overflow: hidden;
-}
-
-.story-entry-header {
-    background-color: var(--color-bg-tertiary);
-}
-
 .story-entry-header-date {
     color: var(--color-text-white);
 }
@@ -20,15 +11,46 @@
     min-width: 0;
 }
 
-.btn.story-entry-header-tag {
+.btn.story-entry-header-button {
     font-size: small !important;
     white-space: nowrap;
     flex: 0 1 auto;
     width: auto !important;
 }
 
+/* TODO : prévoir des couleurs de background au survol */
+.btn.story-entry-header-button-combat {
+    background-color: var(--color-bg-fight) !important;
+    color: var(--color-text-fight) !important;
+}
+
+.btn.story-entry-header-button-combat:hover,
+.btn.story-entry-header-button-combat:active {
+    background-color: var(--color-bg-fight-hover) !important;
+}
+
+.btn.story-entry-header-button-exploration {
+    background-color: var(--color-bg-exploration) !important;
+    color: var(--color-text-exploration) !important;
+}
+
+.btn.story-entry-header-button-exploration:hover,
+.btn.story-entry-header-button-exploration:active {
+    background-color: var(--color-bg-exploration-hover) !important;
+}
+
+.btn.story-entry-header-button-repos {
+    background-color: var(--color-bg-rest) !important;
+    color: var(--color-text-rest) !important;
+}
+
+.btn.story-entry-header-button-repos:hover,
+.btn.story-entry-header-button-repos:active {
+    background-color: var(--color-bg-rest-hover) !important;
+}
+
 @media (max-width: 576px) {
-    .story-entry-header-tag-label {
+    .story-entry-header-button-label {
         display: none;
     }
 }

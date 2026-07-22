@@ -1,6 +1,6 @@
 .settings-item {
-    background-color: var(--color-bg-item);
-    border: 1px solid var(--color-border-item);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-tertiary);
     border-radius: var(--bs-border-radius);
 }
 
@@ -36,7 +36,7 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    background-color: var(--color-bg-item-button) !important;
+    background-color: var(--color-bg-tertiary) !important;
     color: var(--color-text-white) !important;
     border: none !important;
     height: 36px;
@@ -46,7 +46,7 @@
 
 .settings-item-button:hover,
 .settings-item-button:active {
-    background-color: var(--color-border-item) !important;
+    background-color: var(--color-border-primary) !important;
 }
 
 .settings-item-button .svg-large {
@@ -58,8 +58,8 @@
 .settings-description {
     text-align: justify;
     border-radius: var(--bs-border-radius);
-    background-color: var(--color-bg-item);
-    border: 1px solid var(--color-border-item);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-tertiary);
     border-left: 4px solid var(--color-bg-icon);
     color: var(--color-text-white);
 }

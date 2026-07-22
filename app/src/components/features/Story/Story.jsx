@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GiAxeSword, GiCampfire, GiCompass } from 'react-icons/gi';
-import { IoCalendarOutline } from 'react-icons/io5';
+import { Badge } from 'react-bootstrap';
+import { GiAxeSword, GiBookmarklet, GiCampfire, GiCompass } from 'react-icons/gi';
 import { MdDelete, MdEdit } from 'react-icons/md';
 
 import { StoryEntry } from '../../../components/features';
@@ -47,9 +47,9 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
      */
     const renderStory = (text) => {
         const tags = [
-            { code: EnumContext.EXPLORATION, label: 'campaign.exploration', icon: <GiCompass size={20} /> },
-            { code: EnumContext.COMBAT, label: 'campaign.fight', icon: <GiAxeSword size={20} /> },
-            { code: EnumContext.REPOS, label: 'campaign.rest', icon: <GiCampfire size={20} /> }
+            { code: EnumContext.EXPLORATION, label: 'campaign.exploration', icon: <GiCompass size={18} /> },
+            { code: EnumContext.COMBAT, label: 'campaign.fight', icon: <GiAxeSword size={18} /> },
+            { code: EnumContext.REPOS, label: 'campaign.rest', icon: <GiCampfire size={18} /> }
         ];
 
         // Construit dynamiquement la Regex à partir des codes des tags
@@ -65,15 +65,16 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
             if (match) {
                 const tagName = match[2];
                 const tag = tags.find((f) => f.code === tagName);
-                const label = tag?.label;
-                const icon = tag?.icon;
 
                 // Balise reconnue, le titre est formaté
-                if (label) {
+                if (tag) {
                     return (
-                        <div key={index} className="d-flex flew-row align-items-center rounded p-2 my-1 gap-1 story-text-highlight">
-                            {icon} {t(label)}
-                        </div>
+                        <Badge
+                            key={index}
+                            className={`d-inline-flex flew-row align-items-center p-2 my-1 gap-1 story-text-highlight story-text-highlight-${tag.code.toLowerCase()}`}
+                        >
+                            {tag.icon} {t(tag.label)}
+                        </Badge>
                     );
                 }
             }
@@ -102,20 +103,21 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
                     isSubmitting={isSubmitting}
                 />
             ) : (
-                <div className="d-flex flex-column rounded story-container">
+                <div className="d-flex flex-column gap-1">
                     {/* Entête */}
-                    <div className="d-flex align-items-center justify-content-between story-header">
+                    <div className="d-flex align-items-center justify-content-between">
                         {/* Date */}
-                        <span className="d-flex align-items-center gap-2 px-3 py-2 story-header-date">
-                            <IoCalendarOutline size={20} />
+                        <span className="d-flex align-items-center gap-1 story-header-date">
+                            <GiBookmarklet size={32} className="story-header-icon" />
                             {getLocalizedDate(story.createdAt)}
                         </span>
 
                         {/* Boutons d'action */}
-                        <span className="d-flex flex-row align-items-center px-3 py-2 gap-2">
+                        <span className="d-flex flex-row align-items-center gap-1">
                             <TooltipButton
                                 tooltip={t('common.delete')}
                                 content={<MdDelete size={20} />}
+                                className="story-header-button"
                                 onClick={() => onConfirm(story.id, getLocalizedDate(story.createdAt))}
                                 isSubmitting={isSubmitting}
                             />
@@ -124,6 +126,7 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
                                 <TooltipButton
                                     tooltip={t('common.update')}
                                     content={<MdEdit size={20} />}
+                                    className="story-header-button"
                                     onClick={() => onOpenClose(EnumAction.UPDATE, story.id)}
                                     isSubmitting={isSubmitting}
                                 />
@@ -132,7 +135,7 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
                     </div>
 
                     {/* Histoire */}
-                    <div className="p-2 story-text">{renderStory(story.story)}</div>
+                    <div className="px-2 py-1 ms-3 rounded story-text">{renderStory(story.story)}</div>
                 </div>
             )}
         </>

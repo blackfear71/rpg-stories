@@ -18,9 +18,9 @@ const SettingsUsers = ({ users, onOpen, onConfirm, isSubmitting }) => {
         <>
             {/* Ajout */}
             <div className="d-grid mb-2">
-                <Button variant="outline-action" onClick={() => onOpen(EnumAction.CREATE, null)} disabled={isSubmitting}>
-                    <IoAddCircleOutline size={25} />
-                    {t('settings.addUser')}
+                <Button variant="input-action" onClick={() => onOpen(EnumAction.CREATE, null)} disabled={isSubmitting}>
+                    {/* TODO : lors de la revue des boutons, supprimer ce genre d'espace pour séparer logo et libellé, le gérer proprement avec le style */}
+                    <IoAddCircleOutline size={25} /> {t('settings.addUser')}
                 </Button>
             </div>
 

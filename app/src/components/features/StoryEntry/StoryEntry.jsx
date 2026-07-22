@@ -2,8 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Form } from 'react-bootstrap';
-import { GiAxeSword, GiCampfire, GiCompass } from 'react-icons/gi';
-import { IoCalendarOutline } from 'react-icons/io5';
+import { GiAxeSword, GiBookmarklet, GiCampfire, GiCompass } from 'react-icons/gi';
 
 import { TextareaInput } from '../../../components/inputs';
 import { SpinnerButton, TooltipButton } from '../../../components/shared';
@@ -74,17 +73,17 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
         <>
             <Form onSubmit={formData.handleSubmit}>
                 <fieldset disabled={isSubmitting}>
-                    <div className="d-flex flex-column rounded story-entry-container">
+                    <div className="d-flex flex-column rounded gap-1">
                         {/* Entête */}
-                        <div className="d-flex align-items-center justify-content-between story-entry-header">
+                        <div className="d-flex align-items-center justify-content-between">
                             {/* Date */}
-                            <span className="d-flex align-items-center gap-2 px-3 py-2 story-entry-header-date">
-                                <IoCalendarOutline size={20} />
+                            <span className="d-flex align-items-center gap-1 story-entry-header-date">
+                                <GiBookmarklet size={32} className="story-header-icon" />
                                 {getLocalizedDate(story && inputOptions.action === EnumAction.UPDATE ? story.createdAt : new Date())}
                             </span>
 
                             {/* Boutons de contexte */}
-                            <span className="px-3 py-2 gap-2 story-entry-header-actions">
+                            <span className="d-flex flex-row align-items-center gap-1 story-entry-header-actions">
                                 {tags.map((tag) => (
                                     <TooltipButton
                                         key={tag.code}
@@ -92,10 +91,10 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
                                         content={
                                             <div className="d-flex flew-row align-items-center rounded gap-1">
                                                 {tag.icon}
-                                                <span className="story-entry-header-tag-label">{t(tag.label)}</span>
+                                                <span className="story-entry-header-button-label">{t(tag.label)}</span>
                                             </div>
                                         }
-                                        className="story-entry-header-tag"
+                                        className={`story-entry-header-button story-entry-header-button-${tag.code.toLowerCase()}`}
                                         onClick={() => insertTag(tag.code)}
                                         isSubmitting={isSubmitting}
                                     />
@@ -104,7 +103,7 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
                         </div>
 
                         {/* Saisie */}
-                        <div className="d-flex flex-column gap-2 p-2">
+                        <div className="d-flex flex-column gap-2 ms-3">
                             {/* Histoire */}
                             <TextareaInput
                                 name={'story'}

@@ -28,6 +28,11 @@
     color: var(--color-text-primary);
 }
 
+.campaign-stories-timeline {
+    border-left: 2px solid var(--color-border-tertiary);
+    margin-left: 9px;
+}
+
 .campaign-stories-empty {
     background-color: var(--color-bg-secondary);
     color: var(--color-text-white);

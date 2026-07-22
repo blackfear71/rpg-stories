@@ -85,7 +85,7 @@ a {
 }
 
 /* Boutons */
-/* TODO : faire le tri dans ces boutons, c'est le bordel */
+/* TODO : faire le tri dans ces boutons, c'est le bordel, voir aussi pour éviter les classes ".btn.XXX", en gros il faut revoir tous les boutons */
 .btn-action {
     display: flex !important;
     flex-direction: row;
