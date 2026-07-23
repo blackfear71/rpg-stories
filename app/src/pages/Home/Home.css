@@ -13,7 +13,7 @@
     height: 100px;
 }
 
-.home-title {
+.home-title-container {
     font-family:
         'Cinzel-Regular', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     font-weight: bold;

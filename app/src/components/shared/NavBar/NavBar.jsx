@@ -73,7 +73,7 @@ const NavBar = () => {
                 <Image src={rpgStoriesLogo} alt="rpg-stories" title={t('common.home')} className="navbar-logo" />
 
                 {/* Titre */}
-                <div className="d-flex flex-column align-items-start navbar-title">
+                <div className="d-flex flex-column align-items-start navbar-title-container">
                     <span className="navbar-title-1">{t('home.rpg')}</span>
                     <span className="navbar-title-2">{t('home.stories')}</span>
                 </div>
@@ -84,7 +84,7 @@ const NavBar = () => {
 
             {/* Connexion / menu déroulant */}
             <div ref={dropdownRef}>
-                <div className="navbar-user-wrapper" onClick={() => setShowDropdown(!showDropdown)}>
+                <div className="navbar-user-container" onClick={() => setShowDropdown(!showDropdown)}>
                     <FaUserCircle className="navbar-user" />
                     <div className="navbar-user-connected"></div>
                 </div>

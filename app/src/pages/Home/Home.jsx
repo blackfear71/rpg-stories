@@ -22,8 +22,6 @@ const initialConnectionValues = {
     password: ''
 };
 
-// TODO : finir / nettoyer le style (penser à nettoyer les styles communs)
-
 /**
  * Page d'accueil
  */
@@ -136,7 +134,7 @@ const Home = () => {
                             <Image src={rpgStoriesLogo} alt="rpg-stories" title={t('home.rpgStories')} className="home-logo" />
 
                             {/* Titre */}
-                            <div className="d-flex flex-column align-items-start home-title">
+                            <div className="d-flex flex-column align-items-start home-title-container">
                                 <span className="home-title-1">{t('home.rpg')}</span>
                                 <span className="home-title-2 ms-1">{t('home.stories')}</span>
                             </div>

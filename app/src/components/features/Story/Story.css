@@ -9,6 +9,7 @@
     color: var(--color-text-white);
 }
 
+/* TODO : éviter les .btn.XXX */
 .btn.story-header-button {
     background: var(--color-bg-secondary) !important;
 }

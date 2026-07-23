@@ -11,6 +11,7 @@
     min-width: 0;
 }
 
+/* TODO : éviter les .btn.XXX */
 .btn.story-entry-header-button {
     font-size: small !important;
     white-space: nowrap;
@@ -18,7 +19,6 @@
     width: auto !important;
 }
 
-/* TODO : prévoir des couleurs de background au survol */
 .btn.story-entry-header-button-combat {
     background-color: var(--color-bg-fight) !important;
     color: var(--color-text-fight) !important;

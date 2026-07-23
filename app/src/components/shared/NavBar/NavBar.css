@@ -12,7 +12,7 @@
     width: 40px;
 }
 
-.navbar-title {
+.navbar-title-container {
     font-family:
         'Cinzel-Regular', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     font-weight: bold;
@@ -29,7 +29,7 @@
     line-height: 10px;
 }
 
-.navbar-user-wrapper {
+.navbar-user-container {
     position: relative;
     height: 40px;
     width: 40px;
