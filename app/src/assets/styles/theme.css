@@ -1,5 +1,4 @@
 :root {
-    /* TOOD : nettoyer les couleurs inutiles */
     /* Background */
     --color-bg-primary: #262626;
     --color-bg-secondary: #323233;
@@ -42,13 +41,9 @@
     --color-text-primary: #262626;
     --color-text-secondary: #323233;
     --color-text-tertiary: #4a4a4c;
-    --color-text-card: #5c6f85;
     --color-text-placeholder: #c6cedd;
     --color-text-white: white;
     --color-text-red: #f33e3e;
-    --color-text-green: #0f6e3e;
-    --color-text-toggle: #987e4f;
-    --color-text-gold: #b8870a;
     --color-text-tab: #fdd343;
     --color-text-fight: #e8a8a8;
     --color-text-exploration: #c2b3e8;

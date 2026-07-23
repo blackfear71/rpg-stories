@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { FaUserCircle } from 'react-icons/fa';
 import { FaUser } from 'react-icons/fa6';
-import { HiIdentification, HiKey } from 'react-icons/hi';
+import { HiIdentification } from 'react-icons/hi';
+import { HiKey } from 'react-icons/hi2';
 
 import { ConfirmInput, PasswordInput, SelectInput, TextInput } from '../../../components/inputs';
 import { Message, SpinnerButton } from '../../../components/shared';
