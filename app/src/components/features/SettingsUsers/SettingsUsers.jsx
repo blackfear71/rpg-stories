@@ -17,12 +17,10 @@ const SettingsUsers = ({ users, onOpen, onConfirm, isSubmitting }) => {
     return (
         <>
             {/* Ajout */}
-            <div className="d-grid mb-2">
-                <Button variant="input-action" onClick={() => onOpen(EnumAction.CREATE, null)} disabled={isSubmitting}>
-                    {/* TODO : lors de la revue des boutons, supprimer ce genre d'espace pour séparer logo et libellé, le gérer proprement avec le style */}
-                    <IoAddCircleOutline size={25} /> {t('settings.addUser')}
-                </Button>
-            </div>
+            <Button variant="action" className="w-100 gap-1 mb-2" onClick={() => onOpen(EnumAction.CREATE, null)} disabled={isSubmitting}>
+                <IoAddCircleOutline size={25} />
+                {t('settings.addUser')}
+            </Button>
 
             {/* Liste */}
             {users && users.length > 0 ? (

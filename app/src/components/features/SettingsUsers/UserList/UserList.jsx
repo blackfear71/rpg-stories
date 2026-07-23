@@ -50,6 +50,7 @@ const UserList = ({ users, onOpen, onConfirm, isSubmitting }) => {
                     {u.login !== auth.login && (
                         <Button
                             onClick={() => handleDelete(u)}
+                            variant="action"
                             className="settings-item-button"
                             style={{ cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
                             disabled={isSubmitting}
@@ -61,6 +62,7 @@ const UserList = ({ users, onOpen, onConfirm, isSubmitting }) => {
                     {/* Modification */}
                     <Button
                         onClick={() => onOpen(EnumAction.UPDATE, u.id)}
+                        variant="action"
                         className="settings-item-button"
                         style={{ cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
                         disabled={isSubmitting}

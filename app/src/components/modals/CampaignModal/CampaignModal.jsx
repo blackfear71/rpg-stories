@@ -191,12 +191,13 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
 
                         {/* Boutons d'action */}
                         <div className="modal-footer-actions">
-                            <Button type="button" variant="modal-outline-action" onClick={() => onClose()} disabled={isSubmitting}>
+                            <Button type="button" variant="input-outline-action" onClick={() => onClose()} disabled={isSubmitting}>
                                 {t('common.close')}
                             </Button>
 
                             <SpinnerButton
-                                variant={'input-action'}
+                                variant="input-action"
+                                className="input-action-red-button"
                                 label={t(getButtonFromAction(modalOptions.action))}
                                 isSubmitting={isSubmitting}
                             />

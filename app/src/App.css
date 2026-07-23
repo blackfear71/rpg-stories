@@ -68,25 +68,47 @@ a {
 }
 
 /* Boutons */
-/* TODO : faire le tri dans ces boutons, c'est le bordel, voir aussi pour éviter les classes ".btn.XXX", en gros il faut revoir tous les boutons */
-/* TODO : à chercher : <Button et <SpinnerButton et <TooltipButton */
 .btn-action {
     display: flex !important;
     flex-direction: row;
     align-items: center !important;
     justify-content: center !important;
-    width: 100%;
-    gap: 6px;
-    background-color: var(--color-bg-primary) !important;
-    border: 2px solid var(--color-border-primary) !important;
+    background-color: var(--color-bg-secondary) !important;
+    border: 2px solid var(--color-border-secondary) !important;
     color: var(--color-text-white) !important;
-    padding: 5px 12px !important;
     font-size: large !important;
+    padding: 7px !important;
+}
+
+.btn-input-action {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: var(--color-bg-secondary) !important;
+    border: 2px solid var(--color-border-secondary) !important;
+    color: var(--color-text-white) !important;
+    font-size: medium !important;
+    padding: 5px 12px !important;
 }
 
 .btn-action:hover,
-.btn-action:active {
+.btn-action:active,
+.btn-input-action:hover,
+.btn-input-action:active {
     background-color: var(--color-bg-tertiary) !important;
+    border: 2px solid var(--color-border-tertiary) !important;
+}
+
+.btn.input-action-red-button {
+    background-color: var(--color-bg-secondary) !important;
+    color: var(--color-text-white) !important;
+}
+
+.btn.input-action-red-button:hover,
+.btn.input-action-red-button:active {
+    background-color: var(--color-bg-red) !important;
+    border: 2px solid var(--color-border-red) !important;
 }
 
 .btn-outline-action {
@@ -94,95 +116,30 @@ a {
     flex-direction: row;
     align-items: center !important;
     justify-content: center !important;
-    width: 100%;
-    gap: 6px;
     background-color: var(--color-bg-transparent) !important;
-    border: 2px solid var(--color-border-primary) !important;
+    border: 2px solid var(--color-border-tertiary) !important;
     color: var(--color-text-white) !important;
     font-size: large !important;
     padding: 7px !important;
 }
 
-.btn-outline-action:hover,
-.btn-outline-action:active {
-    background-color: var(--color-bg-validate-hover) !important;
-}
-
-.btn-outline-action.btn-yellow {
-    border-color: var(--color-bg-icon) !important;
-    color: var(--color-bg-icon) !important;
-}
-
-.btn-outline-action.btn-yellow:hover,
-.btn-outline-action.btn-yellow:active {
-    background-color: var(--color-bg-icon) !important;
-    border-color: var(--color-bg-icon) !important;
-    color: var(--color-text-primary) !important;
-}
-
-.btn-outline-action.btn-red {
-    border-color: var(--color-border-cancel) !important;
-    color: var(--color-text-red) !important;
-}
-
-.btn-outline-action.btn-red:hover,
-.btn-outline-action.btn-red:active {
-    background-color: var(--color-bg-cancel) !important;
-    border-color: var(--color-border-cancel-hover) !important;
-    color: var(--color-text-white) !important;
-}
-
-.btn-input-action {
-    background-color: var(--color-bg-tertiary) !important;
-    border: 2px solid var(--color-border-primary) !important;
-    color: var(--color-text-white) !important;
-    padding: 5px 12px !important;
-}
-
-.btn-input-action:hover,
-.btn-input-action:active {
-    background-color: var(--color-bg-secondary) !important;
-}
-
-.btn-input-action.btn-red {
-    background-color: var(--color-bg-cancel) !important;
-    border-color: var(--color-border-cancel-hover) !important;
-    color: var(--color-text-white) !important;
-}
-
-.btn-input-action.btn-red:hover,
-.btn-input-action.btn-red:active {
-    background-color: var(--color-bg-cancel-hover) !important;
-    border-color: var(--color-border-cancel-hover) !important;
-    color: var(--color-bg-white) !important;
-}
-
-.btn-input-action {
-    background-color: var(--color-bg-secondary) !important;
-    border: 2px solid var(--color-bg-tertiary) !important;
-    color: var(--color-text-white) !important;
-    padding: 5px 12px !important;
-}
-
-.btn-input-action:hover,
-.btn-input-action:active {
-    background-color: var(--color-bg-tertiary) !important;
-    color: var(--color-text-white) !important;
-}
-
-.btn-input-outline-action,
-.btn-modal-outline-action {
+.btn-input-outline-action {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center !important;
+    justify-content: center !important;
     background-color: var(--color-bg-transparent) !important;
-    border: 2px solid var(--color-border-gray-medium) !important;
-    color: var(--color-text-secondary) !important;
+    border: 2px solid var(--color-border-tertiary) !important;
+    color: var(--color-text-tertiary) !important;
+    font-size: medium !important;
     padding: 5px 12px !important;
 }
 
+.btn-outline-action:hover,
+.btn-outline-action:active,
 .btn-input-outline-action:hover,
-.btn-input-outline-action:active,
-.btn-modal-outline-action:hover,
-.btn-modal-outline-action:active {
-    background-color: var(--color-bg-gray-bold) !important;
+.btn-input-outline-action:active {
+    background-color: var(--color-bg-tertiary) !important;
     color: var(--color-text-white) !important;
 }
 
@@ -265,29 +222,6 @@ a {
 .modal-body .modal-group-content .input-icon svg {
     width: 28px;
     height: 28px;
-}
-
-.modal-body .modal-group-content .input-button-delete {
-    background-color: var(--color-bg-cancel);
-    border: 2px solid var(--color-border-cancel-hover);
-    color: var(--color-bg-white);
-    height: 36px;
-    width: 36px;
-    min-width: 36px;
-    min-height: 36px;
-    cursor: pointer;
-    margin-left: auto;
-}
-
-.modal-body .modal-group-content .input-button-delete svg {
-    width: 14px;
-    height: 14px;
-    flex-shrink: 0;
-}
-
-.modal-body .modal-group-content .input-button-delete:hover,
-.modal-body .modal-group-content .input-button-delete:active {
-    background-color: var(--color-bg-cancel-hover);
 }
 
 .modal-footer {

@@ -28,3 +28,23 @@
     flex: 0 1 auto;
     background-color: var(--color-bg-gray-light);
 }
+
+.btn.input-button-delete {
+    background-color: var(--color-bg-red) !important;
+    border: 2px solid var(--color-border-red-hover) !important;
+    color: var(--color-bg-white) !important;
+    height: 36px;
+    width: 36px;
+    margin-left: auto;
+}
+
+.btn.input-button-delete:hover,
+.btn.input-button-delete:active {
+    background-color: var(--color-bg-red-hover) !important;
+}
+
+.input-button-delete svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}

@@ -8,9 +8,8 @@
     --color-bg-gray-medium: #c6cedd;
     --color-bg-gray-light: #e3e3e3;
     --color-bg-gray-lighter: #edeff5;
-    --color-bg-validate-hover: #ba2f2f;
-    --color-bg-cancel-hover: #ba2f2f;
-    --color-bg-cancel: #f33e3e;
+    --color-bg-red: #f33e3e;
+    --color-bg-red-hover: #ba2f2f;
     --color-bg-green: #22c55e;
     --color-bg-icon: #fdd343;
     --color-bg-black: black;
@@ -34,14 +33,15 @@
     --color-border-input: #dee2e6;
     --color-border-input-hover: #adb5bd;
     --color-border-input-focus: #86b7fe;
-    --color-border-cancel-hover: #ba2f2f;
-    --color-border-cancel: #f33e3e;
+    --color-border-red: #f33e3e;
+    --color-border-red-hover: #ba2f2f;
     --color-border-tab: #fdd343;
     --color-border-white: white;
 
     /* Texte */
-    --color-text-primary: black;
-    --color-text-secondary: #8892a4;
+    --color-text-primary: #262626;
+    --color-text-secondary: #323233;
+    --color-text-tertiary: #4a4a4c;
     --color-text-card: #5c6f85;
     --color-text-placeholder: #c6cedd;
     --color-text-white: white;

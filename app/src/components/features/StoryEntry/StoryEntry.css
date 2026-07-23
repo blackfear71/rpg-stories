@@ -11,12 +11,17 @@
     min-width: 0;
 }
 
-/* TODO : éviter les .btn.XXX */
 .btn.story-entry-header-button {
     font-size: small !important;
     white-space: nowrap;
     flex: 0 1 auto;
     width: auto !important;
+    border: none !important;
+}
+
+.btn.story-entry-header-button:hover,
+.btn.story-entry-header-button:active {
+    border: none !important;
 }
 
 .btn.story-entry-header-button-combat {
@@ -47,6 +52,21 @@
 .btn.story-entry-header-button-repos:hover,
 .btn.story-entry-header-button-repos:active {
     background-color: var(--color-bg-rest-hover) !important;
+}
+
+.btn.story-entry-cancel-button {
+    color: var(--color-text-white) !important;
+}
+
+.btn.story-entry-validate-button {
+    background-color: var(--color-bg-secondary) !important;
+    color: var(--color-text-white) !important;
+}
+
+.btn.story-entry-validate-button:hover,
+.btn.story-entry-validate-button:active {
+    background-color: var(--color-bg-red) !important;
+    border: 2px solid var(--color-border-red) !important;
 }
 
 @media (max-width: 576px) {

@@ -27,8 +27,12 @@ const IncrementInput = ({ title, icon, name, value, onChangeDown, onChangeUp, er
                     <Form.Label className="visually-hidden">{title ?? name}</Form.Label>
 
                     <div className="d-flex align-items-center gap-2">
-                        <Button className="d-flex align-items-center justify-content-center increment-input-button" onClick={onChangeDown}>
-                            <FaMinus />
+                        <Button
+                            variant="outline-action"
+                            className="d-flex align-items-center justify-content-center increment-input-button"
+                            onClick={onChangeDown}
+                        >
+                            <FaMinus size={12} />
                         </Button>
 
                         <div
@@ -37,8 +41,12 @@ const IncrementInput = ({ title, icon, name, value, onChangeDown, onChangeUp, er
                             {value || 0}
                         </div>
 
-                        <Button className="d-flex align-items-center justify-content-center increment-input-button" onClick={onChangeUp}>
-                            <FaPlus />
+                        <Button
+                            variant="outline-action"
+                            className="d-flex align-items-center justify-content-center increment-input-button"
+                            onClick={onChangeUp}
+                        >
+                            <FaPlus size={12} />
                         </Button>
                     </div>
 

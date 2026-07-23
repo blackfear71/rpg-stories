@@ -26,11 +26,12 @@ const SettingsUser = ({ user, onOpen, isSubmitting }) => {
                 {/* Mot de passe */}
                 <Button
                     onClick={() => onOpen()}
+                    variant="action"
                     className="settings-item-button"
                     style={{ cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
                     disabled={isSubmitting}
                 >
-                    <HiKey className="svg-large" color={isSubmitting ? 'gray' : 'white'} />
+                    <HiKey color={isSubmitting ? 'gray' : 'white'} />
                 </Button>
             </div>
 

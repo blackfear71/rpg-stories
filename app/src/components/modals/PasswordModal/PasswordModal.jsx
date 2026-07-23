@@ -118,11 +118,16 @@ const PasswordModal = ({ user, formData, modalOptions, setModalOptions, onClose,
 
                         {/* Boutons d'action */}
                         <div className="modal-footer-actions">
-                            <Button type="button" variant="modal-outline-action" onClick={() => onClose()} disabled={isSubmitting}>
+                            <Button type="button" variant="input-outline-action" onClick={() => onClose()} disabled={isSubmitting}>
                                 {t('common.close')}
                             </Button>
 
-                            <SpinnerButton label={t('common.validate')} isSubmitting={isSubmitting} />
+                            <SpinnerButton
+                                variant="input-action"
+                                className="input-action-red-button"
+                                label={t('common.validate')}
+                                isSubmitting={isSubmitting}
+                            />
                         </div>
                     </Modal.Footer>
                 </fieldset>

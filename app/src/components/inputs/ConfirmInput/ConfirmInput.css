@@ -1,0 +1,10 @@
+.btn.confirm-input-button {
+    background-color: var(--color-bg-red) !important;
+    border-color: var(--color-border-red) !important;
+}
+
+.btn.confirm-input-button:hover,
+.btn.confirm-input-button:active {
+    background-color: var(--color-bg-red-hover) !important;
+    border-color: var(--color-border-red-hover) !important;
+}

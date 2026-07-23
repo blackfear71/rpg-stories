@@ -1,17 +1,17 @@
-.increment-input-button {
+.btn.increment-input-button {
     flex-shrink: 0;
     width: 36px;
     height: 36px;
     background-color: var(--color-bg-gray-lighter) !important;
     border: 1.5px solid var(--color-border-input) !important;
-    cursor: pointer;
     color: var(--color-bg-black) !important;
 }
 
-.increment-input-button:hover,
-.increment-input-button:active {
+.btn.increment-input-button:hover,
+.btn.increment-input-button:active {
     background-color: var(--color-bg-gray-light) !important;
     border-color: var(--color-border-input-hover) !important;
+    color: var(--color-bg-black) !important;
 }
 
 .increment-input-value {

@@ -36,6 +36,11 @@
     width: 300px;
 }
 
+.btn.home-button {
+    background-color: var(--color-bg-primary) !important;
+    border: 2px solid var(--color-border-primary) !important;
+}
+
 @media (max-width: 576px) {
     .home-form {
         width: 100%;

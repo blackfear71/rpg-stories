@@ -55,9 +55,9 @@ const PasswordInput = ({ title, icon, name, ref, placeholder, value, onChange, e
                         />
 
                         <Button
+                            className="d-flex align-items-center password-input-button"
                             onClick={() => toggleVisibility()}
                             tabIndex={-1}
-                            className="d-flex align-items-center password-input-button"
                         >
                             {showPassword ? <FaEyeSlash /> : <FaEye />}
                         </Button>

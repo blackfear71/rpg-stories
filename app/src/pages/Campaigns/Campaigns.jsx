@@ -9,7 +9,7 @@ import { of, switchMap } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
 
 import { Button, Spinner } from 'react-bootstrap';
-import { FaPlus } from 'react-icons/fa6';
+import { IoAddCircleOutline } from 'react-icons/io5';
 
 import { CampaignModal } from '../../components/modals';
 import { Message } from '../../components/shared';
@@ -239,11 +239,11 @@ const Campaigns = () => {
                     <div className="gap-3 campaigns-grid">
                         {/* Ajout */}
                         <Button
-                            className="d-flex flex-column align-items-center justify-content-center gap-3 campaigns-button"
+                            className="d-flex flex-column align-items-center justify-content-center gap-2 campaigns-button"
                             onClick={() => openCloseCampaignModal(EnumAction.CREATE)}
                             disabled={isSubmitting}
                         >
-                            <FaPlus size={30} />
+                            <IoAddCircleOutline size={30} />
                             {t('campaign.createCampaign')}
                         </Button>
 

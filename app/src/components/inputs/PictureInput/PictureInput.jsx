@@ -140,10 +140,7 @@ const PictureInput = ({ title, icon, name, value, onChange, error, isSubmitting,
                             <Image key={previewUrl} src={previewUrl} alt={fileName} rounded className="picture-input-preview-image" />
 
                             {/* Suppression */}
-                            <Button
-                                onClick={handleFileRemove}
-                                className="d-flex align-items-center justify-content-center input-button-delete"
-                            >
+                            <Button variant="outline-action" className="input-button-delete" onClick={handleFileRemove}>
                                 <FaTrashCan />
                             </Button>
                         </div>

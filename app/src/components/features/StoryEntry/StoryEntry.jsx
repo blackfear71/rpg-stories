@@ -99,6 +99,7 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
                                                 <span className="story-entry-header-button-label">{t(tag.label)}</span>
                                             </div>
                                         }
+                                        variant="action"
                                         className={`story-entry-header-button story-entry-header-button-${tag.code.toLowerCase()}`}
                                         onClick={() => insertTag(tag.code)}
                                         isSubmitting={isSubmitting}
@@ -120,11 +121,21 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
 
                             {/* Boutons d'action */}
                             <div className="d-flex flex-row gap-2 justify-content-end">
-                                <Button variant={'input-action'} onClick={onOpenClose} disabled={isSubmitting}>
+                                <Button
+                                    variant="input-outline-action"
+                                    className="story-entry-cancel-button"
+                                    onClick={onOpenClose}
+                                    disabled={isSubmitting}
+                                >
                                     {t('common.cancel')}
                                 </Button>
 
-                                <SpinnerButton variant={'input-action'} label={t('common.validate')} isSubmitting={isSubmitting} />
+                                <SpinnerButton
+                                    variant="input-outline-action"
+                                    className="story-entry-validate-button"
+                                    label={t('common.validate')}
+                                    isSubmitting={isSubmitting}
+                                />
                             </div>
                         </div>
                     </div>

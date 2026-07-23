@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Button } from 'react-bootstrap';
 
+import './ConfirmInput.css';
+
 /**
  * Bouton d'action avec confirmation intégrée
  */
@@ -45,7 +47,7 @@ const ConfirmInput = ({ title, buttonLabel, onConfirm }) => {
                         {t('common.cancel')}
                     </Button>
 
-                    <Button type="button" variant="input-action" className="btn-red" onClick={handleConfirm}>
+                    <Button type="button" variant="input-action" className="confirm-input-button" onClick={handleConfirm}>
                         {t('common.confirm')}
                     </Button>
                 </div>

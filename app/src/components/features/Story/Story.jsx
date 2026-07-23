@@ -117,6 +117,7 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
                             <TooltipButton
                                 tooltip={t('common.delete')}
                                 content={<MdDelete size={20} />}
+                                variant="action"
                                 className="story-header-button"
                                 onClick={() => onConfirm(story.id, getLocalizedDate(story.createdAt))}
                                 isSubmitting={isSubmitting}
@@ -126,6 +127,7 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
                                 <TooltipButton
                                     tooltip={t('common.update')}
                                     content={<MdEdit size={20} />}
+                                    variant="action"
                                     className="story-header-button"
                                     onClick={() => onOpenClose(EnumAction.UPDATE, story.id)}
                                     isSubmitting={isSubmitting}
