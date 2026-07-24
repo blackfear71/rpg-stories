@@ -67,14 +67,14 @@ const ConfirmModal = ({ modalOptions, setModalOptions, onClose, onConfirmAction,
 
                         {/* Boutons d'action */}
                         <div className="modal-footer-actions">
-                            <Button type="button" variant="input-outline-action" onClick={() => onClose()} disabled={isSubmitting}>
+                            <Button type="button" variant="outline-text-action" onClick={() => onClose()} disabled={isSubmitting}>
                                 {t('common.cancel')}
                             </Button>
 
                             {onConfirmAction && (
                                 <SpinnerButton
-                                    variant="input-action"
-                                    className="input-action-red-button"
+                                    variant="filled-text-action"
+                                    className="filled-red-button"
                                     label={t('common.validate')}
                                     isSubmitting={isSubmitting}
                                 />

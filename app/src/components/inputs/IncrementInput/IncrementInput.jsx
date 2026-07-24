@@ -28,7 +28,7 @@ const IncrementInput = ({ title, icon, name, value, onChangeDown, onChangeUp, er
 
                     <div className="d-flex align-items-center gap-2">
                         <Button
-                            variant="outline-action"
+                            variant="outline-icon-action"
                             className="d-flex align-items-center justify-content-center increment-input-button"
                             onClick={onChangeDown}
                         >
@@ -42,7 +42,7 @@ const IncrementInput = ({ title, icon, name, value, onChangeDown, onChangeUp, er
                         </div>
 
                         <Button
-                            variant="outline-action"
+                            variant="outline-icon-action"
                             className="d-flex align-items-center justify-content-center increment-input-button"
                             onClick={onChangeUp}
                         >

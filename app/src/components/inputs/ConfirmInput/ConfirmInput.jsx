@@ -37,17 +37,17 @@ const ConfirmInput = ({ title, buttonLabel, onConfirm }) => {
 
             {!confirmActions ? (
                 <div className="d-flex">
-                    <Button type="button" variant="input-action" onClick={() => setConfirmActions(true)}>
+                    <Button type="button" variant="filled-text-action" onClick={() => setConfirmActions(true)}>
                         {buttonLabel}
                     </Button>
                 </div>
             ) : (
                 <div className="d-flex gap-2">
-                    <Button type="button" variant="input-outline-action" onClick={() => setConfirmActions(false)}>
+                    <Button type="button" variant="outline-text-action" onClick={() => setConfirmActions(false)}>
                         {t('common.cancel')}
                     </Button>
 
-                    <Button type="button" variant="input-action" className="confirm-input-button" onClick={handleConfirm}>
+                    <Button type="button" variant="filled-text-action" className="confirm-input-button" onClick={handleConfirm}>
                         {t('common.confirm')}
                     </Button>
                 </div>

@@ -170,7 +170,7 @@ const Home = () => {
 
                                     {/* Boutons d'action */}
                                     <SpinnerButton
-                                        variant="input-action"
+                                        variant="filled-text-action"
                                         className="home-button"
                                         label={t('navbar.connect')}
                                         isSubmitting={isSubmitting}

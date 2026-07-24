@@ -44,7 +44,7 @@ const CampaignHeader = ({ campaign, inputOptions, onOpenInput, onOpenModal, onCo
                         <TooltipButton
                             tooltip={t('campaign.createStory')}
                             content={<FaPlus size={25} />}
-                            variant="outline-action"
+                            variant="outline-icon-action"
                             className="campaign-header-button"
                             onClick={() => onOpenInput(EnumAction.CREATE)}
                             isSubmitting={isSubmitting}
@@ -55,7 +55,7 @@ const CampaignHeader = ({ campaign, inputOptions, onOpenInput, onOpenModal, onCo
                     <TooltipButton
                         tooltip={t('campaign.updateCampaign')}
                         content={<MdEdit size={25} />}
-                        variant="outline-action"
+                        variant="outline-icon-action"
                         className="campaign-header-button"
                         onClick={() => onOpenModal(EnumAction.UPDATE)}
                         isSubmitting={isSubmitting}
@@ -65,7 +65,7 @@ const CampaignHeader = ({ campaign, inputOptions, onOpenInput, onOpenModal, onCo
                     <TooltipButton
                         tooltip={t('campaign.deleteCampaign')}
                         content={<MdDelete size={25} />}
-                        variant="outline-action"
+                        variant="outline-icon-action"
                         className="campaign-header-button"
                         onClick={onConfirm}
                         isSubmitting={isSubmitting}

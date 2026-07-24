@@ -68,7 +68,7 @@ a {
 }
 
 /* Boutons */
-.btn-action {
+.btn-filled-icon-action {
     display: flex !important;
     flex-direction: row;
     align-items: center !important;
@@ -80,7 +80,7 @@ a {
     padding: 7px !important;
 }
 
-.btn-input-action {
+.btn-filled-text-action {
     display: flex !important;
     flex-direction: row;
     align-items: center !important;
@@ -92,26 +92,26 @@ a {
     padding: 5px 12px !important;
 }
 
-.btn-action:hover,
-.btn-action:active,
-.btn-input-action:hover,
-.btn-input-action:active {
+.btn-filled-icon-action:hover,
+.btn-filled-icon-action:active,
+.btn-filled-text-action:hover,
+.btn-filled-text-action:active {
     background-color: var(--color-bg-tertiary) !important;
     border: 2px solid var(--color-border-tertiary) !important;
 }
 
-.btn.input-action-red-button {
+.btn.filled-red-button {
     background-color: var(--color-bg-secondary) !important;
     color: var(--color-text-white) !important;
 }
 
-.btn.input-action-red-button:hover,
-.btn.input-action-red-button:active {
+.btn.filled-red-button:hover,
+.btn.filled-red-button:active {
     background-color: var(--color-bg-red) !important;
     border: 2px solid var(--color-border-red) !important;
 }
 
-.btn-outline-action {
+.btn-outline-icon-action {
     display: flex !important;
     flex-direction: row;
     align-items: center !important;
@@ -123,7 +123,7 @@ a {
     padding: 7px !important;
 }
 
-.btn-input-outline-action {
+.btn-outline-text-action {
     display: flex !important;
     flex-direction: row;
     align-items: center !important;
@@ -135,10 +135,10 @@ a {
     padding: 5px 12px !important;
 }
 
-.btn-outline-action:hover,
-.btn-outline-action:active,
-.btn-input-outline-action:hover,
-.btn-input-outline-action:active {
+.btn-outline-icon-action:hover,
+.btn-outline-icon-action:active,
+.btn-outline-text-action:hover,
+.btn-outline-text-action:active {
     background-color: var(--color-bg-tertiary) !important;
     color: var(--color-text-white) !important;
 }

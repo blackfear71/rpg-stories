@@ -17,7 +17,7 @@ const SettingsUsers = ({ users, onOpen, onConfirm, isSubmitting }) => {
     return (
         <>
             {/* Ajout */}
-            <Button variant="action" className="w-100 gap-1 mb-2" onClick={() => onOpen(EnumAction.CREATE, null)} disabled={isSubmitting}>
+            <Button variant="filled-icon-action" className="w-100 gap-1 mb-2" onClick={() => onOpen(EnumAction.CREATE, null)} disabled={isSubmitting}>
                 <IoAddCircleOutline size={25} />
                 {t('settings.addUser')}
             </Button>

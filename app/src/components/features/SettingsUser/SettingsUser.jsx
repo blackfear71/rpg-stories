@@ -26,7 +26,7 @@ const SettingsUser = ({ user, onOpen, isSubmitting }) => {
                 {/* Mot de passe */}
                 <Button
                     onClick={() => onOpen()}
-                    variant="action"
+                    variant="filled-icon-action"
                     className="settings-item-button"
                     style={{ cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
                     disabled={isSubmitting}
