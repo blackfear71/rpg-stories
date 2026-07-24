@@ -10,7 +10,6 @@
 .campaign-header-title {
     font-family:
         'Cinzel-Medium', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    font-size: xx-large;
     background-color: var(--color-transparent-bg-primary);
     color: var(--color-text-white);
     max-width: 100%;
@@ -18,7 +17,6 @@
 }
 
 .campaign-header-universe {
-    font-size: medium;
     font-style: italic;
     background-color: var(--color-transparent-bg-white);
     color: var(--color-text-primary);
@@ -27,7 +25,6 @@
 }
 
 .campaign-header-players {
-    font-size: medium;
     background-color: var(--color-transparent-bg-white);
     color: var(--color-text-primary);
     max-width: 100%;

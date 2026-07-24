@@ -30,19 +30,19 @@ const CampaignHeader = ({ campaign, inputOptions, onOpenInput, onOpenModal, onCo
                 {/* Infos */}
                 <div className="d-flex flex-column align-items-start gap-2">
                     {/* Nom de la campagne */}
-                    <div className="d-flex align-items-center gap-2 py-1 px-2 rounded campaign-header-title">
+                    <div className="d-flex align-items-center gap-2 py-1 px-2 fs-2 rounded campaign-header-title">
                         <GiSpellBook className="campaign-header-icon-large" />
                         {campaign.name}
                     </div>
 
                     {/* Univers */}
-                    <div className="d-flex align-items-center gap-2 py-1 px-2 rounded campaign-header-universe">
+                    <div className="d-flex align-items-center gap-2 py-1 px-2 fs-6 rounded campaign-header-universe">
                         <GiGalaxy className="campaign-header-icon-medium" />
                         {campaign.universe}
                     </div>
 
                     {/* Nombre de joueurs */}
-                    <div className="d-flex align-items-center gap-2 py-1 px-2 rounded campaign-header-players">
+                    <div className="d-flex align-items-center gap-2 py-1 px-2 fs-6 rounded campaign-header-players">
                         <GiMeepleGroup className="campaign-header-icon-small" />
                         {t(campaign.players === 1 ? 'campaign.countPlayer' : 'campaign.countPlayers', {
                             count: campaign.players
