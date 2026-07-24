@@ -16,7 +16,7 @@
     min-width: 0;
 }
 
-.campaign-header-universe {
+.campaign-header-badge-italic {
     font-style: italic;
     background-color: var(--color-transparent-bg-white);
     color: var(--color-text-primary);
@@ -24,7 +24,7 @@
     min-width: 0;
 }
 
-.campaign-header-players {
+.campaign-header-badge {
     background-color: var(--color-transparent-bg-white);
     color: var(--color-text-primary);
     max-width: 100%;

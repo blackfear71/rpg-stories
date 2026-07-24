@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, Form, Modal } from 'react-bootstrap';
 import { FaWandSparkles } from 'react-icons/fa6';
-import { GiGalaxy, GiHills, GiMeepleGroup, GiSpellBook } from 'react-icons/gi';
+import { GiCastle, GiHills, GiMeepleGroup, GiSpellBook } from 'react-icons/gi';
 
 import { IncrementInput, PictureInput, TextInput } from '../../../components/inputs';
 import { Message, SpinnerButton } from '../../../components/shared';
@@ -133,7 +133,7 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
                             <div className="modal-group-content">
                                 <TextInput
                                     title={t('campaign.universe')}
-                                    icon={<GiGalaxy />}
+                                    icon={<GiCastle />}
                                     name="universe"
                                     placeholder={t('campaign.universe')}
                                     value={formData.values.universe}

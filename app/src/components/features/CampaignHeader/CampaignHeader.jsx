@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { FaPlus } from 'react-icons/fa6';
-import { GiGalaxy, GiMeepleGroup, GiSpellBook } from 'react-icons/gi';
+import { GiCastle, GiDoorway, GiMeepleGroup, GiSpellBook } from 'react-icons/gi';
 import { MdDelete, MdEdit } from 'react-icons/md';
 
 import { TooltipButton } from '../../../components/shared';
@@ -11,7 +11,7 @@ import { EnumAction } from '../../../enums';
 /**
  * Liste des histoires
  */
-const CampaignHeader = ({ campaign, inputOptions, onOpenInput, onOpenModal, onConfirm, isSubmitting }) => {
+const CampaignHeader = ({ campaign, storyCount, inputOptions, onOpenInput, onOpenModal, onConfirm, isSubmitting }) => {
     // Traductions
     const { t } = useTranslation();
 
@@ -36,18 +36,28 @@ const CampaignHeader = ({ campaign, inputOptions, onOpenInput, onOpenModal, onCo
                     </div>
 
                     {/* Univers */}
-                    <div className="d-flex align-items-center gap-2 py-1 px-2 fs-6 rounded campaign-header-universe">
-                        <GiGalaxy className="campaign-header-icon-medium" />
+                    <div className="d-flex align-items-center gap-2 py-1 px-2 fs-6 rounded campaign-header-badge-italic">
+                        <GiCastle className="campaign-header-icon-small" />
                         {campaign.universe}
                     </div>
 
                     {/* Nombre de joueurs */}
-                    <div className="d-flex align-items-center gap-2 py-1 px-2 fs-6 rounded campaign-header-players">
+                    <div className="d-flex align-items-center gap-2 py-1 px-2 fs-6 rounded campaign-header-badge">
                         <GiMeepleGroup className="campaign-header-icon-small" />
                         {t(campaign.players === 1 ? 'campaign.countPlayer' : 'campaign.countPlayers', {
                             count: campaign.players
                         })}
                     </div>
+
+                    {/* Nombre de sessions */}
+                    {storyCount > 0 && (
+                        <div className="d-flex align-items-center gap-2 py-1 px-2 fs-6 rounded campaign-header-badge">
+                            <GiDoorway className="campaign-header-icon-small" />
+                            {t(storyCount === 1 ? 'campaign.countStory' : 'campaign.countStories', {
+                                count: storyCount
+                            })}
+                        </div>
+                    )}
                 </div>
 
                 {/* Actions */}

@@ -504,6 +504,7 @@ const Campaign = () => {
                             {/* Entete */}
                             <CampaignHeader
                                 campaign={campaign}
+                                storyCount={stories?.length ?? 0}
                                 inputOptions={inputOptionsStory}
                                 onOpenInput={openCloseStoryInput}
                                 onOpenModal={openCloseCampaignModal}

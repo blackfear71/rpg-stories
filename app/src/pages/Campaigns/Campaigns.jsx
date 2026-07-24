@@ -9,7 +9,7 @@ import { of, switchMap } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
 
 import { Button, Spinner } from 'react-bootstrap';
-import { GiGalaxy, GiMeepleGroup, GiSpellBook } from 'react-icons/gi';
+import { GiCastle, GiMeepleGroup, GiSpellBook } from 'react-icons/gi';
 import { IoAddCircleOutline } from 'react-icons/io5';
 
 import { CampaignModal } from '../../components/modals';
@@ -274,7 +274,7 @@ const Campaigns = () => {
                                     <div className="d-flex gap-2 campaigns-button-badges-wrapper">
                                         {/* Univers */}
                                         <div className="d-flex align-items-center gap-1 py-1 px-2 rounded campaigns-button-badge">
-                                            <GiGalaxy size={20} className="campaigns-button-icon" />
+                                            <GiCastle size={20} className="campaigns-button-icon" />
                                             <span className="campaigns-button-text">{campaign.universe}</span>
                                         </div>
 

@@ -67,6 +67,8 @@
         "confirmDeleteCampaign": "Do you really want to delete the campaign \"{{name}}\"?",
         "countPlayer": "{{count}} player",
         "countPlayers": "{{count}} players",
+        "countStory": "{{count}} session",
+        "countStories": "{{count}} sessions",
         "createCampaign": "Create campaign",
         "createStory": "Create story",
         "deleteCampaign": "Delete the campaign",

@@ -67,6 +67,8 @@
         "confirmDeleteCampaign": "Voulez-vous vraiment supprimer la campagne \"{{name}}\" ?",
         "countPlayer": "{{count}} joueur",
         "countPlayers": "{{count}} joueurs",
+        "countStory": "{{count}} session",
+        "countStories": "{{count}} sessions",
         "createCampaign": "Créer une campagne",
         "createStory": "Créer une histoire",
         "deleteCampaign": "Supprimer la campagne",
