@@ -13,6 +13,8 @@
     font-size: xx-large;
     background-color: var(--color-transparent-bg-primary);
     color: var(--color-text-white);
+    max-width: 100%;
+    min-width: 0;
 }
 
 .campaign-header-universe {
@@ -20,12 +22,37 @@
     font-style: italic;
     background-color: var(--color-transparent-bg-white);
     color: var(--color-text-primary);
+    max-width: 100%;
+    min-width: 0;
 }
 
 .campaign-header-players {
     font-size: medium;
     background-color: var(--color-transparent-bg-white);
     color: var(--color-text-primary);
+    max-width: 100%;
+    min-width: 0;
+}
+
+.campaign-header-icon-large {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+}
+
+.campaign-header-icon-medium {
+    flex-shrink: 0;
+    width: 25px;
+    height: 25px;
+    min-width: 25px;
+}
+
+.campaign-header-icon-small {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
 }
 
 .btn.campaign-header-button {

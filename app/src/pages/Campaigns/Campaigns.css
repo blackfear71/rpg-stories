@@ -22,20 +22,29 @@
 
 .campaigns-grid .campaigns-button:hover,
 .campaigns-grid .campaigns-button:active {
-    background-color: var(--color-bg-primary);
+    background-color: var(--color-bg-tertiary);
 }
 
 .campaigns-grid .campaigns-button-label {
     font-family:
         'Cinzel-Medium', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     font-size: x-large;
+    background-color: var(--color-transparent-bg-primary);
+    color: var(--color-text-white);
+    max-width: 100%;
+    min-width: 0;
+}
+
+.campaigns-grid .campaigns-button-icon {
+    flex-shrink: 0;
+}
+
+.campaigns-grid .campaigns-button-text {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    max-width: 100%;
     min-width: 0;
-    background-color: var(--color-transparent-bg-primary);
-    color: var(--color-text-white);
+    flex: 1 1 auto;
 }
 
 .campaigns-grid .campaigns-button:hover .campaigns-button-label,
@@ -50,17 +59,15 @@
 
 .campaigns-grid .campaigns-button-badges-wrapper .campaigns-button-badge {
     font-size: small;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    max-width: 100%;
-    min-width: 0;
     background-color: var(--color-transparent-bg-white);
     color: var(--color-text-primary);
+    max-width: 100%;
+    min-width: 0;
 }
 
-.campaigns-grid .campaigns-button-badges-wrapper .campaigns-button-badge-universe {
+.campaigns-grid .campaigns-button-badges-wrapper .campaigns-button-badge:first-child .campaigns-button-text {
     font-style: italic;
+    padding-right: 2px; /* L'italique déborde un peu et est tronqué à cause de l'overflow */
 }
 
 .campaigns-grid .campaigns-button-badges-wrapper .campaigns-button-badge:last-child {

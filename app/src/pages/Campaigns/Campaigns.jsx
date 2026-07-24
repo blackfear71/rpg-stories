@@ -9,6 +9,7 @@ import { of, switchMap } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
 
 import { Button, Spinner } from 'react-bootstrap';
+import { GiGalaxy, GiMeepleGroup, GiSpellBook } from 'react-icons/gi';
 import { IoAddCircleOutline } from 'react-icons/io5';
 
 import { CampaignModal } from '../../components/modals';
@@ -264,16 +265,28 @@ const Campaigns = () => {
                                     onClick={() => navigate(`/campaign/${campaign.id}`)}
                                     disabled={isSubmitting}
                                 >
-                                    <span className="py-1 px-2 rounded campaigns-button-label">{campaign.name}</span>
-                                    <div className="d-flex flex-row gap-2 campaigns-button-badges-wrapper">
-                                        <span className="py-1 px-2 rounded campaigns-button-badge campaigns-button-badge-universe">
-                                            {campaign.universe}
-                                        </span>
-                                        <span className="py-1 px-2 rounded campaigns-button-badge">
-                                            {t(campaign.players === 1 ? 'campaign.countPlayer' : 'campaign.countPlayers', {
-                                                count: campaign.players
-                                            })}
-                                        </span>
+                                    {/* Nom de la campagne */}
+                                    <div className="d-flex align-items-center gap-2 py-1 px-2 rounded campaigns-button-label">
+                                        <GiSpellBook size={30} className="campaigns-button-icon" />
+                                        <span className="campaigns-button-text">{campaign.name}</span>
+                                    </div>
+
+                                    <div className="d-flex gap-2 campaigns-button-badges-wrapper">
+                                        {/* Univers */}
+                                        <div className="d-flex align-items-center gap-1 py-1 px-2 rounded campaigns-button-badge">
+                                            <GiGalaxy size={20} className="campaigns-button-icon" />
+                                            <span className="campaigns-button-text">{campaign.universe}</span>
+                                        </div>
+
+                                        {/* Nombre de joueurs */}
+                                        <div className="d-flex align-items-center gap-1 py-1 px-2 rounded campaigns-button-badge">
+                                            <GiMeepleGroup size={20} className="campaigns-button-icon" />
+                                            <span className="campaigns-button-text">
+                                                {t(campaign.players === 1 ? 'campaign.countPlayer' : 'campaign.countPlayers', {
+                                                    count: campaign.players
+                                                })}
+                                            </span>
+                                        </div>
                                     </div>
                                 </Button>
                             ))}

@@ -53,5 +53,6 @@
     --color-transparent-border-input: rgba(13, 110, 253, 0.25);
     --color-transparent-bg-primary: rgba(38, 38, 38, 0.75);
     --color-transparent-bg-secondary: rgba(50, 50, 51, 0.75);
+    --color-transparent-bg-tertiary: rgba(74, 74, 76, 0.75);
     --color-transparent-bg-white: rgba(255, 255, 255, 0.75);
 }

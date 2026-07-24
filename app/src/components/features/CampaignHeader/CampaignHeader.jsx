@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { FaPlus } from 'react-icons/fa6';
+import { GiGalaxy, GiMeepleGroup, GiSpellBook } from 'react-icons/gi';
 import { MdDelete, MdEdit } from 'react-icons/md';
 
 import { TooltipButton } from '../../../components/shared';
@@ -28,9 +29,21 @@ const CampaignHeader = ({ campaign, inputOptions, onOpenInput, onOpenModal, onCo
             >
                 {/* Infos */}
                 <div className="d-flex flex-column align-items-start gap-2">
-                    <div className="py-1 px-2 rounded campaign-header-title">{campaign.name}</div>
-                    <div className="py-1 px-2 rounded campaign-header-universe">{campaign.universe}</div>
-                    <div className="py-1 px-2 rounded campaign-header-players">
+                    {/* Nom de la campagne */}
+                    <div className="d-flex align-items-center gap-2 py-1 px-2 rounded campaign-header-title">
+                        <GiSpellBook className="campaign-header-icon-large" />
+                        {campaign.name}
+                    </div>
+
+                    {/* Univers */}
+                    <div className="d-flex align-items-center gap-2 py-1 px-2 rounded campaign-header-universe">
+                        <GiGalaxy className="campaign-header-icon-medium" />
+                        {campaign.universe}
+                    </div>
+
+                    {/* Nombre de joueurs */}
+                    <div className="d-flex align-items-center gap-2 py-1 px-2 rounded campaign-header-players">
+                        <GiMeepleGroup className="campaign-header-icon-small" />
                         {t(campaign.players === 1 ? 'campaign.countPlayer' : 'campaign.countPlayers', {
                             count: campaign.players
                         })}
