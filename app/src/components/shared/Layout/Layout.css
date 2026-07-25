@@ -1,4 +1,5 @@
 .layout-container {
+    position: relative;
     min-height: 100vh;
 }
 
@@ -13,4 +14,85 @@
 
 .layout-main-with-navbar {
     padding-top: 80px;
+}
+
+.smoke {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 320px;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.smoke-left {
+    left: 0;
+    mask-image: linear-gradient(to right, black 40%, transparent 100%);
+}
+
+.smoke-right {
+    right: 0;
+    mask-image: linear-gradient(to left, black 40%, transparent 100%);
+}
+
+.smoke span {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    filter: blur(45px);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 45%, rgba(255, 255, 255, 0) 75%);
+    animation: smoke-drift 16s ease-in-out infinite;
+}
+
+.smoke-left span:nth-child(1) {
+    top: -10%;
+    left: -30%;
+}
+
+.smoke-left span:nth-child(2) {
+    top: 40%;
+    left: -20%;
+    animation-duration: 20s;
+    animation-delay: -5s;
+}
+
+.smoke-left span:nth-child(3) {
+    top: 75%;
+    left: -35%;
+    animation-duration: 13s;
+    animation-delay: -9s;
+}
+
+.smoke-right span:nth-child(1) {
+    top: -5%;
+    right: -30%;
+    animation-delay: -3s;
+}
+
+.smoke-right span:nth-child(2) {
+    top: 45%;
+    right: -20%;
+    animation-duration: 18s;
+    animation-delay: -7s;
+}
+
+.smoke-right span:nth-child(3) {
+    top: 80%;
+    right: -35%;
+    animation-duration: 14s;
+    animation-delay: -2s;
+}
+
+@keyframes smoke-drift {
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translate(6%, -8%) scale(1.25);
+        opacity: 0.85;
+    }
 }
