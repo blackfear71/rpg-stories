@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { Form, Image, Spinner } from 'react-bootstrap';
+import { useNavigate } from 'react-router';
 
 import rpgStoriesLogo from '../../assets/images/rpg-stories.webp';
 

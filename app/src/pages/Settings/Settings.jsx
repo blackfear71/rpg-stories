@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -12,6 +11,7 @@ import { Spinner, Tab, Tabs } from 'react-bootstrap';
 import { FaQuestionCircle } from 'react-icons/fa';
 import { FaStar, FaUser } from 'react-icons/fa6';
 import { IoSettingsOutline } from 'react-icons/io5';
+import { useLocation, useNavigate } from 'react-router';
 
 import { SettingsUser, SettingsUsers } from '../../components/features';
 import { ConfirmModal, PasswordModal, SettingsModal } from '../../components/modals';
