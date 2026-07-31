@@ -69,7 +69,7 @@ export default [
                 'error',
                 {
                     groups: [
-                        ['^react$', '^react-i18next$'],
+                        ['^react$', '^react-i18next$', '^react-router$'],
                         ['^i18next'],
                         ['^formik$', '^yup$'],
                         ['rxjs'],

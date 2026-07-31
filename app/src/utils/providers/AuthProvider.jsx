@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 import { of } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
 
 import { Spinner } from 'react-bootstrap';
-import { useNavigate } from 'react-router';
 
 import { AuthContext } from '../../utils/context/AuthContext';
 

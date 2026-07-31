@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 
 import { useFormik } from 'formik';
 
@@ -7,7 +8,6 @@ import { of } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { FaSearch, FaTimes } from 'react-icons/fa';
-import { useNavigate } from 'react-router';
 
 import { TextInput } from '../../../components/inputs';
 import { Message } from '../../../components/shared';
