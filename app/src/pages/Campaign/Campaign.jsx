@@ -44,7 +44,7 @@ const Campaign = () => {
     const navigate = useNavigate();
 
     // Contexte
-    const { auth, refreshAuth } = useAuth();
+    const { auth, authMessage, refreshAuth, setAuthMessage } = useAuth();
 
     // Traductions
     const { t } = useTranslation();
@@ -165,6 +165,17 @@ const Campaign = () => {
             navigate('/');
         }
     }, [auth]);
+
+    /**
+     * Si un message d'authentification est défini on l'affiche
+     */
+    useEffect(() => {
+        // Message venant du AuthContext (rafraîchissement de la connexion)
+        if (authMessage) {
+            setMessage(authMessage);
+            setAuthMessage(null);
+        }
+    }, [authMessage, setAuthMessage]);
 
     /**
      * Mise à jour du formulaire de la campagne aux changements de sa modale
@@ -429,7 +440,7 @@ const Campaign = () => {
                     openCloseConfirmModal();
 
                     // Redirection avec message
-                    navigate('/', {
+                    navigate('/campaigns', {
                         state: {
                             navMessage: { code: dataCampaign.response.message, type: dataCampaign.response.status }
                         }
