@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useEffect, useRef, useState } from 'react';
 
 import { of } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
