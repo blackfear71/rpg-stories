@@ -44,7 +44,6 @@ const initialUserValues = {
  */
 const Settings = () => {
     // Router
-    const { pathname } = useLocation();
     const navigate = useNavigate();
 
     // Contexte
@@ -150,11 +149,9 @@ const Settings = () => {
      * Récupération des données après contrôle de l'authentification
      */
     useEffect(() => {
-        // Retour à l'accueil si non connecté (on ne fait la navigation que si on n'est pas déjà revenu à l'accueil, après déconnexion par exemple)
+        // Redirection vers l'accueil si non connecté
         if (!auth || !auth.isLoggedIn) {
-            if (pathname === '/settings') {
-                navigate('/');
-            }
+            navigate('/');
             return;
         }
 
@@ -196,8 +193,8 @@ const Settings = () => {
      * Si un message d'authentification est défini on l'affiche
      */
     useEffect(() => {
-        // Message venant du AuthContext (connexion / déconnexion)
-        if (authMessage && authMessage.target === 'page') {
+        // Message venant du AuthContext (rafraîchissement de la connexion)
+        if (authMessage) {
             setMessage(authMessage);
             setAuthMessage(null);
         }

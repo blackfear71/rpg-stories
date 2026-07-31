@@ -41,7 +41,7 @@ const Campaigns = () => {
     const navigate = useNavigate();
 
     // Contexte
-    const { auth, refreshAuth } = useAuth();
+    const { auth, authMessage, refreshAuth, setAuthMessage, skipAutoRedirectRef } = useAuth();
 
     // Traductions
     const { t } = useTranslation();
@@ -124,22 +124,33 @@ const Campaigns = () => {
      */
     useEffect(() => {
         if (!auth || !auth.isLoggedIn) {
-            navigate('/');
+            // Redirection si non connecté (en évitant la navigation concurrente à la déconnexion)
+            if (skipAutoRedirectRef.current) {
+                skipAutoRedirectRef.current = false;
+            } else {
+                navigate('/');
+            }
         }
     }, [auth]);
 
     /**
-     * Si un message d'authentification est défini on l'affiche
+     * Si un message d'authentification ou de navigation est défini on l'affiche
      */
     useEffect(() => {
-        // Message venant du navigate() (suppression campagne)
+        // Message venant du AuthContext (rafraîchissement de la connexion)
+        if (authMessage) {
+            setMessage(authMessage);
+            setAuthMessage(null);
+        }
+
+        // Message venant du navigate() (connexion ou suppression campagne)
         if (location.state?.navMessage) {
             setMessage(location.state.navMessage);
 
             // Nettoyage du state React Router
             navigate(location.pathname, { replace: true, state: {} });
         }
-    }, [location.state, location.pathname, navigate]);
+    }, [authMessage, setAuthMessage, location.state, location.pathname, navigate]);
 
     /**
      * Réinitialisation à l'ouverture/fermeture de la modale campagne

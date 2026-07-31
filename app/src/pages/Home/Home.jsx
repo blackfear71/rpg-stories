@@ -27,10 +27,11 @@ const initialConnectionValues = {
  */
 const Home = () => {
     // Router
+    const location = useLocation();
     const navigate = useNavigate();
 
     // Contexte
-    const { auth, authMessage, login, refreshAuth, setAuthMessage } = useAuth();
+    const { auth, authMessage, login, refreshAuth, setAuthMessage, skipAutoRedirectRef } = useAuth();
 
     // Traductions
     const { t } = useTranslation();
@@ -69,27 +70,41 @@ const Home = () => {
     }, []);
 
     /**
-     * Redirection vers les campagnes si connecté, sinon affichage du formulaire de connexion
+     * Redirection vers les campagnes si déjà connecté au chargement, sinon affichage du formulaire de connexion
      */
     useEffect(() => {
         if (auth && auth.isLoggedIn) {
-            navigate('/campaigns');
+            // Redirection si déjà connecté (en évitant la navigation concurrente à la connexion)
+            if (skipAutoRedirectRef.current) {
+                skipAutoRedirectRef.current = false;
+            } else {
+                navigate('/campaigns');
+            }
         } else {
+            // Focus sur l'identifiant
             setIsLoading(false);
             loginInputRef.current?.focus();
         }
     }, [auth]);
 
     /**
-     * Si un message d'authentification est défini on l'affiche
+     * Si un message d'authentification ou de navigation est défini on l'affiche
      */
     useEffect(() => {
-        // Message venant du AuthContext (connexion / déconnexion)
-        if (authMessage && authMessage.target === 'page') {
+        // Message venant du AuthContext (rafraîchissement de la connexion)
+        if (authMessage) {
             setMessage(authMessage);
             setAuthMessage(null);
         }
-    }, [authMessage, setAuthMessage]);
+
+        // Message venant du navigate() (déconnexion)
+        if (location.state?.navMessage) {
+            setMessage(location.state.navMessage);
+
+            // Nettoyage du state React Router
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, [authMessage, setAuthMessage, location.state, location.pathname, navigate]);
 
     /**
      * Connexion
@@ -98,10 +113,14 @@ const Home = () => {
         setIsSubmitting(true);
         setMessage(null);
 
-        // On attend la promesse de connexion pour fermer la modale
+        // On attend la promesse de connexion pour rediriger
         login(values)
-            .then(() => {
-                navigate('/campaigns');
+            .then((loginMessage) => {
+                navigate('/campaigns', {
+                    state: {
+                        navMessage: loginMessage
+                    }
+                });
             })
             .catch((err) => {
                 setMessage({ code: err?.code, type: err?.type });

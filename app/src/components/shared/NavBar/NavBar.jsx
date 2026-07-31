@@ -61,8 +61,14 @@ const NavBar = () => {
      * Déconnexion
      */
     const handleSubmitLogout = () => {
-        // On attend la promesse de déconnexion
-        logout();
+        // On attend la promesse de déconnexion pour rediriger
+        logout().then((logoutMessage) => {
+            navigate('/', {
+                state: {
+                    navMessage: logoutMessage
+                }
+            });
+        });
     };
 
     return (
