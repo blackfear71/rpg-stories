@@ -11,10 +11,11 @@ import { catchError, finalize, map, take } from 'rxjs/operators';
 import { Spinner } from 'react-bootstrap';
 
 import { CampaignHeader, Story, StoryEntry } from '../../components/features';
-import { CampaignModal, ConfirmModal } from '../../components/modals';
+import { CampaignModal, ConfirmModal, DraftsModal } from '../../components/modals';
 import { Message } from '../../components/shared';
 
 import { useAuth } from '../../utils/context/AuthContext';
+import { useDrafts } from '../../utils/hooks/useDrafts';
 
 import { EnumAction } from '../../enums';
 
@@ -45,6 +46,7 @@ const Campaign = () => {
 
     // Contexte
     const { auth, authMessage, refreshAuth, setAuthMessage } = useAuth();
+    const draftsState = useDrafts(id);
 
     // Traductions
     const { t } = useTranslation();
@@ -67,6 +69,10 @@ const Campaign = () => {
         content: '',
         action: null,
         data: null,
+        isOpen: false,
+        message: null
+    });
+    const [modalOptionsDrafts, setModalOptionsDrafts] = useState({
         isOpen: false,
         message: null
     });
@@ -220,6 +226,18 @@ const Campaign = () => {
     }, [inputOptionsStory.isOpen, inputOptionsStory.storyId]);
 
     /**
+     * Ouverture/fermeture des brouillons
+     */
+    const openCloseDraftsModal = () => {
+        // Ouverture ou fermeture
+        setModalOptionsDrafts((prev) => ({
+            ...prev,
+            isOpen: !prev.isOpen,
+            message: null
+        }));
+    };
+
+    /**
      * Ouverture/fermeture de la modale de modification de campagne
      * @param {*} action Action à réaliser
      */
@@ -300,13 +318,15 @@ const Campaign = () => {
      * Ouverture/fermeture de la saisie d'histoire
      * @param {*} action Action à réaliser
      * @param {*} storyId Identifiant histoire
+     * @param {*} draftId Identifiant brouillon
      */
-    const openCloseStoryInput = (action = null, storyId = null) => {
+    const openCloseStoryInput = (action = null, storyId = null, draftId = null) => {
         // Ouverture ou fermeture
         setInputOptionsStory((prev) => ({
             ...prev,
             action: action,
             storyId: storyId,
+            draftId: draftId,
             isOpen: !prev.isOpen
         }));
     };
@@ -516,9 +536,11 @@ const Campaign = () => {
                             <CampaignHeader
                                 campaign={campaign}
                                 storyCount={stories?.length ?? 0}
+                                draftsState={draftsState}
                                 inputOptions={inputOptionsStory}
-                                onOpenInput={openCloseStoryInput}
-                                onOpenModal={openCloseCampaignModal}
+                                onOpenStoryInput={openCloseStoryInput}
+                                onOpenDraftsModal={openCloseDraftsModal}
+                                onOpenCampaignModal={openCloseCampaignModal}
                                 onConfirm={handleConfirmDeleteCampaign}
                             />
 
@@ -529,9 +551,12 @@ const Campaign = () => {
                                     {/* Nouvelle histoire */}
                                     {inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE && (
                                         <StoryEntry
+                                            campaignId={id}
                                             formData={formStory}
+                                            draftsState={draftsState}
                                             inputOptions={inputOptionsStory}
                                             onOpenClose={openCloseStoryInput}
+                                            setMessage={setMessage}
                                             isSubmitting={isSubmitting}
                                         />
                                     )}
@@ -542,9 +567,11 @@ const Campaign = () => {
                                             key={story.id}
                                             story={story}
                                             formData={formStory}
+                                            draftsState={draftsState}
                                             inputOptions={inputOptionsStory}
                                             onConfirm={handleConfirmDeleteStory}
                                             onOpenClose={openCloseStoryInput}
+                                            setMessage={setMessage}
                                             isSubmitting={isSubmitting}
                                         />
                                     ))}
@@ -571,6 +598,18 @@ const Campaign = () => {
                                     setModalOptions={setModalOptionsConfirm}
                                     onClose={openCloseConfirmModal}
                                     onConfirmAction={handleConfirmAction}
+                                    isSubmitting={isSubmitting}
+                                />
+                            )}
+
+                            {/* Modale des brouillons */}
+                            {modalOptionsDrafts.isOpen && (
+                                <DraftsModal
+                                    draftsState={draftsState}
+                                    modalOptions={modalOptionsDrafts}
+                                    setModalOptions={setModalOptionsDrafts}
+                                    onClose={openCloseDraftsModal}
+                                    onOpenInput={openCloseStoryInput}
                                     isSubmitting={isSubmitting}
                                 />
                             )}

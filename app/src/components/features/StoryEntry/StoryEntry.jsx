@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Form } from 'react-bootstrap';
@@ -14,14 +14,18 @@ import { EnumAction, EnumContext } from '../../../enums';
 import './StoryEntry.css';
 
 /**
- * Liste des histoires
+ * Saisie d'une histoire
  */
-const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmitting }) => {
+const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenClose, setMessage, isSubmitting }) => {
     // Traductions
     const { t } = useTranslation();
 
     // Local states
+    const [localDraftId] = useState(() => inputOptions?.draftId || crypto.randomUUID());
     const storyInputRef = useRef(null);
+
+    // Contexte
+    const { deleteDraft, getDraftById, saveDraft } = draftsState;
 
     // Constantes
     const tags = [
@@ -31,12 +35,71 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
     ];
 
     /**
+     * Lancement initial du composant
+     */
+    useEffect(() => {
+        // Si on a un brouillon on le charge dans le formulaire, sinon on en créé un nouveau
+        inputOptions?.draftId && loadDraft();
+
+        // Création d'un évènement de sauvegarde si l'onglet est masqué ou la page quittée
+        const handler = () => {
+            if (document.visibilityState === 'hidden') {
+                autoSave();
+            }
+        };
+
+        document.addEventListener('visibilitychange', handler);
+        window.addEventListener('pagehide', autoSave);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handler);
+            window.removeEventListener('pagehide', autoSave);
+        };
+    }, []);
+
+    /**
      * Met le focus sur le champ "histoire" à l'ouverture de la saisie
      */
     useEffect(() => {
-        // Focus à la création
+        // Focus à l'ouverture de la saisie
         inputOptions?.isOpen && storyInputRef.current?.focus();
     }, [inputOptions?.isOpen]);
+
+    /**
+     * Sauvegarde après une pause de frappe (3s)
+     */
+    useEffect(() => {
+        const timer = setTimeout(autoSave, 3000);
+        return () => clearTimeout(timer);
+    }, [formData.values.story]);
+
+    /**
+     * Sauvegarde automatique du brouillon
+     */
+    const autoSave = async () => {
+        try {
+            await saveDraft({ draftId: localDraftId, storyId: story?.id ?? null, text: formData.values.story });
+        } catch (err) {
+            setMessage(err);
+        }
+    };
+
+    /**
+     * Charge un brouillon dans le formulaire
+     */
+    const loadDraft = async () => {
+        if (inputOptions?.draftId) {
+            try {
+                const draft = await getDraftById(inputOptions.draftId);
+
+                if (draft) {
+                    formData.setFieldValue('story', draft.text);
+                }
+            } catch (err) {
+                setMessage(err);
+            }
+        }
+    };
 
     /**
      * Insère une balise custom à la position du curseur dans le textarea, puis repositionne le curseur juste après la balise
@@ -74,9 +137,28 @@ const StoryEntry = ({ story = null, formData, inputOptions, onOpenClose, isSubmi
         });
     };
 
+    /**
+     * Soumet le formulaire
+     * @param {*} e Evènement
+     */
+    const handleSubmit = async (e) => {
+        // Empêche le rechargement de la page
+        e.preventDefault();
+
+        try {
+            // Si un brouillon existe alors on le supprime
+            localDraftId && (await deleteDraft(localDraftId));
+
+            // Soumission du formulaire
+            formData.handleSubmit();
+        } catch (err) {
+            setMessage(err);
+        }
+    };
+
     return (
         <>
-            <Form onSubmit={formData.handleSubmit}>
+            <Form onSubmit={handleSubmit}>
                 <fieldset disabled={isSubmitting}>
                     <div className="d-flex flex-column rounded gap-1">
                         {/* Entête */}

@@ -17,7 +17,7 @@ import './Story.css';
 /**
  * Liste des histoires
  */
-const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmitting }) => {
+const Story = ({ story, formData, draftsState, inputOptions, onConfirm, onOpenClose, setMessage, isSubmitting }) => {
     // Traductions
     const { t } = useTranslation();
 
@@ -98,8 +98,10 @@ const Story = ({ story, formData, inputOptions, onConfirm, onOpenClose, isSubmit
                 <StoryEntry
                     story={story}
                     formData={formData}
+                    draftsState={draftsState}
                     inputOptions={inputOptions}
                     onOpenClose={onOpenClose}
+                    setMessage={setMessage}
                     isSubmitting={isSubmitting}
                 />
             ) : (

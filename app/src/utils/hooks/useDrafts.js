@@ -1,12 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-// TODO : je n'aime pas les "as" juste parce que les noms sont identiques...
-import {
-    deleteDraft as dbDeleteDraft,
-    getDraftById as dbGetDraftById,
-    getDraftsByCampaign as dbGetDraftsByCampaign,
-    saveDraft as dbSaveDraft
-} from '../../utils/helpers/draftHelper';
+import { deleteDraftIndexedDB, getCampaignDraftsIndexedDB, getDraftIndexedDB, saveDraftIndexedDB } from '../../utils/helpers/draftHelper';
 
 /**
  * Hook custom donnant accès aux brouillons locaux (IndexedDB) d'une campagne, avec les actions pour créer/mettre à jour, supprimer et rafraîchir
@@ -14,76 +8,72 @@ import {
 export function useDrafts(campaignId) {
     // Local states
     const [drafts, setDrafts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [draftLoading, setDraftLoading] = useState(true);
 
     // Recharge la liste des brouillons de la campagne depuis IndexedDB
-    const refresh = useCallback(async () => {
+    const refreshDrafts = useCallback(async () => {
         if (!campaignId) {
             setDrafts([]);
-            setLoading(false);
+            setDraftLoading(false);
             return;
         }
 
-        setLoading(true);
-
         try {
-            const result = await dbGetDraftsByCampaign(campaignId);
+            const result = await getCampaignDraftsIndexedDB(campaignId);
 
             setDrafts(result);
-            setError(null);
-        } catch (err) {
-            setError(err); // TODO : à voir
+        } catch {
+            throw { code: 'ERR_GET_DRAFTS', type: 'error' };
         } finally {
-            setLoading(false);
+            setDraftLoading(false);
         }
     }, [campaignId]);
 
     // Lancement initial du hook (avec rechargement si on change de campagne)
     useEffect(() => {
-        refresh();
-    }, [refresh]);
+        refreshDrafts();
+    }, [refreshDrafts]);
 
     /**
      * Créé ou met à jour un brouillon, puis resynchronise l'état local
      */
     const saveDraft = useCallback(
-        async ({ id, storyId, texte }) => {
+        async ({ draftId, storyId, text }) => {
             try {
-                await dbSaveDraft({ id, storyId, campaignId, texte });
-                await refresh();
-                setError(null);
-            } catch (err) {
-                setError(err);
-                throw err; // TODO : à voir
+                await saveDraftIndexedDB({ draftId, campaignId, storyId, text });
+                await refreshDrafts();
+            } catch {
+                throw { code: 'ERR_SAVE_DRAFT', type: 'error' };
             }
         },
-        [campaignId, refresh]
+        [campaignId, refreshDrafts]
     );
 
     /**
      * Supprime un brouillon, puis resynchronise l'état local
      */
     const deleteDraft = useCallback(
-        async (id) => {
+        async (draftId) => {
             try {
-                await dbDeleteDraft(id);
-                await refresh();
-                setError(null);
-            } catch (err) {
-                setError(err);
-                throw err;
+                await deleteDraftIndexedDB(draftId);
+                await refreshDrafts();
+            } catch {
+                throw { code: 'ERR_DELETE_DRAFT', type: 'error' };
             }
         },
-        [refresh]
+        [refreshDrafts]
     );
 
     /**
-     * Récupère un brouillon précis (TODO : voir si c'est utile)
+     * Récupère un brouillon
      */
-    const getDraftById = useCallback(async (id) => {
-        return dbGetDraftById(id);
+    const getDraftById = useCallback(async (draftId) => {
+        try {
+            return await getDraftIndexedDB(draftId);
+        } catch {
+            throw { code: 'ERR_GET_DRAFT', type: 'error' };
+        }
     }, []);
 
-    return { drafts, loading, error, saveDraft, deleteDraft, getDraftById, refresh };
+    return { drafts, draftLoading, saveDraft, deleteDraft, getDraftById, refreshDrafts };
 }
