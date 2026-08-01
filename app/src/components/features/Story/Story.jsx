@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Badge } from 'react-bootstrap';
-import { GiAxeSword, GiBookmarklet, GiCampfire, GiCompass } from 'react-icons/gi';
+import { GiAxeSword, GiBeerStein, GiBookmarklet, GiCampfire, GiCompass } from 'react-icons/gi';
 import { MdDelete, MdEdit } from 'react-icons/md';
 
 import { StoryEntry } from '../../../components/features';
@@ -49,6 +49,7 @@ const Story = ({ story, formData, draftsState, inputOptions, onConfirm, onOpenCl
         const tags = [
             { code: EnumContext.EXPLORATION, label: 'campaign.exploration', icon: <GiCompass size={18} /> },
             { code: EnumContext.COMBAT, label: 'campaign.fight', icon: <GiAxeSword size={18} /> },
+            { code: EnumContext.PAUSE, label: 'campaign.pause', icon: <GiBeerStein size={18} /> },
             { code: EnumContext.REPOS, label: 'campaign.rest', icon: <GiCampfire size={18} /> }
         ];
 

@@ -52,6 +52,7 @@ rpg-stories/
 │   │   ├── utils/
 │   │   │   ├── context/
 │   │   │   ├── helpers/
+│   │   │   ├── hooks/
 │   │   │   ├── providers/
 │   │   ├── App.css
 │   │   ├── App.jsx

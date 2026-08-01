@@ -40,6 +40,11 @@
     color: var(--color-text-exploration) !important;
 }
 
+.story-text-highlight-pause {
+    background-color: var(--color-bg-pause) !important;
+    color: var(--color-text-pause) !important;
+}
+
 .story-text-highlight-repos {
     background-color: var(--color-bg-rest) !important;
     color: var(--color-text-rest) !important;

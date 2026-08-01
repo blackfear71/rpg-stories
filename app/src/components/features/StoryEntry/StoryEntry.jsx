@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Form } from 'react-bootstrap';
-import { GiAxeSword, GiBookmarklet, GiCampfire, GiCompass } from 'react-icons/gi';
+import { GiAxeSword, GiBeerStein, GiBookmarklet, GiCampfire, GiCompass } from 'react-icons/gi';
 
 import { TextareaInput } from '../../../components/inputs';
 import { SpinnerButton, TooltipButton } from '../../../components/shared';
@@ -31,6 +31,7 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
     const tags = [
         { code: EnumContext.EXPLORATION, label: 'campaign.exploration', icon: <GiCompass size={20} /> },
         { code: EnumContext.COMBAT, label: 'campaign.fight', icon: <GiAxeSword size={20} /> },
+        { code: EnumContext.PAUSE, label: 'campaign.pause', icon: <GiBeerStein size={20} /> },
         { code: EnumContext.REPOS, label: 'campaign.rest', icon: <GiCampfire size={20} /> }
     ];
 

@@ -4,6 +4,7 @@
 const EnumContext = {
     COMBAT: 'COMBAT',
     EXPLORATION: 'EXPLORATION',
+    PAUSE: 'PAUSE',
     REPOS: 'REPOS'
 };
 

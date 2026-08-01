@@ -83,9 +83,10 @@
         "fight": "Fight",
         "newStory": "NEW STORY",
         "noDrafts": "No saved drafts",
+        "pause": "Short rest",
         "picture": "Picture",
         "playersCount": "Number of players (including GM)",
-        "rest": "Rest",
+        "rest": "Long rest",
         "story": "Story",
         "universe": "Universe",
         "updateCampaign": "Edit the campaign"

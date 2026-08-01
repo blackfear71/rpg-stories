@@ -18,6 +18,8 @@
     --color-bg-fight-hover: #7a2b2b;
     --color-bg-exploration: #332a4a;
     --color-bg-exploration-hover: #453a63;
+    --color-bg-pause: #1e3a4d;
+    --color-bg-pause-hover: #2a4f66;
     --color-bg-rest: #3d3820;
     --color-bg-rest-hover: #554d2c;
 
@@ -47,6 +49,7 @@
     --color-text-tab: #fdd343;
     --color-text-fight: #e8a8a8;
     --color-text-exploration: #c2b3e8;
+    --color-text-pause: #a8d0e6;
     --color-text-rest: #d4c98a;
 
     /* Transparent */

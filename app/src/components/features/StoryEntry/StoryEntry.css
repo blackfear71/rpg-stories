@@ -44,6 +44,16 @@
     background-color: var(--color-bg-exploration-hover) !important;
 }
 
+.btn.story-entry-header-button-pause {
+    background-color: var(--color-bg-pause) !important;
+    color: var(--color-text-pause) !important;
+}
+
+.btn.story-entry-header-button-pause:hover,
+.btn.story-entry-header-button-pause:active {
+    background-color: var(--color-bg-pause-hover) !important;
+}
+
 .btn.story-entry-header-button-repos {
     background-color: var(--color-bg-rest) !important;
     color: var(--color-text-rest) !important;
