@@ -98,3 +98,33 @@ export const getLocalizedTime = (date, options = {}) => {
 
     return new Intl.DateTimeFormat(locale, defaultOptions).format(jsDate);
 };
+
+/**
+ * Récupère une date et heure formatées selon la langue active
+ * @param {*} date Date à convertir
+ * @param {*} options Options Intl.DateTimeFormat
+ * @returns Date et heure formatées
+ */
+export const getLocalizedDateAndTime = (date, options = {}) => {
+    if (!date) {
+        return '';
+    }
+
+    // Normalisation de la date (utile pour les formats "YYYY-MM-DD HH:mm:ss")
+    const jsDate = new Date(typeof date === 'string' ? date.replace(' ', 'T') : date);
+
+    // Récupération de la langue actuelle
+    const locale = i18next.language || 'fr';
+
+    // Options par défaut : DD/MM/YYYY
+    const defaultOptions = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        ...options
+    };
+
+    return new Intl.DateTimeFormat(locale, defaultOptions).format(jsDate);
+};

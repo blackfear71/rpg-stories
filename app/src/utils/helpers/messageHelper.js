@@ -44,6 +44,12 @@ export const getMessageTranslationKey = (code, params, t) => {
         // Histoires
         ERR_INVALID_STORY: 'errors.invalidStory',
 
+        // Brouillons
+        ERR_DELETE_DRAFT: 'errors.deleteDraft',
+        ERR_GET_DRAFT: 'errors.getDraft',
+        ERR_GET_DRAFTS: 'errors.getDrafts',
+        ERR_SAVE_DRAFT: 'errors.saveDraft',
+
         // Utilisateurs
         ERR_INVALID_AUTH: 'errors.invalidAuth',
         ERR_INVALID_ID_MATCH: 'errors.unknownError',

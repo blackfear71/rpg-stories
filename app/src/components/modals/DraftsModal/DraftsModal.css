@@ -1,0 +1,41 @@
+.draft-modal-text {
+    font-size: small;
+    font-style: italic;
+    color: var(--color-text-placeholder);
+    text-align: justify;
+}
+
+.btn.draft-modal-button-delete {
+    background-color: var(--color-bg-red) !important;
+    border: 2px solid var(--color-border-red-hover) !important;
+    color: var(--color-bg-white) !important;
+    height: 36px;
+    width: 36px;
+    margin-left: auto;
+}
+
+.btn.draft-modal-button-delete:hover,
+.btn.draft-modal-button-delete:active {
+    background-color: var(--color-bg-red-hover) !important;
+}
+
+.btn.draft-modal-button-inject {
+    background-color: var(--color-bg-secondary) !important;
+    border: 2px solid var(--color-border-tertiary) !important;
+    color: var(--color-bg-white) !important;
+    height: 36px;
+    width: 36px;
+    margin-left: auto;
+}
+
+.btn.draft-modal-button-inject:hover,
+.btn.draft-modal-button-inject:active {
+    background-color: var(--color-bg-tertiary) !important;
+}
+
+.draft-modal-button-delete svg,
+.draft-modal-button-inject svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}

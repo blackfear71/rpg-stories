@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { FaPlus } from 'react-icons/fa6';
 import { GiCastle, GiDoorway, GiMeepleGroup, GiSpellBook } from 'react-icons/gi';
-import { MdDelete, MdEdit } from 'react-icons/md';
+import { MdDelete, MdEdit, MdRestorePage } from 'react-icons/md';
 
 import { TooltipButton } from '../../../components/shared';
 
@@ -11,9 +11,22 @@ import { EnumAction } from '../../../enums';
 /**
  * Liste des histoires
  */
-const CampaignHeader = ({ campaign, storyCount, inputOptions, onOpenInput, onOpenModal, onConfirm, isSubmitting }) => {
+const CampaignHeader = ({
+    campaign,
+    storyCount,
+    draftsState,
+    inputOptions,
+    onOpenStoryInput,
+    onOpenDraftsModal,
+    onOpenCampaignModal,
+    onConfirm,
+    isSubmitting
+}) => {
     // Traductions
     const { t } = useTranslation();
+
+    // Contexte
+    const { drafts, draftLoading } = draftsState;
 
     return (
         <>
@@ -69,7 +82,19 @@ const CampaignHeader = ({ campaign, storyCount, inputOptions, onOpenInput, onOpe
                             content={<FaPlus size={25} />}
                             variant="outline-icon-action"
                             className="campaign-header-button"
-                            onClick={() => onOpenInput(EnumAction.CREATE)}
+                            onClick={() => onOpenStoryInput(EnumAction.CREATE)}
+                            isSubmitting={isSubmitting}
+                        />
+                    )}
+
+                    {/* Brouillons */}
+                    {!inputOptions?.isOpen && !draftLoading && drafts && drafts.length > 0 && (
+                        <TooltipButton
+                            tooltip={t('campaign.drafts')}
+                            content={<MdRestorePage size={25} />}
+                            variant="outline-icon-action"
+                            className="campaign-header-button"
+                            onClick={onOpenDraftsModal}
                             isSubmitting={isSubmitting}
                         />
                     )}
@@ -80,7 +105,7 @@ const CampaignHeader = ({ campaign, storyCount, inputOptions, onOpenInput, onOpe
                         content={<MdEdit size={25} />}
                         variant="outline-icon-action"
                         className="campaign-header-button"
-                        onClick={() => onOpenModal(EnumAction.UPDATE)}
+                        onClick={() => onOpenCampaignModal(EnumAction.UPDATE)}
                         isSubmitting={isSubmitting}
                     />
 
