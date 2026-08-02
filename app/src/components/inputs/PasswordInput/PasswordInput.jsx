@@ -9,7 +9,20 @@ import './PasswordInput.css';
 /**
  * Saisie mot de passe
  */
-const PasswordInput = ({ title, icon, name, ref, placeholder, value, onChange, error, maxLength, required = false }) => {
+const PasswordInput = ({
+    title,
+    icon,
+    name,
+    ref,
+    placeholder,
+    value,
+    inputClassName = null,
+    buttonClassName = null,
+    onChange,
+    error,
+    maxLength,
+    required = false
+}) => {
     // Traductions
     const { t } = useTranslation();
 
@@ -47,7 +60,7 @@ const PasswordInput = ({ title, icon, name, ref, placeholder, value, onChange, e
                             type={showPassword ? 'text' : 'password'}
                             name={name}
                             placeholder={placeholder}
-                            className="password-input"
+                            className={`password-input ${inputClassName}`}
                             value={value}
                             onChange={onChange}
                             maxLength={maxLength}
@@ -55,7 +68,7 @@ const PasswordInput = ({ title, icon, name, ref, placeholder, value, onChange, e
                         />
 
                         <Button
-                            className="d-flex align-items-center password-input-button"
+                            className={`d-flex align-items-center password-input-button ${buttonClassName}`}
                             onClick={() => toggleVisibility()}
                             tabIndex={-1}
                         >

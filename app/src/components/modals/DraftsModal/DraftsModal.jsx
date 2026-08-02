@@ -116,7 +116,9 @@ const DraftsModal = ({ draftsState, modalOptions, setModalOptions, onClose, onOp
                     ))
                 ) : (
                     <div className="modal-group">
-                        <div className="modal-group-content">{t('campaign.noDrafts')}</div>
+                        <div className="modal-group-content">
+                            <div className="p-2 mt-2 modal-empty">{t('campaign.noDrafts')}</div>
+                        </div>
                     </div>
                 )}
             </Modal.Body>

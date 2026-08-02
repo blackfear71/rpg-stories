@@ -36,6 +36,22 @@
     width: 300px;
 }
 
+.home-password-input {
+    border: solid 1px var(--color-border-primary);
+}
+
+.home-password-input-button {
+    background-color: var(--color-bg-primary) !important;
+    border: 1.5px solid var(--color-border-primary) !important;
+    color: var(--color-text-white) !important;
+}
+
+.home-password-input-button:hover,
+.home-password-input-button:active {
+    background-color: var(--color-bg-tertiary) !important;
+    border-color: var(--color-border-secondary) !important;
+}
+
 .btn.home-button {
     background-color: var(--color-bg-primary) !important;
     border: 2px solid var(--color-border-primary) !important;

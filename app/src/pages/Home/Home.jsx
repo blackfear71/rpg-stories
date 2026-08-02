@@ -181,6 +181,8 @@ const Home = () => {
                                         name={'password'}
                                         placeholder={t('navbar.password')}
                                         value={formConnection.values.password}
+                                        inputClassName="home-password-input"
+                                        buttonClassName="home-password-input-button"
                                         onChange={formConnection.handleChange}
                                         error={formConnection.submitCount > 0 && formConnection.errors.password}
                                         maxLength={100}
