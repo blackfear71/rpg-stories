@@ -16,7 +16,7 @@ import './StoryEntry.css';
 /**
  * Saisie d'une histoire
  */
-const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenClose, setMessage, isSubmitting }) => {
+const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenClose, renderNavigation, setMessage, isSubmitting }) => {
     // Traductions
     const { t } = useTranslation();
 
@@ -192,18 +192,25 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
                         </div>
 
                         {/* Saisie */}
-                        <div className="d-flex flex-column gap-2 ms-3">
-                            {/* Histoire */}
-                            <TextareaInput
-                                name={'story'}
-                                ref={storyInputRef}
-                                placeholder={t('campaign.story')}
-                                value={formData.values.story}
-                                onChange={formData.handleChange}
-                            />
+                        <div className="d-flex flex-column gap-2">
+                            <div>
+                                {/* Navigation */}
+                                {renderNavigation}
+
+                                {/* Histoire */}
+                                <div className="ms-3">
+                                    <TextareaInput
+                                        name={'story'}
+                                        ref={storyInputRef}
+                                        placeholder={t('campaign.story')}
+                                        value={formData.values.story}
+                                        onChange={formData.handleChange}
+                                    />
+                                </div>
+                            </div>
 
                             {/* Boutons d'action */}
-                            <div className="d-flex flex-row gap-2 justify-content-end">
+                            <div className="d-flex flex-row gap-2 ms-3 justify-content-end">
                                 <Button
                                     variant="outline-text-action"
                                     className="story-entry-cancel-button"

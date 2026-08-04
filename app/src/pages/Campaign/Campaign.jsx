@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 
@@ -52,6 +52,7 @@ const Campaign = () => {
     const { t } = useTranslation();
 
     // Local states
+    const storyRefs = useRef({});
     const [inputOptionsStory, setInputOptionsStory] = useState({
         action: null,
         storyId: 0,
@@ -518,6 +519,29 @@ const Campaign = () => {
             .subscribe();
     };
 
+    /**
+     * Enregistre / efface la ref DOM d'une histoire
+     */
+    const registerStoryRef = (storyId, node) => {
+        if (node) {
+            storyRefs.current[storyId] = node;
+        } else {
+            delete storyRefs.current[storyId];
+        }
+    };
+
+    /**
+     * Navigue vers l'histoire précédente / suivante en scrollant
+     * @param {*} direction 'previous' | 'next'
+     * @param {*} currentIndex Index de l'histoire courante
+     */
+    const handleNavigateStory = (direction, currentIndex) => {
+        const targetIndex = direction === 'previous' ? currentIndex - 1 : currentIndex + 1;
+        const targetStory = stories[targetIndex];
+
+        targetStory && storyRefs.current[targetStory.id]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
     return (
         <div>
             {isLoading ? (
@@ -562,15 +586,20 @@ const Campaign = () => {
                                     )}
 
                                     {/* Histoires */}
-                                    {stories?.map((story) => (
+                                    {stories?.map((story, index) => (
                                         <Story
                                             key={story.id}
                                             story={story}
+                                            storyCount={stories.length}
+                                            isFirstStory={index === 0}
+                                            isLastStory={index === stories.length - 1}
                                             formData={formStory}
                                             draftsState={draftsState}
                                             inputOptions={inputOptionsStory}
                                             onConfirm={handleConfirmDeleteStory}
                                             onOpenClose={openCloseStoryInput}
+                                            onNavigate={(direction) => handleNavigateStory(direction, index)}
+                                            registerRef={registerStoryRef}
                                             setMessage={setMessage}
                                             isSubmitting={isSubmitting}
                                         />

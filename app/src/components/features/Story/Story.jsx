@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Badge } from 'react-bootstrap';
+import { Badge, Button } from 'react-bootstrap';
 import { GiAxeSword, GiBeerStein, GiBookmarklet, GiCampfire, GiCompass } from 'react-icons/gi';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { MdDelete, MdEdit } from 'react-icons/md';
 
 import { StoryEntry } from '../../../components/features';
@@ -15,9 +16,23 @@ import { EnumAction, EnumContext } from '../../../enums';
 import './Story.css';
 
 /**
- * Liste des histoires
+ * Histoire
  */
-const Story = ({ story, formData, draftsState, inputOptions, onConfirm, onOpenClose, setMessage, isSubmitting }) => {
+const Story = ({
+    story,
+    storyCount,
+    isFirstStory,
+    isLastStory,
+    formData,
+    draftsState,
+    inputOptions,
+    onConfirm,
+    onOpenClose,
+    onNavigate,
+    registerRef,
+    setMessage,
+    isSubmitting
+}) => {
     // Traductions
     const { t } = useTranslation();
 
@@ -31,15 +46,10 @@ const Story = ({ story, formData, draftsState, inputOptions, onConfirm, onOpenCl
         // Focus à la modification
         inputOptions?.isOpen &&
             inputOptions?.action === EnumAction.UPDATE &&
-            inputOptions?.sstoryId === story.id &&
+            inputOptions?.storyId === story.id &&
             storyInputRef.current?.focus();
     }, [inputOptions?.isOpen]);
 
-    /**
-     * Formate le texte selon les balises
-     * @param {*} text Texte à formater
-     * @returns Texte formaté
-     */
     /**
      * Formate le texte selon les balises
      * @param {*} text Texte à formater
@@ -92,19 +102,45 @@ const Story = ({ story, formData, draftsState, inputOptions, onConfirm, onOpenCl
         });
     };
 
+    /**
+     * Affiche les boutons de navigation entre histoires
+     */
+    const renderNavigation = () =>
+        storyCount > 1 && (
+            <div className="d-flex flex-column gap-1 story-navigation-container">
+                {!isFirstStory && (
+                    <Button variant="filled-icon-action" className="story-navigation-button" onClick={() => onNavigate('previous')}>
+                        <IoIosArrowUp size={15} />
+                    </Button>
+                )}
+
+                {!isLastStory && (
+                    <Button variant="filled-icon-action" className="story-navigation-button" onClick={() => onNavigate('next')}>
+                        <IoIosArrowDown size={15} />
+                    </Button>
+                )}
+            </div>
+        );
+
     return (
-        <>
+        <div ref={(node) => registerRef?.(story.id, node)} className="story-wrapper">
             {/* Saisie ou affichage */}
             {inputOptions.isOpen && inputOptions.action === EnumAction.UPDATE && inputOptions.storyId === story.id ? (
-                <StoryEntry
-                    story={story}
-                    formData={formData}
-                    draftsState={draftsState}
-                    inputOptions={inputOptions}
-                    onOpenClose={onOpenClose}
-                    setMessage={setMessage}
-                    isSubmitting={isSubmitting}
-                />
+                <div className="d-flex flex-row gap-1">
+                    {/* Saisie */}
+                    <div className="flex-grow-1">
+                        <StoryEntry
+                            story={story}
+                            formData={formData}
+                            draftsState={draftsState}
+                            inputOptions={inputOptions}
+                            onOpenClose={onOpenClose}
+                            renderNavigation={renderNavigation()}
+                            setMessage={setMessage}
+                            isSubmitting={isSubmitting}
+                        />
+                    </div>
+                </div>
             ) : (
                 <div className="d-flex flex-column gap-1">
                     {/* Entête */}
@@ -140,10 +176,16 @@ const Story = ({ story, formData, draftsState, inputOptions, onConfirm, onOpenCl
                     </div>
 
                     {/* Histoire */}
-                    <div className="px-2 py-1 ms-3 rounded story-text">{renderStory(story.story)}</div>
+                    <div>
+                        {/* Navigation */}
+                        {renderNavigation()}
+
+                        {/* Texte */}
+                        <div className="px-2 py-1 ms-3 rounded story-text">{renderStory(story.story)}</div>
+                    </div>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 
