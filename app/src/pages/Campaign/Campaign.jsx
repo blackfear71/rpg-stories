@@ -52,6 +52,7 @@ const Campaign = () => {
     const { t } = useTranslation();
 
     // Local states
+    const newStoryRef = useRef(null);
     const storyRefs = useRef({});
     const [inputOptionsStory, setInputOptionsStory] = useState({
         action: null,
@@ -213,18 +214,32 @@ const Campaign = () => {
         if (inputOptionsStory.isOpen && inputOptionsStory.action === EnumAction.UPDATE && inputOptionsStory.storyId) {
             const currentStory = stories.find((g) => g.id === inputOptionsStory.storyId);
 
-            currentStory &&
+            if (currentStory) {
+                // Initialisation du formulaire
                 formStory.setValues({
                     id: currentStory.id,
                     story: currentStory.story
                 });
+
+                // Scroll vers la saisie à l'ouverture en modification
+                requestAnimationFrame(() => {
+                    storyRefs.current[currentStory.id]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            }
+        }
+
+        // Scroll vers la saisie à l'ouverture en création
+        if (inputOptionsStory.isOpen && inputOptionsStory.action === EnumAction.CREATE) {
+            requestAnimationFrame(() => {
+                newStoryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
         }
 
         // Réinitialisation à la fermeture de la modale ou à l'ouverture de la saisie en création
         if (!inputOptionsStory.isOpen || inputOptionsStory.action === EnumAction.CREATE) {
             formStory.resetForm();
         }
-    }, [inputOptionsStory.isOpen, inputOptionsStory.storyId]);
+    }, [inputOptionsStory.isOpen, inputOptionsStory.storyId, inputOptionsStory.action]);
 
     /**
      * Ouverture/fermeture des brouillons
@@ -577,15 +592,17 @@ const Campaign = () => {
 
                                     {/* Nouvelle histoire */}
                                     {inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE && (
-                                        <StoryEntry
-                                            campaignId={id}
-                                            formData={formStory}
-                                            draftsState={draftsState}
-                                            inputOptions={inputOptionsStory}
-                                            onOpenClose={openCloseStoryInput}
-                                            setMessage={setMessage}
-                                            isSubmitting={isSubmitting}
-                                        />
+                                        <div ref={newStoryRef} className="campaign-story-entry-wrapper">
+                                            <StoryEntry
+                                                campaignId={id}
+                                                formData={formStory}
+                                                draftsState={draftsState}
+                                                inputOptions={inputOptionsStory}
+                                                onOpenClose={openCloseStoryInput}
+                                                setMessage={setMessage}
+                                                isSubmitting={isSubmitting}
+                                            />
+                                        </div>
                                     )}
 
                                     {/* Histoires */}

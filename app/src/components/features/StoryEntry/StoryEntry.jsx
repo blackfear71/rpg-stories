@@ -63,7 +63,7 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
      */
     useEffect(() => {
         // Focus à l'ouverture de la saisie
-        inputOptions?.isOpen && storyInputRef.current?.focus();
+        inputOptions?.isOpen && storyInputRef.current?.focus({ preventScroll: true });
     }, [inputOptions?.isOpen]);
 
     /**

@@ -65,6 +65,10 @@
     position: relative;
 }
 
+.campaign-story-entry-wrapper {
+    scroll-margin-top: 70px;
+}
+
 .campaign-stories-timeline {
     position: absolute;
     top: 0;

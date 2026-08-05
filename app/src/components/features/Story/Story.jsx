@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Badge, Button } from 'react-bootstrap';
@@ -35,20 +34,6 @@ const Story = ({
 }) => {
     // Traductions
     const { t } = useTranslation();
-
-    // Local states
-    const storyInputRef = useRef(null);
-
-    /**
-     * Met le focus sur le champ "histoire" à l'ouverture de la saisie
-     */
-    useEffect(() => {
-        // Focus à la modification
-        inputOptions?.isOpen &&
-            inputOptions?.action === EnumAction.UPDATE &&
-            inputOptions?.storyId === story.id &&
-            storyInputRef.current?.focus();
-    }, [inputOptions?.isOpen]);
 
     /**
      * Affiche les boutons de navigation entre histoires
