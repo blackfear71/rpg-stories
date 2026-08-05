@@ -61,9 +61,17 @@
     background-color: var(--color-bg-red-hover) !important;
 }
 
+.campaign-stories {
+    position: relative;
+}
+
 .campaign-stories-timeline {
-    border-left: 2px solid var(--color-border-tertiary);
-    margin-left: 9px;
+    position: absolute;
+    top: 0;
+    left: 14px;
+    width: 2px;
+    height: 100%;
+    background-color: var(--color-border-tertiary);
 }
 
 .campaign-stories-empty {

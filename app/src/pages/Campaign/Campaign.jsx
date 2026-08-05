@@ -571,7 +571,10 @@ const Campaign = () => {
                             {/* Timeline */}
                             {(inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE) ||
                             (stories && stories.length > 0) ? (
-                                <div className="d-flex flex-column gap-3 campaign-stories-timeline">
+                                <div className="d-flex flex-column gap-3 campaign-stories">
+                                    {/* Timeline */}
+                                    <div className="campaign-stories-timeline"></div>
+
                                     {/* Nouvelle histoire */}
                                     {inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE && (
                                         <StoryEntry

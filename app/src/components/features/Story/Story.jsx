@@ -51,6 +51,26 @@ const Story = ({
     }, [inputOptions?.isOpen]);
 
     /**
+     * Affiche les boutons de navigation entre histoires
+     */
+    const renderNavigation = () =>
+        storyCount > 1 && (
+            <div className="d-flex flex-column gap-1">
+                {!isFirstStory && (
+                    <Button variant="filled-icon-action" className="story-navigation-button" onClick={() => onNavigate('previous')}>
+                        <IoIosArrowUp size={15} />
+                    </Button>
+                )}
+
+                {!isLastStory && (
+                    <Button variant="filled-icon-action" className="story-navigation-button" onClick={() => onNavigate('next')}>
+                        <IoIosArrowDown size={15} />
+                    </Button>
+                )}
+            </div>
+        );
+
+    /**
      * Formate le texte selon les balises
      * @param {*} text Texte à formater
      * @returns Texte formaté
@@ -102,52 +122,27 @@ const Story = ({
         });
     };
 
-    /**
-     * Affiche les boutons de navigation entre histoires
-     */
-    const renderNavigation = () =>
-        storyCount > 1 && (
-            <div className="d-flex flex-column gap-1 story-navigation-container">
-                {!isFirstStory && (
-                    <Button variant="filled-icon-action" className="story-navigation-button" onClick={() => onNavigate('previous')}>
-                        <IoIosArrowUp size={15} />
-                    </Button>
-                )}
-
-                {!isLastStory && (
-                    <Button variant="filled-icon-action" className="story-navigation-button" onClick={() => onNavigate('next')}>
-                        <IoIosArrowDown size={15} />
-                    </Button>
-                )}
-            </div>
-        );
-
     return (
         <div ref={(node) => registerRef?.(story.id, node)} className="story-wrapper">
             {/* Saisie ou affichage */}
             {inputOptions.isOpen && inputOptions.action === EnumAction.UPDATE && inputOptions.storyId === story.id ? (
-                <div className="d-flex flex-row gap-1">
-                    {/* Saisie */}
-                    <div className="flex-grow-1">
-                        <StoryEntry
-                            story={story}
-                            formData={formData}
-                            draftsState={draftsState}
-                            inputOptions={inputOptions}
-                            onOpenClose={onOpenClose}
-                            renderNavigation={renderNavigation()}
-                            setMessage={setMessage}
-                            isSubmitting={isSubmitting}
-                        />
-                    </div>
-                </div>
+                <StoryEntry
+                    story={story}
+                    formData={formData}
+                    draftsState={draftsState}
+                    inputOptions={inputOptions}
+                    onOpenClose={onOpenClose}
+                    renderNavigation={renderNavigation()}
+                    setMessage={setMessage}
+                    isSubmitting={isSubmitting}
+                />
             ) : (
                 <div className="d-flex flex-column gap-1">
                     {/* Entête */}
                     <div className="d-flex align-items-center justify-content-between">
                         {/* Date */}
                         <span className="d-flex align-items-center gap-1 story-header-date">
-                            <GiBookmarklet size={32} className="story-header-icon" />
+                            <GiBookmarklet size={32} className="p-1 story-header-icon" />
                             {getLocalizedDate(story.createdAt)}
                         </span>
 
@@ -176,12 +171,12 @@ const Story = ({
                     </div>
 
                     {/* Histoire */}
-                    <div>
+                    <div className="d-flex gap-1">
                         {/* Navigation */}
                         {renderNavigation()}
 
                         {/* Texte */}
-                        <div className="px-2 py-1 ms-3 rounded story-text">{renderStory(story.story)}</div>
+                        <div className="flex-grow-1 px-2 py-1 rounded story-text">{renderStory(story.story)}</div>
                     </div>
                 </div>
             )}

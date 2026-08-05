@@ -158,7 +158,7 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
     };
 
     return (
-        <>
+        <div className="story-entry-wrapper">
             <Form onSubmit={handleSubmit}>
                 <fieldset disabled={isSubmitting}>
                     <div className="d-flex flex-column rounded gap-1">
@@ -166,7 +166,7 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
                         <div className="d-flex align-items-center justify-content-between">
                             {/* Date */}
                             <span className="d-flex align-items-center gap-1 story-entry-header-date">
-                                <GiBookmarklet size={32} className="story-header-icon" />
+                                <GiBookmarklet size={32} className="p-1 story-entry-header-icon" />
                                 {getLocalizedDate(story && inputOptions.action === EnumAction.UPDATE ? story.createdAt : new Date())}
                             </span>
 
@@ -193,12 +193,12 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
 
                         {/* Saisie */}
                         <div className="d-flex flex-column gap-2">
-                            <div>
+                            <div className="d-flex gap-1">
                                 {/* Navigation */}
-                                {renderNavigation}
+                                <div className="story-entry-scroll-container">{renderNavigation}</div>
 
                                 {/* Histoire */}
-                                <div className="ms-3">
+                                <div className="flex-grow-1">
                                     <TextareaInput
                                         name={'story'}
                                         ref={storyInputRef}
@@ -210,7 +210,7 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
                             </div>
 
                             {/* Boutons d'action */}
-                            <div className="d-flex flex-row gap-2 ms-3 justify-content-end">
+                            <div className="d-flex flex-row gap-2 justify-content-end">
                                 <Button
                                     variant="outline-text-action"
                                     className="story-entry-cancel-button"
@@ -231,7 +231,7 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
                     </div>
                 </fieldset>
             </Form>
-        </>
+        </div>
     );
 };
 

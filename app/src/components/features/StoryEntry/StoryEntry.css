@@ -1,5 +1,21 @@
+.story-entry-wrapper {
+    z-index: 1;
+}
+
+.story-entry-scroll-container {
+    width: 30px;
+}
+
 .story-entry-header-date {
     color: var(--color-text-white);
+}
+
+.story-entry-header-icon {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-white);
+    margin-top: 2px;
+    width: 30px;
+    height: 30px;
 }
 
 .story-entry-header-actions {
