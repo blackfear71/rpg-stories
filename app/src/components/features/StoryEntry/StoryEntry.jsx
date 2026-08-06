@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, Form } from 'react-bootstrap';
 import { GiAxeSword, GiBeerStein, GiBookmarklet, GiCampfire, GiCompass } from 'react-icons/gi';
+import { MdEmojiSymbols } from 'react-icons/md';
 
 import { TextareaInput } from '../../../components/inputs';
 import { SpinnerButton, TooltipButton } from '../../../components/shared';
@@ -13,6 +14,28 @@ import { EnumAction, EnumContext } from '../../../enums';
 
 import './StoryEntry.css';
 
+// Symboles
+const arrows = [
+    String.fromCodePoint(0x2191), // up
+    String.fromCodePoint(0x2197), // upRight
+    String.fromCodePoint(0x2192), // right
+    String.fromCodePoint(0x2198), // downRight
+    String.fromCodePoint(0x2193), // down
+    String.fromCodePoint(0x2199), // downLeft
+    String.fromCodePoint(0x2190), // left
+    String.fromCodePoint(0x2196), // upLeft
+    String.fromCodePoint(0x21d1), // doubleUp
+    String.fromCodePoint(0x21d7), // doubleUpRight
+    String.fromCodePoint(0x21d2), // doubleRight
+    String.fromCodePoint(0x21d8), // doubleDownRight
+    String.fromCodePoint(0x21d3), // doubleDown
+    String.fromCodePoint(0x21d9), // doubleDownLeft
+    String.fromCodePoint(0x21d0), // doubleLeft
+    String.fromCodePoint(0x21d6) // doubleUpLeft
+];
+const circledDigits = [String.fromCodePoint(0x24ea), ...Array.from({ length: 9 }, (_, i) => String.fromCodePoint(0x2460 + i))];
+const circledLetters = Array.from({ length: 26 }, (_, i) => String.fromCodePoint(0x24b6 + i));
+
 /**
  * Saisie d'une histoire
  */
@@ -21,13 +44,21 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
     const { t } = useTranslation();
 
     // Local states
-    const [localDraftId] = useState(() => inputOptions?.draftId || crypto.randomUUID());
     const storyInputRef = useRef(null);
+    const symbolsButtonRef = useRef(null);
+    const symbolsPanelRef = useRef(null);
+    const [localDraftId] = useState(() => inputOptions?.draftId || crypto.randomUUID());
+    const [showSymbols, setShowSymbols] = useState(false);
 
     // Contexte
     const { deleteDraft, getDraftById, saveDraft } = draftsState;
 
     // Constantes
+    const symbolGroups = [
+        { id: 'digits', symbols: circledDigits },
+        { id: 'letters', symbols: circledLetters },
+        { id: 'arrows', symbols: arrows }
+    ];
     const tags = [
         { code: EnumContext.EXPLORATION, label: 'campaign.exploration', icon: <GiCompass size={20} /> },
         { code: EnumContext.COMBAT, label: 'campaign.fight', icon: <GiAxeSword size={20} /> },
@@ -63,8 +94,22 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
      */
     useEffect(() => {
         // Focus à l'ouverture de la saisie
-        inputOptions?.isOpen && storyInputRef.current?.focus({ preventScroll: true });
+        if (inputOptions?.isOpen) {
+            requestAnimationFrame(moveCursorToEnd);
+        }
     }, [inputOptions?.isOpen]);
+
+    /**
+     * Affecte un évènement lors du clic en dehors de la zone
+     */
+    useEffect(() => {
+        if (!showSymbols) {
+            return;
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [showSymbols]);
 
     /**
      * Sauvegarde après une pause de frappe (3s)
@@ -73,6 +118,56 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
         const timer = setTimeout(autoSave, 3000);
         return () => clearTimeout(timer);
     }, [formData.values.story]);
+
+    /**
+     * Charge un brouillon dans le formulaire
+     */
+    const loadDraft = async () => {
+        if (inputOptions?.draftId) {
+            try {
+                const draft = await getDraftById(inputOptions.draftId);
+
+                if (draft) {
+                    formData.setFieldValue('story', draft.text);
+
+                    // Repositionne le curseur une fois le texte du brouillon chargé
+                    requestAnimationFrame(moveCursorToEnd);
+                }
+            } catch (err) {
+                setMessage(err);
+            }
+        }
+    };
+
+    /**
+     * Positionne le curseur à la fin du texte et scrolle le textarea jusqu'en bas
+     */
+    const moveCursorToEnd = () => {
+        const textarea = storyInputRef.current;
+
+        if (!textarea) {
+            return;
+        }
+
+        const length = textarea.value.length;
+
+        textarea.focus({ preventScroll: true });
+        textarea.setSelectionRange(length, length);
+        textarea.scrollTop = textarea.scrollHeight;
+    };
+
+    /**
+     * Ferme le menu utilisateur au clic en dehors
+     * @param {*} e Evènement
+     */
+    const handleClickOutside = (e) => {
+        const clickedButton = symbolsButtonRef.current?.contains(e.target);
+        const clickedPanel = symbolsPanelRef.current?.contains(e.target);
+
+        if (!clickedButton && !clickedPanel) {
+            setShowSymbols(false);
+        }
+    };
 
     /**
      * Sauvegarde automatique du brouillon
@@ -86,27 +181,10 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
     };
 
     /**
-     * Charge un brouillon dans le formulaire
+     * Insère du texte à la position du curseur dans le textarea, puis repositionne le curseur juste après
+     * @param {*} text Texte à insérer
      */
-    const loadDraft = async () => {
-        if (inputOptions?.draftId) {
-            try {
-                const draft = await getDraftById(inputOptions.draftId);
-
-                if (draft) {
-                    formData.setFieldValue('story', draft.text);
-                }
-            } catch (err) {
-                setMessage(err);
-            }
-        }
-    };
-
-    /**
-     * Insère une balise custom à la position du curseur dans le textarea, puis repositionne le curseur juste après la balise
-     * @param {*} tag Nom de la balise à insérer
-     */
-    const insertTag = (tag) => {
+    const insertAtCursor = (text) => {
         const textarea = storyInputRef.current;
 
         // Sécurité : évite un crash si le ref n'est pas encore attaché au DOM
@@ -114,20 +192,18 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
             return;
         }
 
-        const tagText = `<${tag}>`;
-
         // Position du curseur (ou de la sélection) au moment du clic sur le bouton, on mémorise aussi le scroll actuel du textarea
         const { selectionStart, selectionEnd, value, scrollTop } = textarea;
 
-        // Reconstruit le texte en insérant la balise entre les deux morceaux découpés à la position du curseur (si du texte était sélectionné, il est remplacé par la balise)
-        const newValue = value.slice(0, selectionStart) + tagText + value.slice(selectionEnd);
+        // Reconstruit le texte en insérant le texte entre les deux morceaux découpés à la position du curseur (si du texte était sélectionné, il est remplacé)
+        const newValue = value.slice(0, selectionStart) + text + value.slice(selectionEnd);
 
         // Met à jour la valeur Formik
         formData.setFieldValue('story', newValue);
 
-        // Replace le curseur juste après la balise insérée (après le re-render)
+        // Replace le curseur juste après le texte inséré (après le re-render)
         requestAnimationFrame(() => {
-            const cursorPosition = selectionStart + tagText.length;
+            const cursorPosition = selectionStart + text.length;
 
             // preventScroll empêche le navigateur de scroller la page/le textarea au focus
             textarea.focus({ preventScroll: true });
@@ -136,6 +212,19 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
             // Filet de sécurité pour les navigateurs qui ignorent preventScroll (vieux Safari iOS)
             textarea.scrollTop = scrollTop;
         });
+    };
+
+    /**
+     * Insère une balise custom à la position du curseur
+     * @param {*} tag Nom de la balise à insérer
+     */
+    const insertTag = (tag) => insertAtCursor(`<${tag}>`);
+
+    /**
+     * Ouvre ou ferme le panneau de symboles
+     */
+    const handleShowSymbols = () => {
+        setShowSymbols((prev) => !prev);
     };
 
     /**
@@ -170,8 +259,9 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
                                 {getLocalizedDate(story && inputOptions.action === EnumAction.UPDATE ? story.createdAt : new Date())}
                             </span>
 
-                            {/* Boutons de contexte */}
-                            <span className="d-flex flex-row align-items-center gap-1 story-entry-header-actions">
+                            {/* Boutons de contexte & symboles */}
+                            <div className="d-flex flex-row align-items-center gap-1 story-entry-header-actions">
+                                {/* Tags */}
                                 {tags.map((tag) => (
                                     <TooltipButton
                                         key={tag.code}
@@ -188,7 +278,45 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
                                         isSubmitting={isSubmitting}
                                     />
                                 ))}
-                            </span>
+
+                                {/* Séparateur */}
+                                <div className="rounded story-entry-header-separator"></div>
+
+                                {/* Symboles */}
+                                <div className="story-entry-header-symbols-container" ref={symbolsButtonRef}>
+                                    <TooltipButton
+                                        tooltip={t('campaign.symbols')}
+                                        content={
+                                            <div className="d-flex flew-row align-items-center rounded gap-1">
+                                                <MdEmojiSymbols size={20} />
+                                                <span className="story-entry-header-button-label">{t('campaign.symbols')}</span>
+                                            </div>
+                                        }
+                                        variant="filled-icon-action"
+                                        className="story-entry-header-button"
+                                        onClick={handleShowSymbols}
+                                        isSubmitting={isSubmitting}
+                                    />
+
+                                    {showSymbols && (
+                                        <div className="story-entry-header-symbols-panel rounded" ref={symbolsPanelRef}>
+                                            {symbolGroups.map((group) => (
+                                                <div key={group.id} className="d-flex flex-wrap p-1 story-entry-header-symbols-row">
+                                                    {group.symbols.map((symbol) => (
+                                                        <Button
+                                                            key={symbol}
+                                                            className="p-0 rounded story-entry-symbol-button"
+                                                            onClick={() => insertAtCursor(symbol)}
+                                                        >
+                                                            {symbol}
+                                                        </Button>
+                                                    ))}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
                         </div>
 
                         {/* Saisie */}

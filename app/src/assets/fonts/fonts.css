@@ -65,6 +65,7 @@
     src: url('./ZillaSlab/ZillaSlab-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
+    unicode-range: U+0000-2459, U+24FF-10FFFF; /* Exclus les caractères encerclés compris entre U+2460 et U+24FE */
 }
 
 @font-face {

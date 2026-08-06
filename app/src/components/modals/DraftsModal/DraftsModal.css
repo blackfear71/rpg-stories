@@ -3,6 +3,7 @@
     font-style: italic;
     color: var(--color-text-placeholder);
     text-align: justify;
+    word-break: break-word;
 }
 
 .btn.draft-modal-button-delete {

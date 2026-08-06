@@ -4,7 +4,7 @@
     --color-bg-secondary: #323233;
     --color-bg-tertiary: #4a4a4c;
     --color-bg-gray-bold: #8892a4;
-    --color-bg-gray-medium: #c6cedd;
+    --color-bg-gray-medium: #cbcbcb;
     --color-bg-gray-light: #e3e3e3;
     --color-bg-gray-lighter: #edeff5;
     --color-bg-red: #f33e3e;
@@ -44,6 +44,7 @@
     --color-text-secondary: #323233;
     --color-text-tertiary: #4a4a4c;
     --color-text-placeholder: #c6cedd;
+    --color-text-black: black;
     --color-text-white: white;
     --color-text-red: #f33e3e;
     --color-text-tab: #fdd343;

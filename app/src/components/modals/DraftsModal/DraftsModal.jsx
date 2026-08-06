@@ -80,7 +80,7 @@ const DraftsModal = ({ draftsState, modalOptions, setModalOptions, onClose, onOp
 
                                         {/* Indicateur nouvelle histoire */}
                                         {!draft?.storyId && (
-                                            <Badge pill bg="warning">
+                                            <Badge pill bg="warning" className="text-wrap">
                                                 {t('campaign.newStory')}
                                             </Badge>
                                         )}

@@ -132,7 +132,7 @@ const Story = ({
                         </span>
 
                         {/* Boutons d'action */}
-                        <span className="d-flex flex-row align-items-center gap-1">
+                        <div className="d-flex flex-row align-items-center gap-1">
                             <TooltipButton
                                 tooltip={t('common.delete')}
                                 content={<MdDelete size={20} />}
@@ -152,7 +152,7 @@ const Story = ({
                                     isSubmitting={isSubmitting}
                                 />
                             )}
-                        </span>
+                        </div>
                     </div>
 
                     {/* Histoire */}

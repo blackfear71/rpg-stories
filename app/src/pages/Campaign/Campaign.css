@@ -63,6 +63,7 @@
 
 .campaign-stories {
     position: relative;
+    z-index: 1;
 }
 
 .campaign-story-entry-wrapper {
@@ -75,7 +76,7 @@
     left: 14px;
     width: 2px;
     height: 100%;
-    background-color: var(--color-border-tertiary);
+    background-color: var(--color-bg-tertiary);
 }
 
 .campaign-stories-empty {
