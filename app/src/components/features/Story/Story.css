@@ -24,6 +24,10 @@
     border: none !important;
 }
 
+.story-navigation-container {
+    width: 30px;
+}
+
 .btn.story-navigation-button {
     padding: 0 !important;
     width: 30px;

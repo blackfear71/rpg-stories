@@ -158,7 +158,7 @@ const Story = ({
                     {/* Histoire */}
                     <div className="d-flex gap-1">
                         {/* Navigation */}
-                        {renderNavigation()}
+                        <div className="story-navigation-container">{renderNavigation()}</div>
 
                         {/* Texte */}
                         <div className="flex-grow-1 px-2 py-1 rounded story-text">{renderStory(story.story)}</div>

@@ -323,7 +323,7 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
                         <div className="d-flex flex-column gap-2">
                             <div className="d-flex gap-1">
                                 {/* Navigation */}
-                                <div className="story-entry-scroll-container">{renderNavigation}</div>
+                                <div className="story-entry-navigation-container">{renderNavigation}</div>
 
                                 {/* Histoire */}
                                 <div className="flex-grow-1">

@@ -49,10 +49,12 @@ const CampaignHeader = ({
                     </div>
 
                     {/* Univers */}
-                    <div className="d-flex align-items-center gap-2 py-1 px-2 fs-6 rounded campaign-header-badge-italic">
-                        <GiCastle className="campaign-header-icon-small" />
-                        {campaign.universe}
-                    </div>
+                    {campaign.universe && (
+                        <div className="d-flex align-items-center gap-2 py-1 px-2 fs-6 rounded campaign-header-badge-italic">
+                            <GiCastle className="campaign-header-icon-small" />
+                            {campaign.universe}
+                        </div>
+                    )}
 
                     {/* Nombre de joueurs */}
                     <div className="d-flex align-items-center gap-2 py-1 px-2 fs-6 rounded campaign-header-badge">
