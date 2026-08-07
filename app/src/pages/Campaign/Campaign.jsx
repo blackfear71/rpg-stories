@@ -592,7 +592,7 @@ const Campaign = () => {
 
                                     {/* Nouvelle histoire */}
                                     {inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE && (
-                                        <div ref={newStoryRef} className="campaign-story-entry-wrapper">
+                                        <div ref={newStoryRef} className="z-2 campaign-story-entry-wrapper">
                                             <StoryEntry
                                                 campaignId={id}
                                                 formData={formStory}

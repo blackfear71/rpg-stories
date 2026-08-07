@@ -35,6 +35,9 @@ const Story = ({
     // Traductions
     const { t } = useTranslation();
 
+    // Constantes
+    const isEditing = inputOptions.isOpen && inputOptions.action === EnumAction.UPDATE && inputOptions.storyId === story.id;
+
     /**
      * Affiche les boutons de navigation entre histoires
      */
@@ -108,9 +111,9 @@ const Story = ({
     };
 
     return (
-        <div ref={(node) => registerRef?.(story.id, node)} className="story-wrapper">
+        <div ref={(node) => registerRef?.(story.id, node)} className={`${isEditing ? 'z-2 ' : ''} story-wrapper`}>
             {/* Saisie ou affichage */}
-            {inputOptions.isOpen && inputOptions.action === EnumAction.UPDATE && inputOptions.storyId === story.id ? (
+            {isEditing ? (
                 <StoryEntry
                     story={story}
                     formData={formData}
