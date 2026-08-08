@@ -15,26 +15,14 @@ import { EnumAction, EnumContext } from '../../../enums';
 import './StoryEntry.css';
 
 // Symboles
-const arrows = [
-    String.fromCodePoint(0x2191), // up
-    String.fromCodePoint(0x2197), // upRight
-    String.fromCodePoint(0x2192), // right
-    String.fromCodePoint(0x2198), // downRight
-    String.fromCodePoint(0x2193), // down
-    String.fromCodePoint(0x2199), // downLeft
-    String.fromCodePoint(0x2190), // left
-    String.fromCodePoint(0x2196), // upLeft
-    String.fromCodePoint(0x21d1), // doubleUp
-    String.fromCodePoint(0x21d7), // doubleUpRight
-    String.fromCodePoint(0x21d2), // doubleRight
-    String.fromCodePoint(0x21d8), // doubleDownRight
-    String.fromCodePoint(0x21d3), // doubleDown
-    String.fromCodePoint(0x21d9), // doubleDownLeft
-    String.fromCodePoint(0x21d0), // doubleLeft
-    String.fromCodePoint(0x21d6) // doubleUpLeft
-];
-const circledDigits = [String.fromCodePoint(0x24ea), ...Array.from({ length: 9 }, (_, i) => String.fromCodePoint(0x2460 + i))];
-const circledLetters = Array.from({ length: 26 }, (_, i) => String.fromCodePoint(0x24b6 + i));
+const actions = ['🔒', '🔓', '🗝️', '🔍', '🕯️', '🪜', '⛓️', '🪏', '⚔️', '🏹', '🛡️', '🩸', '🔥'];
+const animals = ['👣', '🐾', '🐺', '🐕', '🐈', '🐎', '🐄', '🐖', '🐦‍⬛', '🕷️', '🕸️', '🐦‍🔥', '🐉', '🐊', '🦈', '🐋', '🐚'];
+const arrows = ['⬆️', '↗️', '➡️', '↘️', '⬇️', '↙️', '⬅️', '↖️', '↩️', '🔃'];
+const colors = ['🔴', '🟠', '🟡', '🟢', '🔵', '🟣', '🟤', '⚫', '⚪'];
+const digits = ['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'];
+const emojis = ['🎲', '💬', '📖', '📕', '📗', '📘', '📙', '📜', '🤴', '👸', '☠️', '🪦', '⌛', '💰', '🎶'];
+const food = ['🍇', '🥕', '🍄‍🟫', '🌶️', '🥖', '🍖', '🍗', '🍺', '🍷'];
+const nature = ['🌳', '💧', '❄️', '🌧️', '🌩️', '🌫️', '☀️', '🌔', '⭐', '🌊', '⛵', '⛺', '📍', '🧭', '🏔️'];
 
 /**
  * Saisie d'une histoire
@@ -54,10 +42,15 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
     const { deleteDraft, getDraftById, saveDraft } = draftsState;
 
     // Constantes
-    const symbolGroups = [
-        { id: 'digits', symbols: circledDigits },
-        { id: 'letters', symbols: circledLetters },
-        { id: 'arrows', symbols: arrows }
+    const symbols = [
+        { id: 'digits', icons: digits },
+        { id: 'arrows', icons: arrows },
+        { id: 'colors', icons: colors },
+        { id: 'emojis', icons: emojis },
+        { id: 'actions', icons: actions },
+        { id: 'nature', icons: nature },
+        { id: 'food', icons: food },
+        { id: 'animals', icons: animals }
     ];
     const tags = [
         { code: EnumContext.EXPLORATION, label: 'campaign.exploration', icon: <GiCompass size={20} /> },
@@ -300,9 +293,9 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
 
                                     {showSymbols && (
                                         <div className="d-flex flex-column rounded story-entry-header-symbols-panel" ref={symbolsPanelRef}>
-                                            {symbolGroups.map((group) => (
+                                            {symbols.map((group) => (
                                                 <div key={group.id} className="p-1 story-entry-header-symbols-row">
-                                                    {group.symbols.map((symbol) => (
+                                                    {group.icons.map((symbol) => (
                                                         <Button
                                                             key={symbol}
                                                             className="p-0 rounded story-entry-symbol-button"
