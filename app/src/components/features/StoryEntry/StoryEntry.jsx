@@ -299,9 +299,9 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
                                     />
 
                                     {showSymbols && (
-                                        <div className="story-entry-header-symbols-panel rounded" ref={symbolsPanelRef}>
+                                        <div className="d-flex flex-column rounded story-entry-header-symbols-panel" ref={symbolsPanelRef}>
                                             {symbolGroups.map((group) => (
-                                                <div key={group.id} className="d-flex flex-wrap p-1 story-entry-header-symbols-row">
+                                                <div key={group.id} className="p-1 story-entry-header-symbols-row">
                                                     {group.symbols.map((symbol) => (
                                                         <Button
                                                             key={symbol}
