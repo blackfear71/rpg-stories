@@ -38,7 +38,7 @@
     color: var(--color-text-white);
     background-color: var(--color-bg-tertiary);
     text-align: justify;
-    white-space: pre-line;
+    white-space: pre-wrap;
     min-height: 70px;
 }
 

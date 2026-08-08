@@ -68,7 +68,7 @@ class StoriesService
         // Construction de l'objet
         $story = new Story(
             campaignId: $campaignId,
-            story: trim($data->story),
+            story: rtrim($data->story),
             createdBy: $user->id
         );
 
@@ -89,7 +89,7 @@ class StoriesService
         // Construction de l'objet
         $story = new Story(
             id: $storyId,
-            story: trim($data->story),
+            story: rtrim($data->story),
             createdBy: $user->id,
             updatedBy: $user->id
         );
