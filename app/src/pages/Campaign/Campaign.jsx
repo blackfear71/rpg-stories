@@ -451,6 +451,8 @@ const Campaign = () => {
         switch (modalOptionsConfirm?.action) {
             case 'deleteCampaign':
                 return handleDeleteCampaign();
+            case 'deleteDrafts':
+                return handleDeleteDrafts();
             case 'deleteStory':
                 return handleDeleteStory(modalOptionsConfirm.data);
             default:
@@ -495,6 +497,25 @@ const Campaign = () => {
                 })
             )
             .subscribe();
+    };
+
+    const handleDeleteDrafts = async () => {
+        setMessage(null);
+        setIsSubmitting(true);
+        setModalOptionsConfirm((prev) => ({ ...prev, message: null }));
+
+        try {
+            const result = await draftsState.deleteDrafts();
+            openCloseConfirmModal();
+            setMessage(result);
+        } catch (err) {
+            setModalOptionsConfirm((prev) => ({
+                ...prev,
+                message: err
+            }));
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     /**
@@ -640,17 +661,6 @@ const Campaign = () => {
                                 />
                             )}
 
-                            {/* Modale de confirmation */}
-                            {modalOptionsConfirm.isOpen && (
-                                <ConfirmModal
-                                    modalOptions={modalOptionsConfirm}
-                                    setModalOptions={setModalOptionsConfirm}
-                                    onClose={openCloseConfirmModal}
-                                    onConfirmAction={handleConfirmAction}
-                                    isSubmitting={isSubmitting}
-                                />
-                            )}
-
                             {/* Modale des brouillons */}
                             {modalOptionsDrafts.isOpen && (
                                 <DraftsModal
@@ -658,7 +668,19 @@ const Campaign = () => {
                                     modalOptions={modalOptionsDrafts}
                                     setModalOptions={setModalOptionsDrafts}
                                     onClose={openCloseDraftsModal}
+                                    onConfirm={openCloseConfirmModal}
                                     onOpenInput={openCloseStoryInput}
+                                    isSubmitting={isSubmitting}
+                                />
+                            )}
+
+                            {/* Modale de confirmation */}
+                            {modalOptionsConfirm.isOpen && (
+                                <ConfirmModal
+                                    modalOptions={modalOptionsConfirm}
+                                    setModalOptions={setModalOptionsConfirm}
+                                    onClose={openCloseConfirmModal}
+                                    onConfirmAction={handleConfirmAction}
                                     isSubmitting={isSubmitting}
                                 />
                             )}

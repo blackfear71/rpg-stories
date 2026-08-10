@@ -69,6 +69,7 @@
     "campaign": {
         "campaignName": "Campaign name",
         "confirmDeleteCampaign": "Do you really want to delete the campaign \"{{name}}\"?",
+        "confirmDeleteDrafts": "Do you really want to delete all the drafts from the campaign ?",
         "countPlayer": "{{count}} player",
         "countPlayers": "{{count}} players",
         "countStory": "{{count}} session",
@@ -76,6 +77,7 @@
         "createCampaign": "Create campaign",
         "createStory": "Create story",
         "deleteCampaign": "Delete the campaign",
+        "deleteDrafts": "Delete all drafts",
         "deleteStory": "Delete the story from {{date}} of the campaign \"{{name}}\"",
         "drafts": "Drafts",
         "emptyStories": "Your quest begins here, don't wait any longer to start a new story!",

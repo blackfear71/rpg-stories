@@ -15,7 +15,7 @@ import './DraftsModal.css';
 /**
  * Modale campagne
  */
-const DraftsModal = ({ draftsState, modalOptions, setModalOptions, onClose, onOpenInput, isSubmitting }) => {
+const DraftsModal = ({ draftsState, modalOptions, setModalOptions, onClose, onConfirm, onOpenInput, isSubmitting }) => {
     // Traductions
     const { t } = useTranslation();
 
@@ -31,12 +31,28 @@ const DraftsModal = ({ draftsState, modalOptions, setModalOptions, onClose, onOp
     };
 
     /**
+     * Ouvre la modale de suppression de tous les brouillons
+     */
+    const handleDeleteDrafts = async () => {
+        // Fermeture de la modale des brouillons
+        onClose();
+
+        // Ouverture de la modale de confirmation
+        onConfirm({
+            content: t('campaign.confirmDeleteDrafts'),
+            action: 'deleteDrafts',
+            data: null
+        });
+    };
+
+    /**
      * Suppression du brouillon
      * @param {*} draftId Identifiant brouillon
      */
     const handleDeleteDraft = async (draftId) => {
         try {
-            await deleteDraft(draftId);
+            const result = await deleteDraft(draftId);
+            setModalMessage(result);
         } catch (err) {
             setModalMessage(err);
         }
@@ -69,51 +85,65 @@ const DraftsModal = ({ draftsState, modalOptions, setModalOptions, onClose, onOp
 
             <Modal.Body>
                 {drafts && drafts.length > 0 ? (
-                    drafts?.map((draft) => (
-                        <div key={draft.id} className="modal-group">
-                            <div className="d-flex flex-row align-items-center justify-content-between gap-3 modal-group-content">
-                                {/* Brouillon */}
-                                <div className="d-flex flex-column">
-                                    <div className="d-flex gap-2 align-items-center">
-                                        {/* Date et heure */}
-                                        {getLocalizedDateAndTime(draft.date)}
-
-                                        {/* Indicateur nouvelle histoire */}
-                                        {!draft?.storyId && (
-                                            <Badge pill bg="warning" className="text-wrap">
-                                                {t('campaign.newStory')}
-                                            </Badge>
-                                        )}
-                                    </div>
-
-                                    <div className="draft-modal-text">
-                                        {draft.text.length > 100 ? draft.text.substring(0, 130) + '...' : draft.text}
-                                    </div>
-                                </div>
-
-                                {/* Actions */}
-                                <div className="d-flex gap-2">
-                                    {/* Suppression */}
-                                    <Button
-                                        variant="outline-icon-action"
-                                        className="draft-modal-button-delete"
-                                        onClick={() => handleDeleteDraft(draft.id)}
-                                    >
-                                        <FaTrashCan />
-                                    </Button>
-
-                                    {/* Injection */}
-                                    <Button
-                                        variant="outline-icon-action"
-                                        className="draft-modal-button-inject"
-                                        onClick={() => handleEditDraft(draft)}
-                                    >
-                                        <FaArrowRight />
-                                    </Button>
-                                </div>
+                    <>
+                        {/* Supprimer tous les brouillons */}
+                        <div className="modal-group">
+                            <div className="d-flex align-items-center justify-content-center modal-group-content">
+                                <Button variant="outline-text-action" onClick={handleDeleteDrafts} disabled={isSubmitting}>
+                                    {t('campaign.deleteDrafts')}
+                                </Button>
                             </div>
                         </div>
-                    ))
+
+                        {/* Brouillons */}
+                        {drafts?.map((draft) => (
+                            <div key={draft.id} className="modal-group">
+                                <div className="d-flex flex-row align-items-center justify-content-between gap-3 modal-group-content">
+                                    {/* Brouillon */}
+                                    <div className="d-flex flex-column">
+                                        <div className="d-flex gap-2 align-items-center">
+                                            {/* Date et heure */}
+                                            {getLocalizedDateAndTime(draft.date)}
+
+                                            {/* Indicateur nouvelle histoire */}
+                                            {!draft?.storyId && (
+                                                <Badge pill bg="warning" className="text-wrap">
+                                                    {t('campaign.newStory')}
+                                                </Badge>
+                                            )}
+                                        </div>
+
+                                        <div className="draft-modal-text">
+                                            {draft.text.length > 100 ? draft.text.substring(0, 130) + '...' : draft.text}
+                                        </div>
+                                    </div>
+
+                                    {/* Actions */}
+                                    <div className="d-flex gap-2">
+                                        {/* Suppression */}
+                                        <Button
+                                            variant="outline-icon-action"
+                                            className="draft-modal-button-delete"
+                                            onClick={() => handleDeleteDraft(draft.id)}
+                                            disabled={isSubmitting}
+                                        >
+                                            <FaTrashCan />
+                                        </Button>
+
+                                        {/* Injection */}
+                                        <Button
+                                            variant="outline-icon-action"
+                                            className="draft-modal-button-inject"
+                                            onClick={() => handleEditDraft(draft)}
+                                            disabled={isSubmitting}
+                                        >
+                                            <FaArrowRight />
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </>
                 ) : (
                     <div className="modal-group">
                         <div className="modal-group-content">

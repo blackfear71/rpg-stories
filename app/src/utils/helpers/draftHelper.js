@@ -118,3 +118,29 @@ export async function deleteDraftIndexedDB(draftId) {
         tx.onerror = () => reject(tx.error);
     });
 }
+
+/**
+ * Supprime tous les brouillons d'une campagne
+ * @param {*} campaignId Identifiant campagne
+ */
+export async function deleteDraftsIndexedDB(campaignId) {
+    const db = await openIndexedDB();
+
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const index = tx.objectStore(STORE_NAME).index('campaignId');
+        const cursorRequest = index.openCursor(IDBKeyRange.only(campaignId));
+
+        cursorRequest.onsuccess = (event) => {
+            const cursor = event.target.result;
+            if (cursor) {
+                cursor.delete();
+                cursor.continue();
+            }
+        };
+        cursorRequest.onerror = () => reject(cursorRequest.error);
+
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+    });
+}

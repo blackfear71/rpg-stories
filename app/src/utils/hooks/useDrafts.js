@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { deleteDraftIndexedDB, getCampaignDraftsIndexedDB, getDraftIndexedDB, saveDraftIndexedDB } from '../../utils/helpers/draftHelper';
+import {
+    deleteDraftIndexedDB,
+    deleteDraftsIndexedDB,
+    getCampaignDraftsIndexedDB,
+    getDraftIndexedDB,
+    saveDraftIndexedDB
+} from '../../utils/helpers/draftHelper';
 
 /**
  * Hook custom donnant accès aux brouillons locaux (IndexedDB) d'une campagne, avec les actions pour créer/mettre à jour, supprimer et rafraîchir
@@ -57,12 +63,26 @@ export function useDrafts(campaignId) {
             try {
                 await deleteDraftIndexedDB(draftId);
                 await refreshDrafts();
+                return { code: 'MSG_DELETION_SUCCESS', type: 'success' };
             } catch {
                 throw { code: 'ERR_DELETE_DRAFT', type: 'error' };
             }
         },
         [refreshDrafts]
     );
+
+    /**
+     * Supprime tous les brouillons, puis resynchronise l'état local
+     */
+    const deleteDrafts = useCallback(async () => {
+        try {
+            await deleteDraftsIndexedDB(campaignId);
+            await refreshDrafts();
+            return { code: 'MSG_DELETION_SUCCESS', type: 'success' };
+        } catch {
+            throw { code: 'ERR_DELETION_FAILED', type: 'error' };
+        }
+    }, [refreshDrafts]);
 
     /**
      * Récupère un brouillon
@@ -75,5 +95,5 @@ export function useDrafts(campaignId) {
         }
     }, []);
 
-    return { drafts, draftLoading, saveDraft, deleteDraft, getDraftById, refreshDrafts };
+    return { drafts, draftLoading, saveDraft, deleteDraft, deleteDrafts, getDraftById, refreshDrafts };
 }
