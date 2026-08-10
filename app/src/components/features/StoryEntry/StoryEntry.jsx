@@ -150,7 +150,7 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
     };
 
     /**
-     * Ferme le menu utilisateur au clic en dehors
+     * Ferme la fenêtre des symboles au clic en dehors
      * @param {*} e Evènement
      */
     const handleClickOutside = (e) => {
@@ -171,6 +171,18 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
         } catch (err) {
             setMessage(err);
         }
+    };
+
+    /**
+     * Insertion d'un symbole
+     * @param {*} symbol Symbole à insérer
+     */
+    const handleInsertSymbol = (symbol) => {
+        // Insertion symbole
+        insertAtCursor(symbol);
+
+        // Fermeture fenêtre des symboles
+        setShowSymbols(false);
     };
 
     /**
@@ -299,7 +311,7 @@ const StoryEntry = ({ story = null, formData, draftsState, inputOptions, onOpenC
                                                         <Button
                                                             key={symbol}
                                                             className="p-0 rounded story-entry-symbol-button"
-                                                            onClick={() => insertAtCursor(symbol)}
+                                                            onClick={() => handleInsertSymbol(symbol)}
                                                         >
                                                             {symbol}
                                                         </Button>
