@@ -117,8 +117,9 @@ class CampaignsService
 
         // Construction de l'objet
         $campaign = new Campaign(
+            sagaId: $data->sagaId,
             name: trim($data->name),
-            universe: trim($data->universe),
+            universe: $data->universe ? trim($data->universe) : null,
             players: $data->players,
             picture: $picture,
             createdBy: $userId
@@ -148,8 +149,9 @@ class CampaignsService
         // Construction de l'objet
         $campaign = new Campaign(
             id: $campaignId,
+            sagaId: $data->sagaId,
             name: trim($data->name),
-            universe: trim($data->universe),
+            universe: $data->universe ? trim($data->universe) : null,
             players: $data->players,
             picture: $picture,
             createdBy: $userId,

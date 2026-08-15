@@ -68,6 +68,8 @@
     },
     "campaign": {
         "campaignName": "Campaign name",
+        "campaigns": "Campaigns",
+        "chooseSaga": "Choose saga",
         "confirmDeleteCampaign": "Do you really want to delete the campaign \"{{name}}\"?",
         "confirmDeleteDrafts": "Do you really want to delete all the drafts from the campaign ?",
         "countPlayer": "{{count}} player",
@@ -75,6 +77,7 @@
         "countStory": "{{count}} session",
         "countStories": "{{count}} sessions",
         "createCampaign": "Create campaign",
+        "createSaga": "Create saga",
         "createStory": "Create story",
         "deleteCampaign": "Delete the campaign",
         "deleteDrafts": "Delete all drafts",
@@ -89,10 +92,14 @@
         "picture": "Picture",
         "playersCount": "Number of players (including GM)",
         "rest": "Long rest",
+        "sagaName": "Saga's name",
+        "saga": "Saga",
+        "sagas": "Sagas",
         "story": "Story",
         "symbols": "Symbols",
         "universe": "Universe",
-        "updateCampaign": "Edit the campaign"
+        "updateCampaign": "Edit the campaign",
+        "updateSaga": "Edit the saga"
     },
     "home": {
         "rpg": "RPG",

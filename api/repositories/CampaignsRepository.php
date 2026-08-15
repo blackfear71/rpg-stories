@@ -120,12 +120,13 @@ class CampaignsRepository
      */
     public function createCampaign(Campaign $campaign): bool
     {
-        $sql = "INSERT INTO {$this->campaignsTable} (name, universe, players, picture, created_at, created_by, is_active)
-            VALUES (:name, :universe, :players, :picture, :created_at, :created_by, :is_active)";
+        $sql = "INSERT INTO {$this->campaignsTable} (saga_id, name, universe, players, picture, created_at, created_by, is_active)
+            VALUES (:saga_id, :name, :universe, :players, :picture, :created_at, :created_by, :is_active)";
 
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
+            'saga_id'    => $campaign->sagaId,
             'name'       => $campaign->name,
             'universe'   => $campaign->universe,
             'players'    => $campaign->players,
@@ -142,13 +143,14 @@ class CampaignsRepository
     public function updateCampaign(Campaign $campaign): bool
     {
         $sql = "UPDATE {$this->campaignsTable}
-            SET name = :name, universe = :universe, players = :players, picture = :picture, updated_at = :updated_at, updated_by = :updated_by
+            SET saga_id = :saga_id, name = :name, universe = :universe, players = :players, picture = :picture, updated_at = :updated_at, updated_by = :updated_by
             WHERE id = :id AND created_by = :created_by";
 
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
             'id'         => $campaign->id,
+            'saga_id'    => $campaign->sagaId,
             'name'       => $campaign->name,
             'universe'   => $campaign->universe,
             'players'    => $campaign->players,

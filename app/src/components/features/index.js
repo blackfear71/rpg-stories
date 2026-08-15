@@ -1,4 +1,6 @@
 export { default as CampaignHeader } from './CampaignHeader/CampaignHeader';
+export { default as CampaignsList } from './CampaignsList/CampaignsList';
+export { default as SagasList } from './SagasList/SagasList';
 export { default as SettingsUser } from './SettingsUser/SettingsUser';
 export { default as SettingsUsers } from './SettingsUsers/SettingsUsers';
 export { default as Story } from './Story/Story';

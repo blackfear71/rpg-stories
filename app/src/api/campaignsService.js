@@ -50,6 +50,7 @@ class CampaignsService {
      * @param {*} body Saisie
      * @returns Liste des campagnes recherchées
      */
+    // TODO : adapter la recherche pour les sagas
     getSearchCampaigns = (body) => {
         const url = `${this.apiUrl}/search`;
         return ajax({

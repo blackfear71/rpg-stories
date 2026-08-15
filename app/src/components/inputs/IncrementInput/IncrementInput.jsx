@@ -8,14 +8,19 @@ import './IncrementInput.css';
 /**
  * Saisie incrément
  */
-const IncrementInput = ({ title, icon, name, value, onChangeDown, onChangeUp, error }) => {
+const IncrementInput = ({ title, icon, name, value, onChangeDown, onChangeUp, error, required = false }) => {
     // Traductions
     const { t } = useTranslation();
 
     return (
         <div className="d-flex flex-column gap-1">
             {/* Titre */}
-            {title && <div className="input-title">{title}</div>}
+            {title && (
+                <div className="input-title">
+                    {title}
+                    {required && <span className="required-star">*</span>}
+                </div>
+            )}
 
             {/* Saisie */}
             <div className="d-flex align-items-center gap-2">

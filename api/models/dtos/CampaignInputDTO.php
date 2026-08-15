@@ -10,7 +10,8 @@ class CampaignInputDTO
      */
     public function __construct(
         public readonly string  $name          = '',
-        public readonly ?string $universe      = '',
+        public readonly ?int    $sagaId        = null,
+        public readonly ?string $universe      = null,
         public readonly int     $players       = 0,
         public readonly ?string $picture       = null,
         public readonly ?string $pictureAction = null
@@ -23,7 +24,8 @@ class CampaignInputDTO
     {
         return new self(
             name: $data['name'] ?? '',
-            universe: $data['universe'] ?? '',
+            sagaId: $data['sagaId'] ?? null,
+            universe: $data['universe'] ?? null,
             players: (int) ($data['players'] ?? 0),
             picture: $data['picture'] ?? null,
             pictureAction: $data['pictureAction'] ?? null

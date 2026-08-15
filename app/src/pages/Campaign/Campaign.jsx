@@ -19,14 +19,15 @@ import { useDrafts } from '../../utils/hooks/useDrafts';
 
 import { EnumAction } from '../../enums';
 
-import { CampaignsService, StoriesService } from '../../api';
+import { CampaignsService, SagasService, StoriesService } from '../../api';
 
 import './Campaign.css';
 
 // Valeurs initiales des formulaires
 const initialCampaignValues = {
+    sagaId: null,
     name: '',
-    universe: '',
+    universe: null,
     players: 0,
     picture: null,
     pictureAction: null
@@ -81,6 +82,7 @@ const Campaign = () => {
 
     // API states
     const [campaign, setCampaign] = useState();
+    const [sagas, setSagas] = useState([]);
     const [stories, setStories] = useState([]);
 
     /**
@@ -142,15 +144,18 @@ const Campaign = () => {
 
         // Récupération de la campagne et de ses histoires
         const campaignsService = new CampaignsService();
+        const sagasService = new SagasService();
         const storiesService = new StoriesService();
 
         const subscriptionCampaign = campaignsService.getCampaign(id);
+        const subscriptionSagas = sagasService.getSagas();
         const subscriptionStories = storiesService.getCampaignStories(id);
 
-        combineLatest([subscriptionCampaign, subscriptionStories])
+        combineLatest([subscriptionCampaign, subscriptionSagas, subscriptionStories])
             .pipe(
-                map(([dataCampaign, dataStories]) => {
+                map(([dataCampaign, dataSagas, dataStories]) => {
                     setCampaign(dataCampaign.response.data);
+                    setSagas(dataSagas.response.data);
                     setStories(dataStories.response.data);
                 }),
                 take(1),
@@ -317,7 +322,7 @@ const Campaign = () => {
 
         // Champs textes
         Object.entries(values).forEach(([key, value]) => {
-            if (key !== 'picture' && value !== null) {
+            if (key !== 'picture' && value) {
                 formData.append(key, value);
             }
         });
@@ -653,6 +658,7 @@ const Campaign = () => {
                             {/* Modale de modification de campagne */}
                             {formCampaign && modalOptionsCampaign.isOpen && (
                                 <CampaignModal
+                                    sagas={sagas}
                                     formData={formCampaign}
                                     modalOptions={modalOptionsCampaign}
                                     setModalOptions={setModalOptionsCampaign}

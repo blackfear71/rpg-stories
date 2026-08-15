@@ -28,14 +28,21 @@ a {
     border: 2px dashed var(--color-border-gray-bold);
 }
 
+.page-tabs {
+    background-color: var(--color-bg-secondary) !important;
+    border-radius: 50rem;
+    width: fit-content;
+    margin: 0 auto;
+}
+
 .page-tabs .nav-link {
+    background-color: var(--color-bg-secondary) !important;
     color: var(--color-text-white) !important;
-    border-color: var(--color-border-white) !important;
+    border-radius: 50rem;
 }
 
 .page-tabs .nav-link.active {
-    color: var(--color-text-tab) !important;
-    border-color: var(--color-border-tab) !important;
+    background-color: var(--color-bg-primary) !important;
 }
 
 /* Saisies */

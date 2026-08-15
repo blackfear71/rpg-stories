@@ -68,6 +68,8 @@
     },
     "campaign": {
         "campaignName": "Nom de la campagne",
+        "campaigns": "Campagnes",
+        "chooseSaga": "Choisir une saga",
         "confirmDeleteCampaign": "Voulez-vous vraiment supprimer la campagne \"{{name}}\" ?",
         "confirmDeleteDrafts": "Voulez-vous vraiment supprimer tous les brouillons de la campagne ?",
         "countPlayer": "{{count}} joueur",
@@ -75,6 +77,7 @@
         "countStory": "{{count}} session",
         "countStories": "{{count}} sessions",
         "createCampaign": "Créer une campagne",
+        "createSaga": "Créer une saga",
         "createStory": "Créer une histoire",
         "deleteCampaign": "Supprimer la campagne",
         "deleteDrafts": "Supprimer tous les brouillons",
@@ -89,10 +92,14 @@
         "picture": "Image",
         "playersCount": "Nombre de joueurs (MJ compris)",
         "rest": "Long repos",
+        "sagaName": "Nom de la saga",
+        "saga": "Saga",
+        "sagas": "Sagas",
         "story": "Histoire",
         "symbols": "Symboles",
         "universe": "Univers",
-        "updateCampaign": "Modifier la campagne"
+        "updateCampaign": "Modifier la campagne",
+        "updateSaga": "Modifier la saga"
     },
     "home": {
         "rpg": "RPG",
