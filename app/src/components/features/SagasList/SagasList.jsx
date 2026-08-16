@@ -37,15 +37,14 @@ const SagasList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCa
                     sagas.map((saga) => (
                         <Fragment key={saga.id}>
                             <Button
-                                className="d-flex flex-column align-items-start justify-content-center p-3 gap-2 campaigns-button"
-                                // TODO : afficher la dernière image de la campagne la plus récente
-                                // style={
-                                //     campaign.picture
-                                //         ? {
-                                //               backgroundImage: `url(${import.meta.env.VITE_API_URL}/serve-file/images?file=${encodeURIComponent(campaign.picture)})`
-                                //           }
-                                //         : undefined
-                                // }
+                                className={`d-flex flex-column align-items-start justify-content-center p-3 gap-2 campaigns-button ${sagaCampaigns.isOpen && sagaCampaigns.sagaId === saga.id && 'campaigns-saga-selected'}`}
+                                style={
+                                    saga.picture
+                                        ? {
+                                              backgroundImage: `url(${import.meta.env.VITE_API_URL}/serve-file/images?file=${encodeURIComponent(saga.picture)})`
+                                          }
+                                        : undefined
+                                }
                                 onClick={() => onOpenSaga(saga.id)}
                                 disabled={isSubmitting}
                             >

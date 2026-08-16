@@ -81,6 +81,39 @@
     background-color: var(--color-bg-tertiary);
 }
 
+.campaigns-saga-selected {
+    position: relative;
+    background-color: var(--color-bg-tertiary) !important;
+}
+
+.campaigns-saga-selected::before {
+    position: absolute;
+    content: '';
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 13px solid transparent;
+    border-right: 13px solid transparent;
+    border-top: 13px solid var(--color-border-secondary);
+    z-index: 1;
+}
+
+.campaigns-saga-selected::after {
+    position: absolute;
+    content: '';
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 12px solid var(--color-border-tertiary);
+    z-index: 2;
+}
+
 @media (max-width: 576px) {
     .campaigns-grid .campaigns-button,
     .campaigns-grid .campaigns-saga-panel {

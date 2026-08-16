@@ -147,11 +147,16 @@ const Campaigns = () => {
                         ? [{ id: null, name: t('campaign.noSaga') }, ...dataSagas.response.data]
                         : dataSagas.response.data;
 
-                    // Calcul du nombre de campagnes par saga
-                    sagasData = sagasData.map((saga) => ({
-                        ...saga,
-                        campaignCount: dataCampaigns.response.data.filter((c) => c.sagaId === saga.id).length
-                    }));
+                    // Ajout de l'image de la campagne la plus récente et calcul du nombre de campagnes par saga
+                    sagasData = sagasData.map((saga) => {
+                        const filteredCampaigns = dataCampaigns.response.data.filter((c) => c.sagaId === saga.id);
+
+                        return {
+                            ...saga,
+                            picture: filteredCampaigns.filter((c) => c.picture).sort((a, b) => b.id - a.id)[0]?.picture,
+                            campaignCount: filteredCampaigns.length
+                        };
+                    });
 
                     setSagas(sagasData);
                 }),
