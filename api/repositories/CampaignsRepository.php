@@ -191,6 +191,26 @@ class CampaignsRepository
     }
 
     /**
+     * Modification de la saga des campagnes liées
+     */
+    public function updateCampaignsSaga(int $sagaId, int $userId): bool
+    {
+        $sql = "UPDATE {$this->campaignsTable}
+            SET saga_id = :new_saga_id, updated_at = :updated_at, updated_by = :updated_by
+            WHERE saga_id = :saga_id AND created_by = :created_by";
+
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            'saga_id'     => $sagaId,
+            'new_saga_id' => NULL,
+            'created_by'  => $userId,
+            'updated_at'  => date('Y-m-d H:i:s'),
+            'updated_by'  => $userId
+        ]);
+    }
+
+    /**
      * Suppression logique d'un enregistrement
      */
     public function deleteCampaign(int $campaignId, int $userId): bool

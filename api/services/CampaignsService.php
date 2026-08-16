@@ -186,6 +186,22 @@ class CampaignsService
     }
 
     /**
+     * Modification de la saga des campagnes liées
+     */
+    public function updateCampaignsSaga(int $sagaId, int $userId): void
+    {
+        // Contrôle des données
+        if (!$sagaId) {
+            throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
+        }
+
+        // Modification
+        if (!$this->campaignsRepository->updateCampaignsSaga($sagaId, $userId)) {
+            throw new \RuntimeException(MessageHelper::ERR_UPDATE_FAILED);
+        }
+    }
+
+    /**
      * Suppression logique d'un enregistrement
      */
     public function deleteCampaign(int $campaignId, int $userId): void

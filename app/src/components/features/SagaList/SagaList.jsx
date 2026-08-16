@@ -2,11 +2,12 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from 'react-bootstrap';
-import { FaTimes } from 'react-icons/fa';
 import { GiBookshelf, GiSpellBook } from 'react-icons/gi';
-import { IoAddCircleOutline } from 'react-icons/io5';
+import { IoAddCircleOutline, IoClose } from 'react-icons/io5';
+import { MdDelete, MdEdit } from 'react-icons/md';
 
 import { CampaignList } from '../../../components/features';
+import { TooltipButton } from '../../../components/shared';
 
 import { EnumAction } from '../../../enums';
 
@@ -15,7 +16,7 @@ import './SagaList.css';
 /**
  * Liste des sagas
  */
-const SagaList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCampaingModal, isSubmitting }) => {
+const SagaList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCampaingModal, onConfirm, isSubmitting }) => {
     // Traductions
     const { t } = useTranslation();
 
@@ -73,16 +74,43 @@ const SagaList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCam
                             {/* Campagnes d'une saga */}
                             {sagaCampaigns.isOpen && sagaCampaigns.sagaId === saga.id && (
                                 <div className="rounded p-3 saga-list-panel">
-                                    {/* Bouton fermeture */}
-                                    <div className="d-flex justify-content-end mb-3">
-                                        <Button
-                                            variant="outline-text-action"
-                                            className="gap-1 saga-list-panel-close-button"
+                                    {/* Actions */}
+                                    <div className="d-flex gap-1 mb-3 justify-content-end">
+                                        {/* TODO : reprendre campaign-header-button et adapter les couleurs */}
+                                        {/* TODO : il reste à faire la modification de saga, pour l'instant ça déclenche une création et le nom n'est pas repris */}
+                                        {sagaCampaigns.sagaId && (
+                                            <>
+                                                {/* Suppression saga */}
+                                                <TooltipButton
+                                                    tooltip={t('common.delete')}
+                                                    content={<MdDelete size={25} />}
+                                                    variant="outline-icon-action"
+                                                    className="campaign-header-button"
+                                                    onClick={() => onConfirm(saga.id, saga.name)}
+                                                    isSubmitting={isSubmitting}
+                                                />
+
+                                                {/* Modification saga */}
+                                                <TooltipButton
+                                                    tooltip={t('common.update')}
+                                                    content={<MdEdit size={25} />}
+                                                    variant="outline-icon-action"
+                                                    className="campaign-header-button"
+                                                    onClick={() => onOpenSagaModal(EnumAction.UPDATE)}
+                                                    isSubmitting={isSubmitting}
+                                                />
+                                            </>
+                                        )}
+
+                                        {/* Fermeture campagnes */}
+                                        <TooltipButton
+                                            tooltip={t('common.close')}
+                                            content={<IoClose size={25} />}
+                                            variant="outline-icon-action"
+                                            className="campaign-header-button"
                                             onClick={() => onOpenSaga(saga.id)}
-                                        >
-                                            <FaTimes />
-                                            {t('common.close')}
-                                        </Button>
+                                            isSubmitting={isSubmitting}
+                                        />
                                     </div>
 
                                     {/* Liste des campagnes de la saga */}

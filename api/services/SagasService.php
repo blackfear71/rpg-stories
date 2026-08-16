@@ -2,11 +2,15 @@
 // Imports
 require_once 'models/dtos/SagaOutputDTO.php';
 
+require_once 'services/CampaignsService.php';
+
 require_once 'repositories/SagasRepository.php';
 
 class SagasService
 {
     private PDO $db;
+
+    private ?CampaignsService $campaignsService = null;
 
     private SagasRepository $sagasRepository;
 
@@ -17,6 +21,18 @@ class SagasService
     {
         $this->db = $db;
         $this->sagasRepository = new SagasRepository($db);
+    }
+
+    /**
+     * Instancie le CampaignsService si besoin
+     */
+    private function getCampaignsService(): CampaignsService
+    {
+        if ($this->campaignsService === null) {
+            $this->campaignsService = new CampaignsService($this->db);
+        }
+
+        return $this->campaignsService;
     }
 
     /**
@@ -89,12 +105,14 @@ class SagasService
             throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
         }
 
-        // TODO : proposer de supprimer les campagnes/histoires liées ? => si non update des campagnes pour effacer leur saga, si oui suppression logique des campagnes et histoires
 
         // Suppression logique de la saga
         if (!$this->sagasRepository->deleteSaga($sagaId, $userId)) {
             throw new \RuntimeException(MessageHelper::ERR_DELETION_FAILED);
         }
+
+        // Suppression de la saga des campagnes liées
+        $this->getCampaignsService()->updateCampaignsSaga($sagaId, $userId);
     }
 
     /**

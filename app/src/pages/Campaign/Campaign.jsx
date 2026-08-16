@@ -163,7 +163,12 @@ const Campaign = () => {
                 }),
                 switchMap((campaignData) => (campaignData?.sagaId ? campaignsService.getSagaCampaigns(campaignData.sagaId) : of(null))),
                 map((dataSagaCampaigns) => {
-                    dataSagaCampaigns?.response?.data && setSagaCampaigns(dataSagaCampaigns.response.data);
+                    // Mise à jour des données de la saga liée à la campagne
+                    if (dataSagaCampaigns?.response?.data) {
+                        setSagaCampaigns(dataSagaCampaigns.response.data);
+                    } else {
+                        setSagaCampaigns([]);
+                    }
                 }),
                 take(1),
                 catchError((err) => {
@@ -302,8 +307,22 @@ const Campaign = () => {
                 }),
                 switchMap(() => campaignsService.getCampaign(campaign.id)),
                 map((newDataCampaign) => {
-                    openCloseCampaignModal();
+                    // Mise à jour des données de la campagne
                     setCampaign(newDataCampaign.response.data);
+
+                    return newDataCampaign.response.data;
+                }),
+                switchMap((campaignData) => (campaignData?.sagaId ? campaignsService.getSagaCampaigns(campaignData.sagaId) : of(null))),
+                map((dataSagaCampaigns) => {
+                    // Mise à jour des données de la saga liée à la campagne
+                    if (dataSagaCampaigns?.response?.data) {
+                        setSagaCampaigns(dataSagaCampaigns.response.data);
+                    } else {
+                        setSagaCampaigns([]);
+                    }
+
+                    // Fermeture de la modale de modification de campagne
+                    openCloseCampaignModal();
                 }),
                 take(1),
                 catchError((err) => {
@@ -512,6 +531,9 @@ const Campaign = () => {
             .subscribe();
     };
 
+    /**
+     * Suppression d'un brouillon
+     */
     const handleDeleteDrafts = async () => {
         setMessage(null);
         setIsSubmitting(true);
@@ -619,7 +641,7 @@ const Campaign = () => {
                             />
 
                             {/* Saga */}
-                            <CampaignSaga campaign={campaign} sagaCampaigns={sagaCampaigns} isSubmitting={isSubmitting} />
+                            <CampaignSaga sagaCampaigns={sagaCampaigns} isSubmitting={isSubmitting} />
 
                             {/* Timeline */}
                             {/* TODO : faire un composant StoryList */}

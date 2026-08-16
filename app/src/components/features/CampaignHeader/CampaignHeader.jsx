@@ -101,7 +101,7 @@ const CampaignHeader = ({
                         />
                     )}
 
-                    {/* Modification */}
+                    {/* Modification campagne */}
                     <TooltipButton
                         tooltip={t('campaign.updateCampaign')}
                         content={<MdEdit size={25} />}
@@ -111,7 +111,7 @@ const CampaignHeader = ({
                         isSubmitting={isSubmitting}
                     />
 
-                    {/* Suppression */}
+                    {/* Suppression campagne */}
                     <TooltipButton
                         tooltip={t('campaign.deleteCampaign')}
                         content={<MdDelete size={25} />}

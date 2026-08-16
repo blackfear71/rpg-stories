@@ -7,7 +7,7 @@ import { GiSpellBook } from 'react-icons/gi';
 /**
  * Liste des histoires
  */
-const CampaignSaga = ({ campaign, sagaCampaigns, isSubmitting }) => {
+const CampaignSaga = ({ sagaCampaigns, isSubmitting }) => {
     // Router
     const navigate = useNavigate();
 
@@ -16,8 +16,9 @@ const CampaignSaga = ({ campaign, sagaCampaigns, isSubmitting }) => {
 
     return (
         <>
-            {sagaCampaigns && sagaCampaigns.length > 0 && sagaCampaigns.some((sc) => sc.id !== campaign.id) && (
+            {sagaCampaigns && sagaCampaigns.length > 0 && (
                 <div className="d-flex flex-column p-2 gap-2 rounded campaign-saga">
+                    {/* TODO : il manque le nom de la saga quelque part... */}
                     {/* Titre */}
                     <div className="ms-1 campaign-saga-title">{t('campaign.sagaCampaigns')}</div>
 

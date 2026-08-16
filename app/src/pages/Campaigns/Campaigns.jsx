@@ -11,7 +11,7 @@ import { catchError, finalize, map, take } from 'rxjs/operators';
 import { Spinner, Tab, Tabs } from 'react-bootstrap';
 
 import { CampaignList, SagaList } from '../../components/features';
-import { CampaignModal, SagaModal } from '../../components/modals';
+import { CampaignModal, ConfirmModal, SagaModal } from '../../components/modals';
 import { Message } from '../../components/shared';
 
 import { useAuth } from '../../utils/context/AuthContext';
@@ -55,6 +55,13 @@ const Campaigns = () => {
     const [message, setMessage] = useState(null);
     const [modalOptionsCampaign, setModalOptionsCampaign] = useState({
         action: null,
+        isOpen: false,
+        message: null
+    });
+    const [modalOptionsConfirm, setModalOptionsConfirm] = useState({
+        content: '',
+        action: null,
+        data: null,
         isOpen: false,
         message: null
     });
@@ -366,7 +373,7 @@ const Campaigns = () => {
                 }),
                 switchMap(() => sagasService.getSagas()),
                 map((dataSagas) => {
-                    setSagas(dataSagas.response.data);
+                    processSagasData(campaigns, dataSagas.response.data);
                     openCloseSagaModal();
                 }),
                 take(1),
@@ -422,6 +429,96 @@ const Campaigns = () => {
         });
     };
 
+    /**
+     * Ouverture/fermeture de la modale de confirmation
+     * @param {*} confirmOptions Données modale de confirmation
+     */
+    const openCloseConfirmModal = (confirmOptions) => {
+        // Ouverture ou fermeture
+        if (confirmOptions) {
+            setModalOptionsConfirm({
+                content: confirmOptions.content,
+                action: confirmOptions.action,
+                data: confirmOptions.data,
+                isOpen: !modalOptionsConfirm.isOpen,
+                message: null
+            });
+        } else {
+            setModalOptionsConfirm({
+                content: '',
+                action: null,
+                data: null,
+                isOpen: false,
+                message: null
+            });
+        }
+    };
+
+    /**
+     * Méthode centralisée d'action à la confirmation
+     */
+    const handleConfirmAction = () => {
+        switch (modalOptionsConfirm?.action) {
+            case 'deleteSaga':
+                return handleDeleteSaga(modalOptionsConfirm.data);
+            default:
+                return;
+        }
+    };
+
+    /**
+     * Ouvre la modale de suppression de saga
+     * @param {*} sagaId Identifiant saga
+     */
+    const handleConfirmDeleteSaga = (sagaId, name) => {
+        // Ouverture de la modale de confirmation
+        openCloseConfirmModal({
+            content: t('campaign.confirmDeleteSaga', { name: name }),
+            action: 'deleteSaga',
+            data: sagaId
+        });
+    };
+
+    /**
+     * Suppression de la campagne
+     * @param {*} sagaId Identifiant saga
+     */
+    const handleDeleteSaga = (sagaId) => {
+        setMessage(null);
+        setIsSubmitting(true);
+        setModalOptionsConfirm((prev) => ({ ...prev, message: null }));
+
+        const sagasService = new SagasService();
+
+        sagasService
+            .deleteSaga(sagaId)
+            .pipe(
+                map((dataSagas) => {
+                    setMessage({ code: dataSagas.response.message, type: dataSagas.response.status });
+                }),
+                switchMap(() => sagasService.getSagas()),
+                map((newDataSagas) => {
+                    // Mise à jour des campagnes et sagas
+                    processSagasData(campaigns, newDataSagas.response.data);
+
+                    // Fermeture modale de confirmation
+                    openCloseConfirmModal();
+                }),
+                take(1),
+                catchError((err) => {
+                    setModalOptionsConfirm((prev) => ({
+                        ...prev,
+                        message: { code: err?.response?.message, type: err?.response?.status }
+                    }));
+                    return of();
+                }),
+                finalize(() => {
+                    setIsSubmitting(false);
+                })
+            )
+            .subscribe();
+    };
+
     return (
         <>
             {isLoading ? (
@@ -449,6 +546,7 @@ const Campaigns = () => {
                                 onOpenSaga={openCloseSaga}
                                 onOpenSagaModal={openCloseSagaModal}
                                 onOpenCampaingModal={openCloseCampaignModal}
+                                onConfirm={handleConfirmDeleteSaga}
                                 isSubmitting={isSubmitting}
                             />
                         </Tab>
@@ -478,6 +576,17 @@ const Campaigns = () => {
                             modalOptions={modalOptionsSaga}
                             setModalOptions={setModalOptionsSaga}
                             onClose={openCloseSagaModal}
+                            isSubmitting={isSubmitting}
+                        />
+                    )}
+
+                    {/* Modale de confirmation */}
+                    {modalOptionsConfirm.isOpen && (
+                        <ConfirmModal
+                            modalOptions={modalOptionsConfirm}
+                            setModalOptions={setModalOptionsConfirm}
+                            onClose={openCloseConfirmModal}
+                            onConfirmAction={handleConfirmAction}
                             isSubmitting={isSubmitting}
                         />
                     )}
