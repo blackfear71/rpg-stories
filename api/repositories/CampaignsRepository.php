@@ -74,6 +74,32 @@ class CampaignsRepository
     }
 
     /**
+     * Lecture des campagnes de la même saga
+     */
+    public function getSagaCampaigns(int $sagaId, int $userId): array
+    {
+        $sql = "SELECT id, saga_id, name, universe, players, picture
+            FROM {$this->campaignsTable}
+            WHERE saga_id = :saga_id AND created_by = :created_by AND is_active = 1
+            ORDER BY id DESC";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'saga_id' => $sagaId,
+            'created_by' => $userId
+        ]);
+
+        return array_map(fn($row) => new Campaign(
+            id: (int) $row['id'],
+            sagaId: $row['saga_id'] !== null ? (int) $row['saga_id'] : null,
+            name: $row['name'],
+            universe: $row['universe'],
+            players: (int) $row['players'],
+            picture: $row['picture']
+        ), $stmt->fetchAll(PDO::FETCH_ASSOC));
+    }
+
+    /**
      * Lecture des campagnes recherchées
      */
     public function getSearchCampaigns(string $search, int $userId): array

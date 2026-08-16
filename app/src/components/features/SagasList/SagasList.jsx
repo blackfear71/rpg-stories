@@ -2,6 +2,7 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from 'react-bootstrap';
+import { FaTimes } from 'react-icons/fa';
 import { GiBookshelf, GiSpellBook } from 'react-icons/gi';
 import { IoAddCircleOutline } from 'react-icons/io5';
 
@@ -31,7 +32,7 @@ const SagasList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCa
                 </Button>
 
                 {/* Sagas */}
-                {/* TODO : il va falloir pouvoir modifier/supprimer les sagas */}
+                {/* TODO : il va falloir pouvoir modifier/supprimer les sagas => boutons à l'intérieur des campagnes dépliées */}
                 {sagas &&
                     sagas.length > 0 &&
                     sagas.map((saga) => (
@@ -68,9 +69,21 @@ const SagasList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCa
                             </Button>
 
                             {/* Campagnes d'une saga */}
-                            {/* TODO : prévoir un bouton de fermeture */}
                             {sagaCampaigns.isOpen && sagaCampaigns.sagaId === saga.id && (
                                 <div className="rounded p-3 campaigns-saga-panel">
+                                    {/* Bouton fermeture */}
+                                    <div className="d-flex justify-content-end mb-3">
+                                        <Button
+                                            variant="outline-text-action"
+                                            className="gap-1 campaigns-saga-close-button"
+                                            onClick={() => onOpenSaga(saga.id)}
+                                        >
+                                            <FaTimes />
+                                            {t('common.close')}
+                                        </Button>
+                                    </div>
+
+                                    {/* Liste des campagnes de la saga */}
                                     <CampaignsList
                                         campaigns={sagaCampaigns.campaigns}
                                         sagaId={saga.id}

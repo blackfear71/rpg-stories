@@ -85,6 +85,24 @@ class CampaignsService
     }
 
     /**
+     * Lecture des campagnes de la même saga
+     */
+    public function getSagaCampaigns(int $sagaId, int $userId): array
+    {
+        // Lecture des campagnes
+        $campaigns = $this->campaignsRepository->getSagaCampaigns($sagaId, $userId);
+
+        return array_map(fn($campaign) => new CampaignOutputDTO(
+            id: $campaign->id,
+            sagaId: $campaign->sagaId,
+            name: $campaign->name,
+            universe: $campaign->universe,
+            players: $campaign->players,
+            picture: $campaign->picture
+        ), $campaigns);
+    }
+
+    /**
      * Lecture des campagnes recherchées
      */
     public function getSearchCampaigns(string $search, int $userId): array

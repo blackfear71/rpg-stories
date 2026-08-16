@@ -82,6 +82,7 @@ const Campaign = () => {
 
     // API states
     const [campaign, setCampaign] = useState();
+    const [sagaCampaigns, setSagaCampaigns] = useState([]);
     const [sagas, setSagas] = useState([]);
     const [stories, setStories] = useState([]);
 
@@ -157,6 +158,12 @@ const Campaign = () => {
                     setCampaign(dataCampaign.response.data);
                     setSagas(dataSagas.response.data);
                     setStories(dataStories.response.data);
+
+                    return dataCampaign.response.data;
+                }),
+                switchMap((campaignData) => (campaignData?.sagaId ? campaignsService.getSagaCampaigns(campaignData.sagaId) : of(null))),
+                map((dataSagaCampaigns) => {
+                    dataSagaCampaigns?.response?.data && setSagaCampaigns(dataSagaCampaigns.response.data);
                 }),
                 take(1),
                 catchError((err) => {
@@ -608,6 +615,17 @@ const Campaign = () => {
                                 onOpenCampaignModal={openCloseCampaignModal}
                                 onConfirm={handleConfirmDeleteCampaign}
                             />
+
+                            {/* Saga */}
+                            {/* TODO : afficher les campagnes de la saga */}
+                            {sagaCampaigns &&
+                                sagaCampaigns.length > 0 &&
+                                sagaCampaigns.some((sc) => sc.id !== campaign.id) &&
+                                sagaCampaigns.map((sagaCampaign) => (
+                                    <div key={`sc-${sagaCampaign.id}`} className="text-white">
+                                        {sagaCampaign.name}
+                                    </div>
+                                ))}
 
                             {/* Timeline */}
                             {(inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE) ||
