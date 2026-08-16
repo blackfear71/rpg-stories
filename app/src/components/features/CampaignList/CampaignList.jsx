@@ -10,7 +10,7 @@ import { EnumAction } from '../../../enums';
 /**
  * Liste des campagnes
  */
-const CampaignsList = ({ campaigns, onOpen, isSubmitting }) => {
+const CampaignList = ({ campaigns, onOpen, isSubmitting }) => {
     // Router
     const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ const CampaignsList = ({ campaigns, onOpen, isSubmitting }) => {
     return (
         <>
             {/* Liste des campagnes */}
-            <div className="gap-3 campaigns-grid">
+            <div className="gap-3 campaigns-list-container">
                 {/* Ajout */}
                 <Button
                     className="d-flex flex-column align-items-center justify-content-center gap-2 campaigns-button"
@@ -80,4 +80,4 @@ const CampaignsList = ({ campaigns, onOpen, isSubmitting }) => {
     );
 };
 
-export default CampaignsList;
+export default CampaignList;

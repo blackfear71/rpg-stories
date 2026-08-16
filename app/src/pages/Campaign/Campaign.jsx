@@ -10,7 +10,7 @@ import { catchError, finalize, map, take } from 'rxjs/operators';
 
 import { Spinner } from 'react-bootstrap';
 
-import { CampaignHeader, Story, StoryEntry } from '../../components/features';
+import { CampaignHeader, CampaignSaga, Story, StoryEntry } from '../../components/features';
 import { CampaignModal, ConfirmModal, DraftsModal } from '../../components/modals';
 import { Message } from '../../components/shared';
 
@@ -204,6 +204,7 @@ const Campaign = () => {
         // Initialisation à l'ouverture de la modale
         if (modalOptionsCampaign.isOpen && campaign) {
             formCampaign.setValues({
+                sagaId: campaign.sagaId,
                 name: campaign.name,
                 universe: campaign.universe,
                 players: campaign.players,
@@ -614,20 +615,14 @@ const Campaign = () => {
                                 onOpenDraftsModal={openCloseDraftsModal}
                                 onOpenCampaignModal={openCloseCampaignModal}
                                 onConfirm={handleConfirmDeleteCampaign}
+                                isSubmitting={isSubmitting}
                             />
 
                             {/* Saga */}
-                            {/* TODO : afficher les campagnes de la saga */}
-                            {sagaCampaigns &&
-                                sagaCampaigns.length > 0 &&
-                                sagaCampaigns.some((sc) => sc.id !== campaign.id) &&
-                                sagaCampaigns.map((sagaCampaign) => (
-                                    <div key={`sc-${sagaCampaign.id}`} className="text-white">
-                                        {sagaCampaign.name}
-                                    </div>
-                                ))}
+                            <CampaignSaga campaign={campaign} sagaCampaigns={sagaCampaigns} isSubmitting={isSubmitting} />
 
                             {/* Timeline */}
+                            {/* TODO : faire un composant StoryList */}
                             {(inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE) ||
                             (stories && stories.length > 0) ? (
                                 <div className="d-flex flex-column gap-3 campaign-stories">

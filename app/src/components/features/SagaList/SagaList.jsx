@@ -6,21 +6,23 @@ import { FaTimes } from 'react-icons/fa';
 import { GiBookshelf, GiSpellBook } from 'react-icons/gi';
 import { IoAddCircleOutline } from 'react-icons/io5';
 
-import { CampaignsList } from '../../../components/features';
+import { CampaignList } from '../../../components/features';
 
 import { EnumAction } from '../../../enums';
+
+import './SagaList.css';
 
 /**
  * Liste des sagas
  */
-const SagasList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCampaingModal, isSubmitting }) => {
+const SagaList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCampaingModal, isSubmitting }) => {
     // Traductions
     const { t } = useTranslation();
 
     return (
         <>
             {/* Liste des sagas */}
-            <div className="gap-3 campaigns-grid">
+            <div className="gap-3 campaigns-list-container">
                 {/* Ajout */}
                 <Button
                     className="d-flex flex-column align-items-center justify-content-center gap-2 campaigns-button"
@@ -38,7 +40,7 @@ const SagasList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCa
                     sagas.map((saga) => (
                         <Fragment key={saga.id}>
                             <Button
-                                className={`d-flex flex-column align-items-start justify-content-center p-3 gap-2 campaigns-button ${sagaCampaigns.isOpen && sagaCampaigns.sagaId === saga.id && 'campaigns-saga-selected'}`}
+                                className={`d-flex flex-column align-items-start justify-content-center p-3 gap-2 campaigns-button ${sagaCampaigns.isOpen && sagaCampaigns.sagaId === saga.id && 'saga-list-panel-selected'}`}
                                 style={
                                     saga.picture
                                         ? {
@@ -70,12 +72,12 @@ const SagasList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCa
 
                             {/* Campagnes d'une saga */}
                             {sagaCampaigns.isOpen && sagaCampaigns.sagaId === saga.id && (
-                                <div className="rounded p-3 campaigns-saga-panel">
+                                <div className="rounded p-3 saga-list-panel">
                                     {/* Bouton fermeture */}
                                     <div className="d-flex justify-content-end mb-3">
                                         <Button
                                             variant="outline-text-action"
-                                            className="gap-1 campaigns-saga-close-button"
+                                            className="gap-1 saga-list-panel-close-button"
                                             onClick={() => onOpenSaga(saga.id)}
                                         >
                                             <FaTimes />
@@ -84,7 +86,7 @@ const SagasList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCa
                                     </div>
 
                                     {/* Liste des campagnes de la saga */}
-                                    <CampaignsList
+                                    <CampaignList
                                         campaigns={sagaCampaigns.campaigns}
                                         sagaId={saga.id}
                                         onOpen={onOpenCampaingModal}
@@ -99,4 +101,4 @@ const SagasList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCa
     );
 };
 
-export default SagasList;
+export default SagaList;

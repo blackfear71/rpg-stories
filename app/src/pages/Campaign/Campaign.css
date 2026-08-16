@@ -1,3 +1,4 @@
+/* CampaignHeader */
 .campaign-header-container {
     width: 100%;
     min-height: 200px;
@@ -61,6 +62,65 @@
     background-color: var(--color-bg-red-hover) !important;
 }
 
+/* CampaignSaga */
+.campaign-saga {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-white);
+    overflow-x: auto;
+}
+
+.campaign-saga .campaign-saga-title {
+    font-family:
+        'Cinzel-Medium', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-size: medium;
+    color: var(--color-text-white);
+}
+
+.campaign-saga .campaign-saga-button {
+    flex: 0 0 150px;
+    min-width: 0;
+    height: 80px;
+    background-color: var(--color-bg-secondary);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 2px solid var(--color-border-primary);
+    color: var(--color-text-white);
+}
+
+.campaign-saga .campaign-saga-button:hover,
+.campaign-saga .campaign-saga-button:active {
+    background-color: var(--color-bg-tertiary);
+}
+
+.campaign-saga .campaign-saga-button-label {
+    font-family:
+        'Cinzel-Medium', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-size: medium;
+    background-color: var(--color-transparent-bg-primary);
+    color: var(--color-text-white);
+    max-width: 100%;
+    min-width: 0;
+}
+
+.campaign-saga .campaign-saga-button-icon {
+    flex-shrink: 0;
+}
+
+.campaign-saga .campaign-saga-button-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.campaign-saga .campaign-saga-button:hover .campaign-saga-button-label,
+.campaign-saga .campaign-saga-button:active .campaign-saga-button-label {
+    background-color: var(--color-transparent-bg-secondary);
+}
+
+/* Story */
 .campaign-stories {
     position: relative;
     z-index: 1;

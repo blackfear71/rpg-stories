@@ -5,12 +5,12 @@ import { useLocation, useNavigate } from 'react-router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { combineLatest, of, switchMap } from 'rxjs';
+import { combineLatest, forkJoin, of, switchMap } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
 
 import { Spinner, Tab, Tabs } from 'react-bootstrap';
 
-import { CampaignsList, SagasList } from '../../components/features';
+import { CampaignList, SagaList } from '../../components/features';
 import { CampaignModal, SagaModal } from '../../components/modals';
 import { Message } from '../../components/shared';
 
@@ -141,24 +141,7 @@ const Campaigns = () => {
             .pipe(
                 map(([dataCampaigns, dataSagas]) => {
                     setCampaigns(dataCampaigns.response.data);
-
-                    // Ajout d'un groupe "Hors saga" en tête de liste si besoin
-                    let sagasData = dataCampaigns.response.data.some((c) => !c.sagaId)
-                        ? [{ id: null, name: t('campaign.noSaga') }, ...dataSagas.response.data]
-                        : dataSagas.response.data;
-
-                    // Ajout de l'image de la campagne la plus récente et calcul du nombre de campagnes par saga
-                    sagasData = sagasData.map((saga) => {
-                        const filteredCampaigns = dataCampaigns.response.data.filter((c) => c.sagaId === saga.id);
-
-                        return {
-                            ...saga,
-                            picture: filteredCampaigns.filter((c) => c.picture).sort((a, b) => b.id - a.id)[0]?.picture,
-                            campaignCount: filteredCampaigns.length
-                        };
-                    });
-
-                    setSagas(sagasData);
+                    processSagasData(dataCampaigns.response.data, dataSagas.response.data);
                 }),
                 take(1),
                 catchError((err) => {
@@ -230,6 +213,29 @@ const Campaigns = () => {
     }, [modalOptionsCampaign.isOpen]);
 
     /**
+     * Enrichit les données sagas avec les données campagnes
+     * @param {*} dataCampaigns Données campagnes
+     * @param {*} dataSagas Données sagas
+     */
+    const processSagasData = (dataCampaigns, dataSagas) => {
+        // Ajout d'un groupe "Hors saga" en tête de liste si besoin
+        let sagasData = dataCampaigns.some((c) => !c.sagaId) ? [{ id: null, name: t('campaign.noSaga') }, ...dataSagas] : dataSagas;
+
+        // Ajout de l'image de la campagne la plus récente et calcul du nombre de campagnes par saga
+        sagasData = sagasData.map((saga) => {
+            const filteredCampaigns = dataCampaigns.filter((c) => c.sagaId === saga.id);
+
+            return {
+                ...saga,
+                picture: filteredCampaigns.filter((c) => c.picture).sort((a, b) => b.id - a.id)[0]?.picture,
+                campaignCount: filteredCampaigns.length
+            };
+        });
+
+        setSagas(sagasData);
+    };
+
+    /**
      * Ouverture/fermeture de la modale de création de campagne
      * @param {*} action Action à réaliser
      */
@@ -256,6 +262,10 @@ const Campaigns = () => {
         const body = formatDataCampaign(values);
 
         const campaignsService = new CampaignsService();
+        const sagasService = new SagasService();
+
+        const subscriptionCampaigns = campaignsService.getCampaigns();
+        const subscriptionSagas = sagasService.getSagas();
 
         campaignsService
             .createCampaign(body)
@@ -263,9 +273,23 @@ const Campaigns = () => {
                 map((dataCampaign) => {
                     setMessage({ code: dataCampaign.response.message, type: dataCampaign.response.status });
                 }),
-                switchMap(() => campaignsService.getCampaigns()),
-                map((dataCampaigns) => {
-                    setCampaigns(dataCampaigns.response.data);
+                switchMap(() => forkJoin([subscriptionCampaigns, subscriptionSagas])),
+                map(([dataCampaigns, dataSagas]) => {
+                    const updatedCampaigns = dataCampaigns.response.data;
+
+                    // Mise à jour des campagnes et sagas
+                    setCampaigns(updatedCampaigns);
+                    processSagasData(updatedCampaigns, dataSagas.response.data);
+
+                    // Mise à jour des campagnes de la saga ouverte (si on est sur l'onglet des sagas)
+                    if (sagaCampaigns?.isOpen) {
+                        setSagaCampaigns({
+                            ...sagaCampaigns,
+                            campaigns: updatedCampaigns.filter((c) => c.sagaId === sagaCampaigns.sagaId)
+                        });
+                    }
+
+                    // Fermeture de la modale de création de campagne
                     openCloseCampaignModal();
                 }),
                 take(1),
@@ -419,7 +443,7 @@ const Campaigns = () => {
                     >
                         {/* Sagas */}
                         <Tab eventKey="sagas" title={t('campaign.sagas')}>
-                            <SagasList
+                            <SagaList
                                 sagas={sagas}
                                 sagaCampaigns={sagaCampaigns}
                                 onOpenSaga={openCloseSaga}
@@ -431,7 +455,7 @@ const Campaigns = () => {
 
                         {/* Campagnes */}
                         <Tab eventKey="campaigns" title={t('campaign.campaigns')}>
-                            <CampaignsList campaigns={campaigns} onOpen={openCloseCampaignModal} isSubmitting={isSubmitting} />
+                            <CampaignList campaigns={campaigns} onOpen={openCloseCampaignModal} isSubmitting={isSubmitting} />
                         </Tab>
                     </Tabs>
 

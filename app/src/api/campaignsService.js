@@ -65,7 +65,7 @@ class CampaignsService {
      * @param {*} body Saisie
      * @returns Liste des campagnes recherchées
      */
-    // TODO : adapter la recherche pour les sagas
+    // TODO : adapter la recherche pour les sagas (penser au visuel + l'objet retour est une liste de campagnes => pas adapté aux sags, faire un autre appel ?)
     getSearchCampaigns = (body) => {
         const url = `${this.apiUrl}/search`;
         return ajax({
