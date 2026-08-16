@@ -19,8 +19,8 @@ class SagaOutputDTO implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'id'        => $this->id,
-            'name'      => $this->name
+            'id'   => $this->id,
+            'name' => $this->name
         ];
     }
 }

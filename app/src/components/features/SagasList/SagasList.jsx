@@ -1,15 +1,18 @@
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from 'react-bootstrap';
-import { GiBookshelf } from 'react-icons/gi';
+import { GiBookshelf, GiSpellBook } from 'react-icons/gi';
 import { IoAddCircleOutline } from 'react-icons/io5';
+
+import { CampaignsList } from '../../../components/features';
 
 import { EnumAction } from '../../../enums';
 
 /**
  * Liste des sagas
  */
-const SagasList = ({ sagas, onOpen, isSubmitting }) => {
+const SagasList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCampaingModal, isSubmitting }) => {
     // Traductions
     const { t } = useTranslation();
 
@@ -20,7 +23,7 @@ const SagasList = ({ sagas, onOpen, isSubmitting }) => {
                 {/* Ajout */}
                 <Button
                     className="d-flex flex-column align-items-center justify-content-center gap-2 campaigns-button"
-                    onClick={() => onOpen(EnumAction.CREATE)}
+                    onClick={() => onOpenSagaModal(EnumAction.CREATE)}
                     disabled={isSubmitting}
                 >
                     <IoAddCircleOutline size={30} />
@@ -29,31 +32,55 @@ const SagasList = ({ sagas, onOpen, isSubmitting }) => {
 
                 {/* Sagas */}
                 {/* TODO : il va falloir pouvoir modifier/supprimer les sagas */}
-                {/* TODO : il faudra aussi un groupe hors saga */}
                 {sagas &&
                     sagas.length > 0 &&
                     sagas.map((saga) => (
-                        <Button
-                            key={saga.id}
-                            className="d-flex flex-column align-items-start justify-content-center p-3 gap-2 campaigns-button"
-                            // TODO : afficher la dernière image de la campagne la plus récente
-                            // style={
-                            //     campaign.picture
-                            //         ? {
-                            //               backgroundImage: `url(${import.meta.env.VITE_API_URL}/serve-file/images?file=${encodeURIComponent(campaign.picture)})`
-                            //           }
-                            //         : undefined
-                            // }
-                            // TODO : afficher les campagnes au clic
-                            // onClick={() => navigate(`/campaign/${campaign.id}`)}
-                            disabled={isSubmitting}
-                        >
-                            {/* Nom de la saga */}
-                            <div className="d-flex align-items-center gap-2 py-1 px-2 rounded campaigns-button-label">
-                                <GiBookshelf size={30} className="campaigns-button-icon" />
-                                <span className="campaigns-button-text">{saga.name}</span>
-                            </div>
-                        </Button>
+                        <Fragment key={saga.id}>
+                            <Button
+                                className="d-flex flex-column align-items-start justify-content-center p-3 gap-2 campaigns-button"
+                                // TODO : afficher la dernière image de la campagne la plus récente
+                                // style={
+                                //     campaign.picture
+                                //         ? {
+                                //               backgroundImage: `url(${import.meta.env.VITE_API_URL}/serve-file/images?file=${encodeURIComponent(campaign.picture)})`
+                                //           }
+                                //         : undefined
+                                // }
+                                onClick={() => onOpenSaga(saga.id)}
+                                disabled={isSubmitting}
+                            >
+                                {/* Nom de la saga */}
+                                <div className="d-flex align-items-center gap-2 py-1 px-2 rounded campaigns-button-label">
+                                    <GiBookshelf size={30} className="campaigns-button-icon" />
+                                    <span className="campaigns-button-text">{saga.name}</span>
+                                </div>
+
+                                <div className="d-flex gap-2 campaigns-button-badges-wrapper">
+                                    {/* Nombre de campagnes */}
+                                    <div className="d-flex align-items-center gap-1 py-1 px-2 rounded campaigns-button-badge">
+                                        <GiSpellBook size={20} className="campaigns-button-icon" />
+                                        <span className="campaigns-button-text">
+                                            {t(saga.campaignCount === 1 ? 'campaign.countCampaign' : 'campaign.countCampaigns', {
+                                                count: saga.campaignCount
+                                            })}
+                                        </span>
+                                    </div>
+                                </div>
+                            </Button>
+
+                            {/* Campagnes d'une saga */}
+                            {/* TODO : prévoir un bouton de fermeture */}
+                            {sagaCampaigns.isOpen && sagaCampaigns.sagaId === saga.id && (
+                                <div className="rounded p-3 campaigns-saga-panel">
+                                    <CampaignsList
+                                        campaigns={sagaCampaigns.campaigns}
+                                        sagaId={saga.id}
+                                        onOpen={onOpenCampaingModal}
+                                        isSubmitting={isSubmitting}
+                                    />
+                                </div>
+                            )}
+                        </Fragment>
                     ))}
             </div>
         </>

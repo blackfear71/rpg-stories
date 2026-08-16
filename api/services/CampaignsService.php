@@ -45,6 +45,7 @@ class CampaignsService
 
         return array_map(fn($campaign) => new CampaignOutputDTO(
             id: $campaign->id,
+            sagaId: $campaign->sagaId,
             name: $campaign->name,
             universe: $campaign->universe,
             players: $campaign->players,
@@ -75,6 +76,7 @@ class CampaignsService
         // Récupération des données campagne
         return new CampaignOutputDTO(
             id: $dataCampaign->id,
+            sagaId: $dataCampaign->sagaId,
             name: $dataCampaign->name,
             universe: $dataCampaign->universe,
             players: $dataCampaign->players,
@@ -97,6 +99,7 @@ class CampaignsService
 
         return array_map(fn($campaign) => new CampaignOutputDTO(
             id: $campaign->id,
+            sagaId: $campaign->sagaId,
             name: $campaign->name,
             universe: $campaign->universe,
             players: $campaign->players,

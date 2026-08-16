@@ -101,17 +101,19 @@ const CampaignModal = ({ sagas, formData, modalOptions, setModalOptions, onClose
         })[action] || 'common.unknownLabel';
 
     /**
-     * Renvoie une liste de sagas sélectionnables
+     * Renvoie une liste de sagas sélectionnables (avec un choix vide et sans le choix "Hors sagas")
      */
     const getSagasOptions = () => {
         return (
             sagas &&
             [{ key: 0, value: '', label: '' }].concat(
-                sagas.map((s) => ({
-                    key: s.id,
-                    value: s.id,
-                    label: s.name
-                }))
+                sagas
+                    .filter((s) => s.id)
+                    .map((s) => ({
+                        key: s.id,
+                        value: s.id,
+                        label: s.name
+                    }))
             )
         );
     };

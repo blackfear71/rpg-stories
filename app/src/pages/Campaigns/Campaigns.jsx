@@ -63,6 +63,11 @@ const Campaigns = () => {
         isOpen: false,
         message: null
     });
+    const [sagaCampaigns, setSagaCampaigns] = useState({
+        sagaId: null,
+        campaigns: [],
+        isOpen: false
+    });
 
     // API states
     const [campaigns, setCampaigns] = useState([]);
@@ -136,7 +141,19 @@ const Campaigns = () => {
             .pipe(
                 map(([dataCampaigns, dataSagas]) => {
                     setCampaigns(dataCampaigns.response.data);
-                    setSagas(dataSagas.response.data);
+
+                    // Ajout d'un groupe "Hors saga" en tête de liste si besoin
+                    let sagasData = dataCampaigns.response.data.some((c) => !c.sagaId)
+                        ? [{ id: null, name: t('campaign.noSaga') }, ...dataSagas.response.data]
+                        : dataSagas.response.data;
+
+                    // Calcul du nombre de campagnes par saga
+                    sagasData = sagasData.map((saga) => ({
+                        ...saga,
+                        campaignCount: dataCampaigns.response.data.filter((c) => c.sagaId === saga.id).length
+                    }));
+
+                    setSagas(sagasData);
                 }),
                 take(1),
                 catchError((err) => {
@@ -184,10 +201,27 @@ const Campaigns = () => {
     }, [authMessage, setAuthMessage, location.state, location.pathname, navigate]);
 
     /**
+     * Changement d'onglet
+     * @param {*} tab Onglet sélectionné
+     */
+    const handleSelectTab = (tab) => {
+        // Si on quitte l'onglet Sagas, on réinitialise la saga ouverte
+        if (tab !== 'sagas') {
+            setSagaCampaigns({ sagaId: null, campaigns: [], isOpen: false });
+        }
+    };
+
+    /**
      * Réinitialisation à l'ouverture/fermeture de la modale campagne
      */
     useEffect(() => {
+        // Réinitialisation du formulaire
         formCampaign.resetForm();
+
+        // Quand on ouvre la modale depuis une saga, on initialise la saga dans le formulaire
+        if (modalOptionsCampaign.isOpen && sagaCampaigns.isOpen && sagaCampaigns.sagaId) {
+            formCampaign.setFieldValue('sagaId', sagaCampaigns.sagaId);
+        }
     }, [modalOptionsCampaign.isOpen]);
 
     /**
@@ -339,6 +373,26 @@ const Campaigns = () => {
         return formData;
     };
 
+    /**
+     * Ouverture/fermeture d'une saga
+     * @param {*} sagaId Identifiant saga
+     */
+    const openCloseSaga = (sagaId) => {
+        setSagaCampaigns((prev) => {
+            // Clic sur la saga ouverte : on ferme et on réinitialise le state
+            if (prev.sagaId === sagaId && prev.isOpen) {
+                return { sagaId: null, campaigns: [], isOpen: false };
+            }
+
+            // Clic sur une saga différente : on ferme l'actuelle et on ouvre la nouvelle
+            return {
+                sagaId: sagaId,
+                campaigns: campaigns.filter((c) => c.sagaId === sagaId),
+                isOpen: true
+            };
+        });
+    };
+
     return (
         <>
             {isLoading ? (
@@ -354,12 +408,20 @@ const Campaigns = () => {
                     <Tabs
                         variant="pills"
                         defaultActiveKey="sagas"
+                        onSelect={handleSelectTab}
                         id="campaigns-tabs"
                         className="p-1 mb-3 gap-1 justify-content-center page-tabs"
                     >
                         {/* Sagas */}
                         <Tab eventKey="sagas" title={t('campaign.sagas')}>
-                            <SagasList sagas={sagas} onOpen={openCloseSagaModal} isSubmitting={isSubmitting} />
+                            <SagasList
+                                sagas={sagas}
+                                sagaCampaigns={sagaCampaigns}
+                                onOpenSaga={openCloseSaga}
+                                onOpenSagaModal={openCloseSagaModal}
+                                onOpenCampaingModal={openCloseCampaignModal}
+                                isSubmitting={isSubmitting}
+                            />
                         </Tab>
 
                         {/* Campagnes */}

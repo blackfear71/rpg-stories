@@ -3,12 +3,13 @@
 }
 
 .campaigns-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 300px));
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
 }
 
 .campaigns-grid .campaigns-button {
+    flex: 0 1 300px;
     width: 100%;
     min-width: 0;
     height: 200px;
@@ -74,8 +75,16 @@
     flex-shrink: 0;
 }
 
+.campaigns-saga-panel {
+    flex: 0 0 100%;
+    max-width: 100%;
+    background-color: var(--color-bg-tertiary);
+}
+
 @media (max-width: 576px) {
-    .campaigns-grid {
-        grid-template-columns: 1fr;
+    .campaigns-grid .campaigns-button,
+    .campaigns-grid .campaigns-saga-panel {
+        flex: 1 1 100%;
+        max-width: 100%;
     }
 }

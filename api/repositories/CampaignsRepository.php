@@ -22,7 +22,7 @@ class CampaignsRepository
      */
     public function getCampaigns(int $userId): array
     {
-        $sql = "SELECT id, name, universe, players, picture
+        $sql = "SELECT id, saga_id, name, universe, players, picture
             FROM {$this->campaignsTable}
             WHERE created_by = :created_by AND is_active = 1
             ORDER BY id DESC";
@@ -34,6 +34,7 @@ class CampaignsRepository
 
         return array_map(fn($row) => new Campaign(
             id: (int) $row['id'],
+            sagaId: $row['saga_id'] !== null ? (int) $row['saga_id'] : null,
             name: $row['name'],
             universe: $row['universe'],
             players: (int) $row['players'],
@@ -46,7 +47,7 @@ class CampaignsRepository
      */
     public function getCampaign(int $campaignId, int $userId): ?Campaign
     {
-        $sql = "SELECT id, name, universe, players, picture
+        $sql = "SELECT id, saga_id, name, universe, players, picture
             FROM {$this->campaignsTable}
             WHERE id = :id AND created_by = :created_by AND is_active = 1";
 
@@ -64,6 +65,7 @@ class CampaignsRepository
 
         return new Campaign(
             id: (int) $row['id'],
+            sagaId: $row['saga_id'] !== null ? (int) $row['saga_id'] : null,
             name: $row['name'],
             universe: $row['universe'],
             players: (int) $row['players'],
@@ -76,7 +78,7 @@ class CampaignsRepository
      */
     public function getSearchCampaigns(string $search, int $userId): array
     {
-        $sql = "SELECT id, name, universe, players
+        $sql = "SELECT id, saga_id, name, universe, players
             FROM {$this->campaignsTable}
             WHERE (name LIKE :search OR universe LIKE :search) AND created_by = :created_by AND is_active = 1
             ORDER BY id DESC";
@@ -89,6 +91,7 @@ class CampaignsRepository
 
         return array_map(fn($row) => new Campaign(
             id: (int) $row['id'],
+            sagaId: $row['saga_id'] !== null ? (int) $row['saga_id'] : null,
             name: $row['name'],
             universe: $row['universe'],
             players: (int) $row['players']
