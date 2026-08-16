@@ -229,7 +229,7 @@ const Campaign = () => {
      */
     useEffect(() => {
         // Initialisation à l'ouverture de la saisie en modification
-        if (inputOptionsStory.isOpen && inputOptionsStory.action === EnumAction.UPDATE && inputOptionsStory.storyId) {
+        if (inputOptionsStory.isOpen && inputOptionsStory.storyId && inputOptionsStory.action === EnumAction.UPDATE) {
             const currentStory = stories.find((g) => g.id === inputOptionsStory.storyId);
 
             if (currentStory) {
@@ -614,7 +614,7 @@ const Campaign = () => {
     };
 
     return (
-        <div>
+        <>
             {isLoading ? (
                 <div className="d-flex align-items-center justify-content-center layout-spinner-centered">
                     <Spinner animation="border" role="status" variant="light" />
@@ -641,7 +641,13 @@ const Campaign = () => {
                             />
 
                             {/* Saga */}
-                            <CampaignSaga sagaCampaigns={sagaCampaigns} isSubmitting={isSubmitting} />
+                            {sagas && sagaCampaigns && sagaCampaigns.length > 0 && (
+                                <CampaignSaga
+                                    saga={sagas.find((s) => s.id === campaign.sagaId)}
+                                    sagaCampaigns={sagaCampaigns}
+                                    isSubmitting={isSubmitting}
+                                />
+                            )}
 
                             {/* Timeline */}
                             {/* TODO : faire un composant StoryList */}
@@ -729,7 +735,7 @@ const Campaign = () => {
                     )}
                 </>
             )}
-        </div>
+        </>
     );
 };
 

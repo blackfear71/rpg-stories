@@ -98,7 +98,7 @@
         "rest": "Long repos",
         "sagaName": "Nom de la saga",
         "saga": "Saga",
-        "sagaCampaigns": "Les campagnes de la saga",
+        "sagaCampaigns": "Les campagnes de la saga : {{name}}",
         "sagas": "Sagas",
         "story": "Histoire",
         "symbols": "Symboles",

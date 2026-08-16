@@ -32,6 +32,7 @@ const initialCampaignValues = {
     pictureAction: null
 };
 const initialSagaValues = {
+    id: null,
     name: ''
 };
 
@@ -67,6 +68,7 @@ const Campaigns = () => {
     });
     const [modalOptionsSaga, setModalOptionsSaga] = useState({
         action: null,
+        sagaId: null,
         isOpen: false,
         message: null
     });
@@ -196,17 +198,6 @@ const Campaigns = () => {
     }, [authMessage, setAuthMessage, location.state, location.pathname, navigate]);
 
     /**
-     * Changement d'onglet
-     * @param {*} tab Onglet sélectionné
-     */
-    const handleSelectTab = (tab) => {
-        // Si on quitte l'onglet Sagas, on réinitialise la saga ouverte
-        if (tab !== 'sagas') {
-            setSagaCampaigns({ sagaId: null, campaigns: [], isOpen: false });
-        }
-    };
-
-    /**
      * Réinitialisation à l'ouverture/fermeture de la modale campagne
      */
     useEffect(() => {
@@ -218,6 +209,38 @@ const Campaigns = () => {
             formCampaign.setFieldValue('sagaId', sagaCampaigns.sagaId);
         }
     }, [modalOptionsCampaign.isOpen]);
+
+    /**
+     * Mise à jour du formulaire de la saga aux changements de sa modale
+     */
+    useEffect(() => {
+        // Initialisation à l'ouverture de la modale
+        if (modalOptionsSaga.isOpen && modalOptionsSaga.sagaId && modalOptionsSaga.action === EnumAction.UPDATE) {
+            const currentSaga = sagas.find((s) => s.id === modalOptionsSaga.sagaId);
+
+            currentSaga &&
+                formSaga.setValues({
+                    id: currentSaga.id,
+                    name: currentSaga.name
+                });
+        }
+
+        // Réinitialisation à la fermeture de la modale ou à l'ouverture de la saisie en création
+        if (!modalOptionsSaga.isOpen || modalOptionsSaga.action === EnumAction.CREATE) {
+            formSaga.resetForm();
+        }
+    }, [modalOptionsSaga.isOpen, modalOptionsSaga.sagaId]);
+
+    /**
+     * Changement d'onglet
+     * @param {*} tab Onglet sélectionné
+     */
+    const handleSelectTab = (tab) => {
+        // Si on quitte l'onglet Sagas, on réinitialise la saga ouverte
+        if (tab !== 'sagas') {
+            setSagaCampaigns({ sagaId: null, campaigns: [], isOpen: false });
+        }
+    };
 
     /**
      * Enrichit les données sagas avec les données campagnes
@@ -341,11 +364,12 @@ const Campaigns = () => {
      * Ouverture/fermeture de la modale de création de saga
      * @param {*} action Action à réaliser
      */
-    const openCloseSagaModal = (action = null) => {
+    const openCloseSagaModal = (action = null, sagaId = null) => {
         // Ouverture ou fermeture
         setModalOptionsSaga((prev) => ({
             ...prev,
             action: action,
+            sagaId: sagaId,
             isOpen: !prev.isOpen,
             message: null
         }));
@@ -357,17 +381,31 @@ const Campaigns = () => {
      */
     const handleSubmitSaga = (values) => {
         setMessage(null);
-        setIsSubmitting(true);
-        setModalOptionsSaga((prev) => ({ ...prev, message: null }));
 
         // Formatage des données
         const body = formatDataSaga(values);
 
         const sagasService = new SagasService();
 
-        sagasService
-            .createSaga(body)
-            .pipe(
+        let subscriptionSagas = null;
+
+        switch (modalOptionsSaga?.action) {
+            case EnumAction.CREATE:
+                setIsSubmitting(true);
+                setModalOptionsSaga((prev) => ({ ...prev, message: null }));
+
+                subscriptionSagas = sagasService.createSaga(body);
+                break;
+            case EnumAction.UPDATE:
+                setIsSubmitting(true);
+                setModalOptionsSaga((prev) => ({ ...prev, message: null }));
+
+                subscriptionSagas = sagasService.updateSaga(values.id, body);
+                break;
+        }
+
+        subscriptionSagas
+            ?.pipe(
                 map((dataSaga) => {
                     setMessage({ code: dataSaga.response.message, type: dataSaga.response.status });
                 }),
