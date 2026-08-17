@@ -46,6 +46,21 @@ class CampaignsService {
     };
 
     /**
+     * Récupération des campagnes de la même saga
+     * @param {*} sagaId Identifiant saga
+     * @returns Liste des campagnes de la même saga
+     */
+    getSagaCampaigns = (sagaId) => {
+        const url = `${this.apiUrl}/saga/${sagaId}`;
+        return ajax({
+            url,
+            method: 'GET',
+            headers: this.headers,
+            withCredentials: true
+        });
+    };
+
+    /**
      * Récupération des campagnes recherchées
      * @param {*} body Saisie
      * @returns Liste des campagnes recherchées

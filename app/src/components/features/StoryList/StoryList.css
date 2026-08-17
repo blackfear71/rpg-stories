@@ -1,0 +1,23 @@
+.story-list-container {
+    position: relative;
+    z-index: 1;
+}
+
+.story-list-entry-wrapper {
+    scroll-margin-top: 70px;
+}
+
+.story-list-timeline {
+    position: absolute;
+    top: 0;
+    left: 14px;
+    width: 2px;
+    height: 100%;
+    background-color: var(--color-bg-tertiary);
+}
+
+.story-list-empty {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-white);
+    text-align: center;
+}

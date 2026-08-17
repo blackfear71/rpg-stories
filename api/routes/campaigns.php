@@ -31,6 +31,20 @@ $router->get('/campaigns/campaign/:campaignId', function (array $params) use ($d
 });
 
 /**
+ * Lecture des campagnes de la même saga
+ */
+$router->get('/campaigns/saga/:sagaId', function (array $params) use ($db): void {
+    // Token
+    $token = $_COOKIE['token'] ?? null;
+
+    // Paramètres
+    $sagaId = DataHelper::parseIntParam($params['sagaId']);
+
+    // Appel contrôleur
+    (new CampaignsController($db))->getSagaCampaigns($token, $sagaId);
+});
+
+/**
  * Lecture des campagnes recherchées
  */
 $router->post('/campaigns/search', function () use ($db): void {

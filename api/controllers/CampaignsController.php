@@ -75,6 +75,26 @@ class CampaignsController
     }
 
     /**
+     * Lecture des campagnes de la même saga
+     */
+    public function getSagaCampaigns(?string $token, int $sagaId): void
+    {
+        try {
+            // Contrôle authentification et niveau utilisateur
+            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
+
+            // Lecture de tous les enregistrements
+            $campaigns = $this->campaignsService->getSagaCampaigns($sagaId, $user->id);
+
+            // Succès
+            ResponseHelper::success($campaigns);
+        } catch (Exception $e) {
+            // Exception
+            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, []);
+        }
+    }
+
+    /**
      * Lecture des campagnes recherchées
      */
     public function getSearchCampaigns(?string $token, string $search): void
@@ -84,10 +104,10 @@ class CampaignsController
             $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
 
             // Lecture de tous les enregistrements recherchés
-            $campaigns = $this->campaignsService->getSearchCampaigns($search, $user->id);
+            $searchResults = $this->campaignsService->getSearchCampaigns($search, $user->id);
 
             // Succès
-            ResponseHelper::success($campaigns);
+            ResponseHelper::success($searchResults);
         } catch (Exception $e) {
             // Exception
             ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$search]);

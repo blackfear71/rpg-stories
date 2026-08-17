@@ -517,11 +517,10 @@ const Settings = () => {
 
                             {rights.isAdmin && connectedUser && users ? (
                                 <Tabs
-                                    variant="underline"
+                                    variant="pills"
                                     defaultActiveKey="user"
-                                    id="justify-tab-example"
-                                    className="mb-3 page-tabs"
-                                    justify
+                                    id="settings-tabs"
+                                    className="p-1 mb-3 gap-1 justify-content-center page-tabs"
                                 >
                                     {/* Utilisateur connecté */}
                                     <Tab eventKey="user" title={t('settings.level0')}>

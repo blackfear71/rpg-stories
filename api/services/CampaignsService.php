@@ -1,6 +1,7 @@
 <?php
 // Imports
 require_once 'models/dtos/CampaignOutputDTO.php';
+require_once 'models/dtos/SearchOutputDTO.php';
 
 require_once 'services/StoriesService.php';
 
@@ -45,6 +46,7 @@ class CampaignsService
 
         return array_map(fn($campaign) => new CampaignOutputDTO(
             id: $campaign->id,
+            sagaId: $campaign->sagaId,
             name: $campaign->name,
             universe: $campaign->universe,
             players: $campaign->players,
@@ -75,11 +77,30 @@ class CampaignsService
         // Récupération des données campagne
         return new CampaignOutputDTO(
             id: $dataCampaign->id,
+            sagaId: $dataCampaign->sagaId,
             name: $dataCampaign->name,
             universe: $dataCampaign->universe,
             players: $dataCampaign->players,
             picture: $picture
         );
+    }
+
+    /**
+     * Lecture des campagnes de la même saga
+     */
+    public function getSagaCampaigns(int $sagaId, int $userId): array
+    {
+        // Lecture des campagnes
+        $campaigns = $this->campaignsRepository->getSagaCampaigns($sagaId, $userId);
+
+        return array_map(fn($campaign) => new CampaignOutputDTO(
+            id: $campaign->id,
+            sagaId: $campaign->sagaId,
+            name: $campaign->name,
+            universe: $campaign->universe,
+            players: $campaign->players,
+            picture: $campaign->picture
+        ), $campaigns);
     }
 
     /**
@@ -93,15 +114,15 @@ class CampaignsService
         }
 
         // Recherche des campagnes
-        $campaigns = $this->campaignsRepository->getSearchCampaigns(trim($search), $userId);
+        $searchResults = $this->campaignsRepository->getSearchCampaigns(trim($search), $userId);
 
-        return array_map(fn($campaign) => new CampaignOutputDTO(
-            id: $campaign->id,
-            name: $campaign->name,
-            universe: $campaign->universe,
-            players: $campaign->players,
-            picture: $campaign->picture
-        ), $campaigns);
+        return array_map(fn($searchResult) => new SearchOutputDTO(
+            campaignId: $searchResult->campaignId,
+            campaignName: $searchResult->campaignName,
+            sagaId: $searchResult->sagaId,
+            sagaName: $searchResult->sagaName,
+            universe: $searchResult->universe
+        ), $searchResults);
     }
 
     /**
@@ -117,8 +138,9 @@ class CampaignsService
 
         // Construction de l'objet
         $campaign = new Campaign(
+            sagaId: $data->sagaId,
             name: trim($data->name),
-            universe: trim($data->universe),
+            universe: $data->universe ? trim($data->universe) : null,
             players: $data->players,
             picture: $picture,
             createdBy: $userId
@@ -148,8 +170,9 @@ class CampaignsService
         // Construction de l'objet
         $campaign = new Campaign(
             id: $campaignId,
+            sagaId: $data->sagaId,
             name: trim($data->name),
-            universe: trim($data->universe),
+            universe: $data->universe ? trim($data->universe) : null,
             players: $data->players,
             picture: $picture,
             createdBy: $userId,
@@ -158,6 +181,22 @@ class CampaignsService
 
         // Modification
         if (!$this->campaignsRepository->updateCampaign($campaign)) {
+            throw new \RuntimeException(MessageHelper::ERR_UPDATE_FAILED);
+        }
+    }
+
+    /**
+     * Modification de la saga des campagnes liées
+     */
+    public function updateCampaignsSaga(int $sagaId, int $userId): void
+    {
+        // Contrôle des données
+        if (!$sagaId) {
+            throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
+        }
+
+        // Modification
+        if (!$this->campaignsRepository->updateCampaignsSaga($sagaId, $userId)) {
             throw new \RuntimeException(MessageHelper::ERR_UPDATE_FAILED);
         }
     }

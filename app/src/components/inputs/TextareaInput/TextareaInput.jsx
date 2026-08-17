@@ -31,7 +31,7 @@ const TextareaInput = ({ title, icon, name, ref, placeholder, value, onChange, e
                         name={name}
                         placeholder={placeholder}
                         className="textarea-input"
-                        value={value}
+                        value={value || ''}
                         onChange={onChange}
                         isInvalid={!!error}
                     />

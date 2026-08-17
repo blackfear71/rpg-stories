@@ -72,13 +72,24 @@
 }
 
 .search-result-item-left {
-    text-overflow: ellipsis;
+    min-width: 0;
+    max-width: 70%;
+    flex: 1 1 auto;
     overflow: hidden;
-    white-space: nowrap;
+    color: var(--color-text-primary);
 }
 
 .search-result-item-right {
+    min-width: 0;
+    max-width: 30%;
+    flex: 0 0 auto;
     font-size: small;
-    color: var(--color-text-secondary);
+    color: var(--color-text-tertiary);
+}
+
+.search-result-item-text {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
 }

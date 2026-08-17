@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, Form, Modal } from 'react-bootstrap';
 import { FaWandSparkles } from 'react-icons/fa6';
-import { GiCastle, GiHills, GiMeepleGroup, GiSpellBook } from 'react-icons/gi';
+import { GiBookshelf, GiCastle, GiHills, GiMeepleGroup, GiSpellBook } from 'react-icons/gi';
 
-import { IncrementInput, PictureInput, TextInput } from '../../../components/inputs';
+import { IncrementInput, PictureInput, SelectInput, TextInput } from '../../../components/inputs';
 import { Message, SpinnerButton } from '../../../components/shared';
 
 import { EnumAction } from '../../../enums';
@@ -13,7 +13,7 @@ import { EnumAction } from '../../../enums';
 /**
  * Modale campagne
  */
-const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSubmitting }) => {
+const CampaignModal = ({ sagas, formData, modalOptions, setModalOptions, onClose, isSubmitting }) => {
     // Traductions
     const { t } = useTranslation();
 
@@ -21,7 +21,7 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
     const nameInputRef = useRef(null);
 
     /**
-     * Met le focus sur le champ "lieu" à l'ouverture de la modale
+     * Met le focus sur le champ "nom" à l'ouverture de la modale
      */
     useEffect(() => {
         // Focus à la création
@@ -36,6 +36,17 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
      */
     const setModalMessage = (message) => {
         setModalOptions((prev) => ({ ...prev, message: message }));
+    };
+
+    /**
+     * Met à jour le formulaire à la saisie
+     * @param {*} e Evènement
+     */
+    const handleChangeSelect = (e) => {
+        formData.setValues((prev) => ({
+            ...prev,
+            sagaId: e.target.value === '' ? '' : parseInt(e.target.value)
+        }));
     };
 
     /**
@@ -90,6 +101,24 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
         })[action] || 'common.unknownLabel';
 
     /**
+     * Renvoie une liste de sagas sélectionnables (avec un choix vide et sans le choix "Hors sagas")
+     */
+    const getSagasOptions = () => {
+        return (
+            sagas &&
+            [{ key: 0, value: '', label: '' }].concat(
+                sagas
+                    .filter((s) => s.id)
+                    .map((s) => ({
+                        key: s.id,
+                        value: s.id,
+                        label: s.name
+                    }))
+            )
+        );
+    };
+
+    /**
      * Détermination du bouton selon l'action à réaliser
      */
     const getButtonFromAction = (action) =>
@@ -116,7 +145,7 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
                                 <TextInput
                                     title={t('campaign.campaignName')}
                                     icon={<GiSpellBook />}
-                                    name="name"
+                                    name={'name'}
                                     ref={nameInputRef}
                                     placeholder={t('campaign.campaignName')}
                                     value={formData.values.name}
@@ -128,13 +157,31 @@ const CampaignModal = ({ formData, modalOptions, setModalOptions, onClose, isSub
                             </div>
                         </div>
 
+                        {/* Saga */}
+                        {sagas && (
+                            <div className="modal-group">
+                                <div className="modal-group-content">
+                                    <SelectInput
+                                        title={t('campaign.saga')}
+                                        icon={<GiBookshelf />}
+                                        name={'sagaId'}
+                                        defaultOption={{ key: 0, value: '', label: t('campaign.chooseSaga') }}
+                                        options={getSagasOptions()}
+                                        value={formData.values.sagaId}
+                                        onChange={handleChangeSelect}
+                                        error={formData.submitCount > 0 && formData.errors.sagaId}
+                                    />
+                                </div>
+                            </div>
+                        )}
+
                         {/* Univers */}
                         <div className="modal-group">
                             <div className="modal-group-content">
                                 <TextInput
                                     title={t('campaign.universe')}
                                     icon={<GiCastle />}
-                                    name="universe"
+                                    name={'universe'}
                                     placeholder={t('campaign.universe')}
                                     value={formData.values.universe}
                                     onChange={formData.handleChange}

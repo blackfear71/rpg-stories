@@ -1,20 +1,16 @@
 <?php
 
 /**
- * Représente une campagne en base
+ * Représente une saga en base
  */
-class Campaign
+class Saga
 {
     /**
      * Constructeur
      */
     public function __construct(
         public readonly int                 $id        = 0,
-        public readonly ?int                $sagaId    = null,
         public readonly string              $name      = '',
-        public readonly ?string             $universe  = null,
-        public readonly int                 $players   = 0,
-        public readonly ?string             $picture   = null,
         public readonly \DateTimeImmutable  $createdAt = new DateTimeImmutable(),
         public readonly int                 $createdBy = 0,
         public readonly ?\DateTimeImmutable $updatedAt = null,

@@ -10,8 +10,9 @@ class CampaignOutputDTO implements \JsonSerializable
      */
     public function __construct(
         public readonly int     $id       = 0,
+        public readonly ?int    $sagaId   = null,
         public readonly string  $name     = '',
-        public readonly ?string $universe = '',
+        public readonly ?string $universe = null,
         public readonly int     $players  = 0,
         public readonly ?string $picture  = null
     ) {}
@@ -22,11 +23,12 @@ class CampaignOutputDTO implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'id'          => $this->id,
-            'name'        => $this->name,
-            'universe'    => $this->universe,
-            'players'     => $this->players,
-            'picture'     => $this->picture
+            'id'       => $this->id,
+            'sagaId'   => $this->sagaId,
+            'name'     => $this->name,
+            'universe' => $this->universe,
+            'players'  => $this->players,
+            'picture'  => $this->picture
         ];
     }
 }

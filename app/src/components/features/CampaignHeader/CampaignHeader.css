@@ -60,27 +60,3 @@
 .btn.campaign-header-button:active {
     background-color: var(--color-bg-red-hover) !important;
 }
-
-.campaign-stories {
-    position: relative;
-    z-index: 1;
-}
-
-.campaign-story-entry-wrapper {
-    scroll-margin-top: 70px;
-}
-
-.campaign-stories-timeline {
-    position: absolute;
-    top: 0;
-    left: 14px;
-    width: 2px;
-    height: 100%;
-    background-color: var(--color-bg-tertiary);
-}
-
-.campaign-stories-empty {
-    background-color: var(--color-bg-secondary);
-    color: var(--color-text-white);
-    text-align: center;
-}

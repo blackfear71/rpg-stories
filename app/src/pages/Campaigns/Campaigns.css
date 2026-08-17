@@ -2,13 +2,14 @@
     min-height: calc(100vh - 130px); /* 60px navbar + 20px padding-top + 20px padding-bottom + 30px footer */
 }
 
-.campaigns-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 300px));
+.campaigns-list-container {
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
 }
 
-.campaigns-grid .campaigns-button {
+.campaigns-list-container .campaigns-button {
+    flex: 0 1 300px;
     width: 100%;
     min-width: 0;
     height: 200px;
@@ -20,12 +21,12 @@
     color: var(--color-text-white);
 }
 
-.campaigns-grid .campaigns-button:hover,
-.campaigns-grid .campaigns-button:active {
+.campaigns-list-container .campaigns-button:hover,
+.campaigns-list-container .campaigns-button:active {
     background-color: var(--color-bg-tertiary);
 }
 
-.campaigns-grid .campaigns-button-label {
+.campaigns-list-container .campaigns-button-label {
     font-family:
         'Cinzel-Medium', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     font-size: x-large;
@@ -35,11 +36,11 @@
     min-width: 0;
 }
 
-.campaigns-grid .campaigns-button-icon {
+.campaigns-list-container .campaigns-button-icon {
     flex-shrink: 0;
 }
 
-.campaigns-grid .campaigns-button-text {
+.campaigns-list-container .campaigns-button-text {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -47,17 +48,17 @@
     flex: 1 1 auto;
 }
 
-.campaigns-grid .campaigns-button:hover .campaigns-button-label,
-.campaigns-grid .campaigns-button:active .campaigns-button-label {
+.campaigns-list-container .campaigns-button:hover .campaigns-button-label,
+.campaigns-list-container .campaigns-button:active .campaigns-button-label {
     background-color: var(--color-transparent-bg-secondary);
 }
 
-.campaigns-grid .campaigns-button-badges-wrapper {
+.campaigns-list-container .campaigns-button-badges-wrapper {
     width: 100%;
     min-width: 0;
 }
 
-.campaigns-grid .campaigns-button-badges-wrapper .campaigns-button-badge {
+.campaigns-list-container .campaigns-button-badges-wrapper .campaigns-button-badge {
     font-size: small;
     background-color: var(--color-transparent-bg-white);
     color: var(--color-text-primary);
@@ -65,17 +66,18 @@
     min-width: 0;
 }
 
-.campaigns-grid .campaigns-button-badges-wrapper .campaigns-button-badge:first-child .campaigns-button-text {
+.campaigns-list-container .campaigns-button-badges-wrapper .campaigns-button-badge:first-child .campaigns-button-text {
     font-style: italic;
     padding-right: 2px; /* L'italique déborde un peu et est tronqué à cause de l'overflow */
 }
 
-.campaigns-grid .campaigns-button-badges-wrapper .campaigns-button-badge:last-child {
+.campaigns-list-container .campaigns-button-badges-wrapper .campaigns-button-badge:last-child {
     flex-shrink: 0;
 }
 
 @media (max-width: 576px) {
-    .campaigns-grid {
-        grid-template-columns: 1fr;
+    .campaigns-list-container .campaigns-button {
+        flex: 1 1 100%;
+        max-width: 100%;
     }
 }

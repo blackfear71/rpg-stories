@@ -10,7 +10,7 @@ import { catchError, finalize, map, take } from 'rxjs/operators';
 
 import { Spinner } from 'react-bootstrap';
 
-import { CampaignHeader, Story, StoryEntry } from '../../components/features';
+import { CampaignHeader, CampaignSaga, StoryList } from '../../components/features';
 import { CampaignModal, ConfirmModal, DraftsModal } from '../../components/modals';
 import { Message } from '../../components/shared';
 
@@ -19,14 +19,13 @@ import { useDrafts } from '../../utils/hooks/useDrafts';
 
 import { EnumAction } from '../../enums';
 
-import { CampaignsService, StoriesService } from '../../api';
-
-import './Campaign.css';
+import { CampaignsService, SagasService, StoriesService } from '../../api';
 
 // Valeurs initiales des formulaires
 const initialCampaignValues = {
+    sagaId: null,
     name: '',
-    universe: '',
+    universe: null,
     players: 0,
     picture: null,
     pictureAction: null
@@ -81,6 +80,8 @@ const Campaign = () => {
 
     // API states
     const [campaign, setCampaign] = useState();
+    const [sagaCampaigns, setSagaCampaigns] = useState([]);
+    const [sagas, setSagas] = useState([]);
     const [stories, setStories] = useState([]);
 
     /**
@@ -142,16 +143,30 @@ const Campaign = () => {
 
         // Récupération de la campagne et de ses histoires
         const campaignsService = new CampaignsService();
+        const sagasService = new SagasService();
         const storiesService = new StoriesService();
 
         const subscriptionCampaign = campaignsService.getCampaign(id);
+        const subscriptionSagas = sagasService.getSagas();
         const subscriptionStories = storiesService.getCampaignStories(id);
 
-        combineLatest([subscriptionCampaign, subscriptionStories])
+        combineLatest([subscriptionCampaign, subscriptionSagas, subscriptionStories])
             .pipe(
-                map(([dataCampaign, dataStories]) => {
+                map(([dataCampaign, dataSagas, dataStories]) => {
                     setCampaign(dataCampaign.response.data);
+                    setSagas(dataSagas.response.data);
                     setStories(dataStories.response.data);
+
+                    return dataCampaign.response.data;
+                }),
+                switchMap((campaignData) => (campaignData?.sagaId ? campaignsService.getSagaCampaigns(campaignData.sagaId) : of(null))),
+                map((dataSagaCampaigns) => {
+                    // Mise à jour des données de la saga liée à la campagne
+                    if (dataSagaCampaigns?.response?.data) {
+                        setSagaCampaigns(dataSagaCampaigns.response.data);
+                    } else {
+                        setSagaCampaigns([]);
+                    }
                 }),
                 take(1),
                 catchError((err) => {
@@ -192,6 +207,7 @@ const Campaign = () => {
         // Initialisation à l'ouverture de la modale
         if (modalOptionsCampaign.isOpen && campaign) {
             formCampaign.setValues({
+                sagaId: campaign.sagaId,
                 name: campaign.name,
                 universe: campaign.universe,
                 players: campaign.players,
@@ -211,7 +227,7 @@ const Campaign = () => {
      */
     useEffect(() => {
         // Initialisation à l'ouverture de la saisie en modification
-        if (inputOptionsStory.isOpen && inputOptionsStory.action === EnumAction.UPDATE && inputOptionsStory.storyId) {
+        if (inputOptionsStory.isOpen && inputOptionsStory.storyId && inputOptionsStory.action === EnumAction.UPDATE) {
             const currentStory = stories.find((g) => g.id === inputOptionsStory.storyId);
 
             if (currentStory) {
@@ -289,8 +305,22 @@ const Campaign = () => {
                 }),
                 switchMap(() => campaignsService.getCampaign(campaign.id)),
                 map((newDataCampaign) => {
-                    openCloseCampaignModal();
+                    // Mise à jour des données de la campagne
                     setCampaign(newDataCampaign.response.data);
+
+                    return newDataCampaign.response.data;
+                }),
+                switchMap((campaignData) => (campaignData?.sagaId ? campaignsService.getSagaCampaigns(campaignData.sagaId) : of(null))),
+                map((dataSagaCampaigns) => {
+                    // Mise à jour des données de la saga liée à la campagne
+                    if (dataSagaCampaigns?.response?.data) {
+                        setSagaCampaigns(dataSagaCampaigns.response.data);
+                    } else {
+                        setSagaCampaigns([]);
+                    }
+
+                    // Fermeture de la modale de modification de campagne
+                    openCloseCampaignModal();
                 }),
                 take(1),
                 catchError((err) => {
@@ -317,7 +347,7 @@ const Campaign = () => {
 
         // Champs textes
         Object.entries(values).forEach(([key, value]) => {
-            if (key !== 'picture' && value !== null) {
+            if (key !== 'picture' && value) {
                 formData.append(key, value);
             }
         });
@@ -499,6 +529,9 @@ const Campaign = () => {
             .subscribe();
     };
 
+    /**
+     * Suppression d'un brouillon
+     */
     const handleDeleteDrafts = async () => {
         setMessage(null);
         setIsSubmitting(true);
@@ -579,7 +612,7 @@ const Campaign = () => {
     };
 
     return (
-        <div>
+        <>
             {isLoading ? (
                 <div className="d-flex align-items-center justify-content-center layout-spinner-centered">
                     <Spinner animation="border" role="status" variant="light" />
@@ -602,57 +635,39 @@ const Campaign = () => {
                                 onOpenDraftsModal={openCloseDraftsModal}
                                 onOpenCampaignModal={openCloseCampaignModal}
                                 onConfirm={handleConfirmDeleteCampaign}
+                                isSubmitting={isSubmitting}
                             />
 
-                            {/* Timeline */}
-                            {(inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE) ||
-                            (stories && stories.length > 0) ? (
-                                <div className="d-flex flex-column gap-3 campaign-stories">
-                                    {/* Timeline */}
-                                    <div className="rounded campaign-stories-timeline"></div>
-
-                                    {/* Nouvelle histoire */}
-                                    {inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE && (
-                                        <div ref={newStoryRef} className="z-2 campaign-story-entry-wrapper">
-                                            <StoryEntry
-                                                campaignId={id}
-                                                formData={formStory}
-                                                draftsState={draftsState}
-                                                inputOptions={inputOptionsStory}
-                                                onOpenClose={openCloseStoryInput}
-                                                setMessage={setMessage}
-                                                isSubmitting={isSubmitting}
-                                            />
-                                        </div>
-                                    )}
-
-                                    {/* Histoires */}
-                                    {stories?.map((story, index) => (
-                                        <Story
-                                            key={story.id}
-                                            story={story}
-                                            storyCount={stories.length}
-                                            isFirstStory={index === 0}
-                                            isLastStory={index === stories.length - 1}
-                                            formData={formStory}
-                                            draftsState={draftsState}
-                                            inputOptions={inputOptionsStory}
-                                            onConfirm={handleConfirmDeleteStory}
-                                            onOpenClose={openCloseStoryInput}
-                                            onNavigate={(direction) => handleNavigateStory(direction, index)}
-                                            registerRef={registerStoryRef}
-                                            setMessage={setMessage}
-                                            isSubmitting={isSubmitting}
-                                        />
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="p-5 rounded campaign-stories-empty">{t('campaign.emptyStories')}</div>
+                            {/* Saga */}
+                            {sagas && sagaCampaigns && sagaCampaigns.length > 0 && (
+                                <CampaignSaga
+                                    campaignId={campaign.id}
+                                    saga={sagas.find((s) => s.id === campaign.sagaId)}
+                                    sagaCampaigns={sagaCampaigns}
+                                    isSubmitting={isSubmitting}
+                                />
                             )}
+
+                            {/* Timeline */}
+                            <StoryList
+                                stories={stories}
+                                inputOptions={inputOptionsStory}
+                                newStoryRef={newStoryRef}
+                                campaignId={id}
+                                formData={formStory}
+                                draftsState={draftsState}
+                                onConfirm={handleConfirmDeleteStory}
+                                onOpenClose={openCloseStoryInput}
+                                onNavigate={handleNavigateStory}
+                                registerRef={registerStoryRef}
+                                setMessage={setMessage}
+                                isSubmitting={isSubmitting}
+                            />
 
                             {/* Modale de modification de campagne */}
                             {formCampaign && modalOptionsCampaign.isOpen && (
                                 <CampaignModal
+                                    sagas={sagas}
                                     formData={formCampaign}
                                     modalOptions={modalOptionsCampaign}
                                     setModalOptions={setModalOptionsCampaign}
@@ -688,7 +703,7 @@ const Campaign = () => {
                     )}
                 </>
             )}
-        </div>
+        </>
     );
 };
 

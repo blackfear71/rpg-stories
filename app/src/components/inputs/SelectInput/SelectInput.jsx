@@ -28,7 +28,7 @@ const SelectInput = ({ title, icon, name, defaultOption, options, value, onChang
                 <Form.Group className="w-100" controlId={name}>
                     <Form.Label className="visually-hidden">{title ?? name}</Form.Label>
 
-                    <Form.Select value={value} onChange={onChange} isInvalid={!!error}>
+                    <Form.Select value={value || ''} onChange={onChange} isInvalid={!!error}>
                         {defaultOption && (
                             <option key={defaultOption.key} value={defaultOption.value} hidden>
                                 {defaultOption.label}

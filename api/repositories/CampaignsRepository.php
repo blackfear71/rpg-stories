@@ -1,12 +1,14 @@
 <?php
 // Imports
 require_once 'models/entities/Campaign.php';
+require_once 'models/entities/Search.php';
 
 class CampaignsRepository
 {
     protected PDO $db;
 
     protected string $campaignsTable = 'campaigns';
+    protected string $sagasTable = 'sagas';
     protected string $storiesTable = 'stories';
 
     /**
@@ -22,7 +24,7 @@ class CampaignsRepository
      */
     public function getCampaigns(int $userId): array
     {
-        $sql = "SELECT id, name, universe, players, picture
+        $sql = "SELECT id, saga_id, name, universe, players, picture
             FROM {$this->campaignsTable}
             WHERE created_by = :created_by AND is_active = 1
             ORDER BY id DESC";
@@ -34,6 +36,7 @@ class CampaignsRepository
 
         return array_map(fn($row) => new Campaign(
             id: (int) $row['id'],
+            sagaId: $row['saga_id'] !== null ? (int) $row['saga_id'] : null,
             name: $row['name'],
             universe: $row['universe'],
             players: (int) $row['players'],
@@ -46,7 +49,7 @@ class CampaignsRepository
      */
     public function getCampaign(int $campaignId, int $userId): ?Campaign
     {
-        $sql = "SELECT id, name, universe, players, picture
+        $sql = "SELECT id, saga_id, name, universe, players, picture
             FROM {$this->campaignsTable}
             WHERE id = :id AND created_by = :created_by AND is_active = 1";
 
@@ -64,6 +67,7 @@ class CampaignsRepository
 
         return new Campaign(
             id: (int) $row['id'],
+            sagaId: $row['saga_id'] !== null ? (int) $row['saga_id'] : null,
             name: $row['name'],
             universe: $row['universe'],
             players: (int) $row['players'],
@@ -72,14 +76,42 @@ class CampaignsRepository
     }
 
     /**
+     * Lecture des campagnes de la même saga
+     */
+    public function getSagaCampaigns(int $sagaId, int $userId): array
+    {
+        $sql = "SELECT id, saga_id, name, universe, players, picture
+            FROM {$this->campaignsTable}
+            WHERE saga_id = :saga_id AND created_by = :created_by AND is_active = 1
+            ORDER BY id DESC";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'saga_id' => $sagaId,
+            'created_by' => $userId
+        ]);
+
+        return array_map(fn($row) => new Campaign(
+            id: (int) $row['id'],
+            sagaId: $row['saga_id'] !== null ? (int) $row['saga_id'] : null,
+            name: $row['name'],
+            universe: $row['universe'],
+            players: (int) $row['players'],
+            picture: $row['picture']
+        ), $stmt->fetchAll(PDO::FETCH_ASSOC));
+    }
+
+    /**
      * Lecture des campagnes recherchées
      */
     public function getSearchCampaigns(string $search, int $userId): array
     {
-        $sql = "SELECT id, name, universe, players
-            FROM {$this->campaignsTable}
-            WHERE (name LIKE :search OR universe LIKE :search) AND created_by = :created_by AND is_active = 1
-            ORDER BY id DESC";
+        $sql = "SELECT c.id, c.name AS campaign_name, c.saga_id, s.name AS saga_name, c.universe
+            FROM {$this->campaignsTable} AS c
+            LEFT JOIN {$this->sagasTable} AS s ON s.id = c.saga_id
+            WHERE (c.name LIKE :search OR c.universe LIKE :search OR (s.name LIKE :search AND s.created_by = :created_by AND s.is_active = 1)) AND c.is_active = 1 AND c.created_by = :created_by
+            GROUP BY c.id
+            ORDER BY c.name ASC";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
@@ -87,11 +119,12 @@ class CampaignsRepository
             'created_by' => $userId
         ]);
 
-        return array_map(fn($row) => new Campaign(
-            id: (int) $row['id'],
-            name: $row['name'],
-            universe: $row['universe'],
-            players: (int) $row['players']
+        return array_map(fn($row) => new Search(
+            campaignId: (int) $row['id'],
+            campaignName: $row['campaign_name'],
+            sagaId: $row['saga_id'] !== null ? (int) $row['saga_id'] : null,
+            sagaName: $row['saga_name'],
+            universe: $row['universe']
         ), $stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 
@@ -120,12 +153,13 @@ class CampaignsRepository
      */
     public function createCampaign(Campaign $campaign): bool
     {
-        $sql = "INSERT INTO {$this->campaignsTable} (name, universe, players, picture, created_at, created_by, is_active)
-            VALUES (:name, :universe, :players, :picture, :created_at, :created_by, :is_active)";
+        $sql = "INSERT INTO {$this->campaignsTable} (saga_id, name, universe, players, picture, created_at, created_by, is_active)
+            VALUES (:saga_id, :name, :universe, :players, :picture, :created_at, :created_by, :is_active)";
 
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
+            'saga_id'    => $campaign->sagaId,
             'name'       => $campaign->name,
             'universe'   => $campaign->universe,
             'players'    => $campaign->players,
@@ -142,13 +176,14 @@ class CampaignsRepository
     public function updateCampaign(Campaign $campaign): bool
     {
         $sql = "UPDATE {$this->campaignsTable}
-            SET name = :name, universe = :universe, players = :players, picture = :picture, updated_at = :updated_at, updated_by = :updated_by
+            SET saga_id = :saga_id, name = :name, universe = :universe, players = :players, picture = :picture, updated_at = :updated_at, updated_by = :updated_by
             WHERE id = :id AND created_by = :created_by";
 
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
             'id'         => $campaign->id,
+            'saga_id'    => $campaign->sagaId,
             'name'       => $campaign->name,
             'universe'   => $campaign->universe,
             'players'    => $campaign->players,
@@ -156,6 +191,26 @@ class CampaignsRepository
             'created_by' => $campaign->createdBy,
             'updated_at' => date('Y-m-d H:i:s'),
             'updated_by' => $campaign->updatedBy
+        ]);
+    }
+
+    /**
+     * Modification de la saga des campagnes liées
+     */
+    public function updateCampaignsSaga(int $sagaId, int $userId): bool
+    {
+        $sql = "UPDATE {$this->campaignsTable}
+            SET saga_id = :new_saga_id, updated_at = :updated_at, updated_by = :updated_by
+            WHERE saga_id = :saga_id AND created_by = :created_by";
+
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            'saga_id'     => $sagaId,
+            'new_saga_id' => NULL,
+            'created_by'  => $userId,
+            'updated_at'  => date('Y-m-d H:i:s'),
+            'updated_by'  => $userId
         ]);
     }
 

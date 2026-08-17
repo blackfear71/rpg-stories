@@ -1,0 +1,62 @@
+.saga-list-selected {
+    position: relative;
+    background-color: var(--color-bg-tertiary) !important;
+    border-color: var(--color-border-input-focus) !important;
+}
+
+.saga-list-selected::before {
+    position: absolute;
+    content: '';
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 13px solid transparent;
+    border-right: 13px solid transparent;
+    border-top: 13px solid var(--color-border-input-focus);
+    z-index: 1;
+}
+
+.saga-list-selected::after {
+    position: absolute;
+    content: '';
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 12px solid var(--color-border-tertiary);
+    z-index: 2;
+}
+
+.saga-list-panel {
+    flex: 0 0 100%;
+    max-width: 100%;
+    background-color: var(--color-bg-tertiary);
+}
+
+.saga-list-panel-title {
+    font-family:
+        'Cinzel-Medium', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-size: x-large;
+    color: var(--color-text-white);
+}
+
+.btn.saga-list-panel-button {
+    background-color: var(--color-bg-secondary) !important;
+    border: 2px solid var(--color-border-primary) !important;
+}
+
+.btn.saga-list-panel-button:hover,
+.btn.saga-list-panel-button:active {
+    background-color: var(--color-bg-red-hover) !important;
+}
+
+@media (max-width: 576px) {
+    .saga-list-panel {
+        flex: 1 1 100%;
+    }
+}
