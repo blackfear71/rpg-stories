@@ -10,7 +10,7 @@ import { catchError, finalize, map, take } from 'rxjs/operators';
 
 import { Spinner } from 'react-bootstrap';
 
-import { CampaignHeader, CampaignSaga, Story, StoryEntry } from '../../components/features';
+import { CampaignHeader, CampaignSaga, StoryList } from '../../components/features';
 import { CampaignModal, ConfirmModal, DraftsModal } from '../../components/modals';
 import { Message } from '../../components/shared';
 
@@ -20,8 +20,6 @@ import { useDrafts } from '../../utils/hooks/useDrafts';
 import { EnumAction } from '../../enums';
 
 import { CampaignsService, SagasService, StoriesService } from '../../api';
-
-import './Campaign.css';
 
 // Valeurs initiales des formulaires
 const initialCampaignValues = {
@@ -643,6 +641,7 @@ const Campaign = () => {
                             {/* Saga */}
                             {sagas && sagaCampaigns && sagaCampaigns.length > 0 && (
                                 <CampaignSaga
+                                    campaignId={campaign.id}
                                     saga={sagas.find((s) => s.id === campaign.sagaId)}
                                     sagaCampaigns={sagaCampaigns}
                                     isSubmitting={isSubmitting}
@@ -650,51 +649,20 @@ const Campaign = () => {
                             )}
 
                             {/* Timeline */}
-                            {/* TODO : faire un composant StoryList */}
-                            {(inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE) ||
-                            (stories && stories.length > 0) ? (
-                                <div className="d-flex flex-column gap-3 campaign-stories">
-                                    {/* Timeline */}
-                                    <div className="rounded campaign-stories-timeline"></div>
-
-                                    {/* Nouvelle histoire */}
-                                    {inputOptionsStory?.isOpen && inputOptionsStory?.action === EnumAction.CREATE && (
-                                        <div ref={newStoryRef} className="z-2 campaign-story-entry-wrapper">
-                                            <StoryEntry
-                                                campaignId={id}
-                                                formData={formStory}
-                                                draftsState={draftsState}
-                                                inputOptions={inputOptionsStory}
-                                                onOpenClose={openCloseStoryInput}
-                                                setMessage={setMessage}
-                                                isSubmitting={isSubmitting}
-                                            />
-                                        </div>
-                                    )}
-
-                                    {/* Histoires */}
-                                    {stories?.map((story, index) => (
-                                        <Story
-                                            key={story.id}
-                                            story={story}
-                                            storyCount={stories.length}
-                                            isFirstStory={index === 0}
-                                            isLastStory={index === stories.length - 1}
-                                            formData={formStory}
-                                            draftsState={draftsState}
-                                            inputOptions={inputOptionsStory}
-                                            onConfirm={handleConfirmDeleteStory}
-                                            onOpenClose={openCloseStoryInput}
-                                            onNavigate={(direction) => handleNavigateStory(direction, index)}
-                                            registerRef={registerStoryRef}
-                                            setMessage={setMessage}
-                                            isSubmitting={isSubmitting}
-                                        />
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="p-5 rounded campaign-stories-empty">{t('campaign.emptyStories')}</div>
-                            )}
+                            <StoryList
+                                stories={stories}
+                                inputOptions={inputOptionsStory}
+                                newStoryRef={newStoryRef}
+                                campaignId={id}
+                                formData={formStory}
+                                draftsState={draftsState}
+                                onConfirm={handleConfirmDeleteStory}
+                                onOpenClose={openCloseStoryInput}
+                                onNavigate={handleNavigateStory}
+                                registerRef={registerStoryRef}
+                                setMessage={setMessage}
+                                isSubmitting={isSubmitting}
+                            />
 
                             {/* Modale de modification de campagne */}
                             {formCampaign && modalOptionsCampaign.isOpen && (

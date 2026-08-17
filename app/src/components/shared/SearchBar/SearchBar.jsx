@@ -8,6 +8,7 @@ import { of } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { FaSearch, FaTimes } from 'react-icons/fa';
+import { GiSpellBook } from 'react-icons/gi';
 
 import { TextInput } from '../../../components/inputs';
 import { Message } from '../../../components/shared';
@@ -83,15 +84,15 @@ const SearchBar = () => {
             campaignsService
                 .getSearchCampaigns({ search: values.search })
                 .pipe(
-                    map((dataCampaigns) => {
-                        if (dataCampaigns.response.data.length === 0) {
+                    map((dataSearch) => {
+                        if (dataSearch.response.data.length === 0) {
                             setResultMessage('messages.noResults');
                         }
 
                         setResults(
-                            dataCampaigns.response.data.map((item) => ({
+                            dataSearch.response.data.map((item) => ({
                                 ...item,
-                                year: new Date(item.startDate).getFullYear()
+                                sagaName: item.sagaName ?? t('campaign.noSaga')
                             }))
                         );
                         setShowResults(true);
@@ -150,15 +151,15 @@ const SearchBar = () => {
 
     /**
      * Redirige vers le résultat de la recherche
-     * @param {*} id Identifiant de la campagne
+     * @param {*} campaignId Identifiant de la campagne
      */
-    const handleResultClick = (id) => {
+    const handleResultClick = (campaignId) => {
         // Vide les résultats
         setResults([]);
         setShowResults(false);
 
         // Redirige vers la campagne
-        navigate(`/campaign/${id}`);
+        navigate(`/campaign/${campaignId}`);
     };
 
     return (
@@ -214,12 +215,20 @@ const SearchBar = () => {
                         <div className="search-results-dropdown">
                             {results.map((item) => (
                                 <div
-                                    key={item.id}
+                                    key={item.campaignId}
                                     className="d-flex align-items-center justify-content-between p-2 search-result-item"
-                                    onClick={() => handleResultClick(item.id)}
+                                    onClick={() => handleResultClick(item.campaignId)}
                                 >
-                                    <div className="search-result-item-left">{item.name}</div>
-                                    <div className="ms-3 search-result-item-right">{item.universe ?? ''}</div>
+                                    <div className="d-flex align-items-center gap-2 search-result-item-left">
+                                        <GiSpellBook size={20} />
+                                        <span className="search-result-item-text">{item.campaignName}</span>
+                                    </div>
+
+                                    <div className="ms-3 search-result-item-right">
+                                        <span className="search-result-item-text">
+                                            {item.universe ? `${item.sagaName} • ${item.universe}` : item.sagaName}
+                                        </span>
+                                    </div>
                                 </div>
                             ))}
                         </div>

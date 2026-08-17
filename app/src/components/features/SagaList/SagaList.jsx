@@ -71,43 +71,47 @@ const SagaList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCam
                         {/* Campagnes d'une saga */}
                         {sagaCampaigns.isOpen && sagaCampaigns.sagaId === saga.id && (
                             <div className="rounded p-3 saga-list-panel">
-                                {/* Actions */}
-                                <div className="d-flex gap-1 mb-3 justify-content-end">
-                                    {/* TODO : tester de rajouter le titre aligné à gauche pour voir le rendu */}
-                                    {/* TODO : reprendre campaign-header-button et adapter les couleurs */}
-                                    {sagaCampaigns.sagaId && (
-                                        <>
-                                            {/* Suppression saga */}
-                                            <TooltipButton
-                                                tooltip={t('common.delete')}
-                                                content={<MdDelete size={25} />}
-                                                variant="outline-icon-action"
-                                                className="campaign-header-button"
-                                                onClick={() => onConfirm(saga.id, saga.name)}
-                                                isSubmitting={isSubmitting}
-                                            />
+                                {/* Entête */}
+                                <div className="d-flex align-items-center justify-content-between gap-1 mb-3">
+                                    {/* Titre de la saga */}
+                                    <div className="saga-list-panel-title">{saga.name}</div>
 
-                                            {/* Modification saga */}
-                                            <TooltipButton
-                                                tooltip={t('common.update')}
-                                                content={<MdEdit size={25} />}
-                                                variant="outline-icon-action"
-                                                className="campaign-header-button"
-                                                onClick={() => onOpenSagaModal(EnumAction.UPDATE, saga.id)}
-                                                isSubmitting={isSubmitting}
-                                            />
-                                        </>
-                                    )}
+                                    {/* Actions */}
+                                    <div className="d-flex gap-1">
+                                        {sagaCampaigns.sagaId && (
+                                            <>
+                                                {/* Suppression saga */}
+                                                <TooltipButton
+                                                    tooltip={t('common.delete')}
+                                                    content={<MdDelete size={20} />}
+                                                    variant="outline-icon-action"
+                                                    className="saga-list-panel-button"
+                                                    onClick={() => onConfirm(saga.id, saga.name)}
+                                                    isSubmitting={isSubmitting}
+                                                />
 
-                                    {/* Fermeture campagnes */}
-                                    <TooltipButton
-                                        tooltip={t('common.close')}
-                                        content={<IoClose size={25} />}
-                                        variant="outline-icon-action"
-                                        className="campaign-header-button"
-                                        onClick={() => onOpenSaga(saga.id)}
-                                        isSubmitting={isSubmitting}
-                                    />
+                                                {/* Modification saga */}
+                                                <TooltipButton
+                                                    tooltip={t('common.update')}
+                                                    content={<MdEdit size={20} />}
+                                                    variant="outline-icon-action"
+                                                    className="saga-list-panel-button"
+                                                    onClick={() => onOpenSagaModal(EnumAction.UPDATE, saga.id)}
+                                                    isSubmitting={isSubmitting}
+                                                />
+                                            </>
+                                        )}
+
+                                        {/* Fermeture campagnes */}
+                                        <TooltipButton
+                                            tooltip={t('common.close')}
+                                            content={<IoClose size={20} />}
+                                            variant="outline-icon-action"
+                                            className="saga-list-panel-button"
+                                            onClick={() => onOpenSaga(saga.id)}
+                                            isSubmitting={isSubmitting}
+                                        />
+                                    </div>
                                 </div>
 
                                 {/* Liste des campagnes de la saga */}

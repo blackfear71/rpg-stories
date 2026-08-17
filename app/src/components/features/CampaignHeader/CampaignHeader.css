@@ -1,0 +1,62 @@
+.campaign-header-container {
+    width: 100%;
+    min-height: 200px;
+    background-color: var(--color-bg-secondary);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.campaign-header-title {
+    font-family:
+        'Cinzel-Medium', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    background-color: var(--color-transparent-bg-primary);
+    color: var(--color-text-white);
+    max-width: 100%;
+    min-width: 0;
+}
+
+.campaign-header-badge-italic {
+    font-style: italic;
+    background-color: var(--color-transparent-bg-white);
+    color: var(--color-text-primary);
+    max-width: 100%;
+    min-width: 0;
+}
+
+.campaign-header-badge {
+    background-color: var(--color-transparent-bg-white);
+    color: var(--color-text-primary);
+    max-width: 100%;
+    min-width: 0;
+}
+
+.campaign-header-icon-large {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+}
+
+.campaign-header-icon-medium {
+    flex-shrink: 0;
+    width: 25px;
+    height: 25px;
+    min-width: 25px;
+}
+
+.campaign-header-icon-small {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+}
+
+.btn.campaign-header-button {
+    background-color: var(--color-transparent-bg-primary) !important;
+}
+
+.btn.campaign-header-button:hover,
+.btn.campaign-header-button:active {
+    background-color: var(--color-bg-red-hover) !important;
+}

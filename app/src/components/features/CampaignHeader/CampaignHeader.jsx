@@ -8,6 +8,8 @@ import { TooltipButton } from '../../../components/shared';
 
 import { EnumAction } from '../../../enums';
 
+import './CampaignHeader.css';
+
 /**
  * Liste des histoires
  */

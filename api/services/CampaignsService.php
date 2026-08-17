@@ -1,6 +1,7 @@
 <?php
 // Imports
 require_once 'models/dtos/CampaignOutputDTO.php';
+require_once 'models/dtos/SearchOutputDTO.php';
 
 require_once 'services/StoriesService.php';
 
@@ -113,16 +114,15 @@ class CampaignsService
         }
 
         // Recherche des campagnes
-        $campaigns = $this->campaignsRepository->getSearchCampaigns(trim($search), $userId);
+        $searchResults = $this->campaignsRepository->getSearchCampaigns(trim($search), $userId);
 
-        return array_map(fn($campaign) => new CampaignOutputDTO(
-            id: $campaign->id,
-            sagaId: $campaign->sagaId,
-            name: $campaign->name,
-            universe: $campaign->universe,
-            players: $campaign->players,
-            picture: $campaign->picture
-        ), $campaigns);
+        return array_map(fn($searchResult) => new SearchOutputDTO(
+            campaignId: $searchResult->campaignId,
+            campaignName: $searchResult->campaignName,
+            sagaId: $searchResult->sagaId,
+            sagaName: $searchResult->sagaName,
+            universe: $searchResult->universe
+        ), $searchResults);
     }
 
     /**

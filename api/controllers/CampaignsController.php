@@ -104,10 +104,10 @@ class CampaignsController
             $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
 
             // Lecture de tous les enregistrements recherchés
-            $campaigns = $this->campaignsService->getSearchCampaigns($search, $user->id);
+            $searchResults = $this->campaignsService->getSearchCampaigns($search, $user->id);
 
             // Succès
-            ResponseHelper::success($campaigns);
+            ResponseHelper::success($searchResults);
         } catch (Exception $e) {
             // Exception
             ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$search]);

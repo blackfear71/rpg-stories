@@ -1,12 +1,14 @@
 <?php
 // Imports
 require_once 'models/entities/Campaign.php';
+require_once 'models/entities/Search.php';
 
 class CampaignsRepository
 {
     protected PDO $db;
 
     protected string $campaignsTable = 'campaigns';
+    protected string $sagasTable = 'sagas';
     protected string $storiesTable = 'stories';
 
     /**
@@ -104,18 +106,12 @@ class CampaignsRepository
      */
     public function getSearchCampaigns(string $search, int $userId): array
     {
-        $sql = "SELECT id, saga_id, name, universe, players
-            FROM {$this->campaignsTable}
-            WHERE (name LIKE :search OR universe LIKE :search) AND created_by = :created_by AND is_active = 1
-            ORDER BY id DESC";
-
-        // TODO : s'inspirer et tester une requête du genre (attention l'objet en sortie n'a pas le name de saga, adapter les noms et variables ou faire 2 nouveaux objets Search/SearchOutputDTO) :
-        // SELECT c.id, c.saga_id, c.name AS campaign_name, c.universe, c.players, s.name AS saga_name
-        // FROM `campaigns` AS c
-        // LEFT JOIN `sagas` AS s ON s.id = c.saga_id
-        // WHERE ((c.name LIKE '%disparition%' OR c.universe LIKE '%disparition%') OR (s.name LIKE '%disparition%' AND s.is_active = 1)) AND c.is_active = 1
-        // GROUP BY c.id
-        // ORDER BY c.name ASC
+        $sql = "SELECT c.id, c.name AS campaign_name, c.saga_id, s.name AS saga_name, c.universe
+            FROM {$this->campaignsTable} AS c
+            LEFT JOIN {$this->sagasTable} AS s ON s.id = c.saga_id
+            WHERE (c.name LIKE :search OR c.universe LIKE :search OR (s.name LIKE :search AND s.created_by = :created_by AND s.is_active = 1)) AND c.is_active = 1 AND c.created_by = :created_by
+            GROUP BY c.id
+            ORDER BY c.name ASC";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
@@ -123,12 +119,12 @@ class CampaignsRepository
             'created_by' => $userId
         ]);
 
-        return array_map(fn($row) => new Campaign(
-            id: (int) $row['id'],
+        return array_map(fn($row) => new Search(
+            campaignId: (int) $row['id'],
+            campaignName: $row['campaign_name'],
             sagaId: $row['saga_id'] !== null ? (int) $row['saga_id'] : null,
-            name: $row['name'],
-            universe: $row['universe'],
-            players: (int) $row['players']
+            sagaName: $row['saga_name'],
+            universe: $row['universe']
         ), $stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 
