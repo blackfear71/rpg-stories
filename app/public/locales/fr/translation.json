@@ -72,7 +72,7 @@
         "chooseSaga": "Choisir une saga",
         "confirmDeleteCampaign": "Voulez-vous vraiment supprimer la campagne \"{{name}}\" ?",
         "confirmDeleteDrafts": "Voulez-vous vraiment supprimer tous les brouillons de la campagne ?",
-        "confirmDeleteSaga": "Voulez-vous vraiment supprimer la saga \"{{name}}\" ? Cette action ne supprime pas les campagnes associées qui doivent être supprimées manuellement si souhaité.",
+        "confirmDeleteSaga": "Voulez-vous vraiment supprimer la saga \"{{name}}\" ? Cette action détache les campagnes associées mais ne les supprime pas. Elles doivent être supprimées manuellement si souhaité.",
         "countCampaign": "{{count}} campagne",
         "countCampaigns": "{{count}} campagnes",
         "countPlayer": "{{count}} joueur",

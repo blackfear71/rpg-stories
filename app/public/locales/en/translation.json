@@ -72,7 +72,7 @@
         "chooseSaga": "Choose saga",
         "confirmDeleteCampaign": "Do you really want to delete the campaign \"{{name}}\"?",
         "confirmDeleteDrafts": "Do you really want to delete all the drafts from the campaign ?",
-        "confirmDeleteSaga": "Do you really want to delete the saga \"{{name}}\"? This action does not delete the associated campaigns, which must be deleted manually if desired.",
+        "confirmDeleteSaga": "Do you really want to delete the saga \"{{name}}\"? This action unlinks associated campaigns but does not delete them. They must be deleted manually if desired.",
         "countCampaign": "{{count}} campaign",
         "countCampaigns": "{{count}} campaigns",
         "countPlayer": "{{count}} player",

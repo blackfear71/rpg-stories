@@ -109,6 +109,14 @@ class CampaignsRepository
             WHERE (name LIKE :search OR universe LIKE :search) AND created_by = :created_by AND is_active = 1
             ORDER BY id DESC";
 
+        // TODO : s'inspirer et tester une requête du genre (attention l'objet en sortie n'a pas le name de saga, adapter les noms et variables ou faire 2 nouveaux objets Search/SearchOutputDTO) :
+        // SELECT c.id, c.saga_id, c.name AS campaign_name, c.universe, c.players, s.name AS saga_name
+        // FROM `campaigns` AS c
+        // LEFT JOIN `sagas` AS s ON s.id = c.saga_id
+        // WHERE ((c.name LIKE '%disparition%' OR c.universe LIKE '%disparition%') OR (s.name LIKE '%disparition%' AND s.is_active = 1)) AND c.is_active = 1
+        // GROUP BY c.id
+        // ORDER BY c.name ASC
+
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             'search' => "%$search%",
