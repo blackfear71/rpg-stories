@@ -55,6 +55,7 @@ const SagaList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCam
                                 <span className="campaigns-button-text">{saga.name}</span>
                             </div>
 
+                            {/* Badges */}
                             <div className="d-flex gap-2 campaigns-button-badges-wrapper">
                                 {/* Nombre de campagnes */}
                                 <div className="d-flex align-items-center gap-1 py-1 px-2 rounded campaigns-button-badge">

@@ -105,7 +105,6 @@ class SagasService
             throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
         }
 
-
         // Suppression logique de la saga
         if (!$this->sagasRepository->deleteSaga($sagaId, $userId)) {
             throw new \RuntimeException(MessageHelper::ERR_DELETION_FAILED);

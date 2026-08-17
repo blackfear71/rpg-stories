@@ -232,17 +232,6 @@ const Campaigns = () => {
     }, [modalOptionsSaga.isOpen, modalOptionsSaga.sagaId]);
 
     /**
-     * Changement d'onglet
-     * @param {*} tab Onglet sélectionné
-     */
-    const handleSelectTab = (tab) => {
-        // Si on quitte l'onglet Sagas, on réinitialise la saga ouverte
-        if (tab !== 'sagas') {
-            setSagaCampaigns({ sagaId: null, campaigns: [], isOpen: false });
-        }
-    };
-
-    /**
      * Enrichit les données sagas avec les données campagnes
      * @param {*} dataCampaigns Données campagnes
      * @param {*} dataSagas Données sagas
@@ -263,6 +252,17 @@ const Campaigns = () => {
         });
 
         setSagas(sagasData);
+    };
+
+    /**
+     * Changement d'onglet
+     * @param {*} tab Onglet sélectionné
+     */
+    const handleSelectTab = (tab) => {
+        // Si on quitte l'onglet Sagas, on réinitialise la saga ouverte
+        if (tab !== 'sagas') {
+            setSagaCampaigns({ sagaId: null, campaigns: [], isOpen: false });
+        }
     };
 
     /**

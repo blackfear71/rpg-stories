@@ -52,6 +52,7 @@ const CampaignList = ({ campaigns, onOpen, isSubmitting }) => {
                             <span className="campaigns-button-text">{campaign.name}</span>
                         </div>
 
+                        {/* Badges */}
                         <div className="d-flex gap-2 campaigns-button-badges-wrapper">
                             {/* Univers */}
                             {campaign.universe && (
