@@ -237,12 +237,13 @@ const Campaigns = () => {
      * @param {*} dataSagas Données sagas
      */
     const processSagasData = (dataCampaigns, dataSagas) => {
-        // Ajout d'un groupe "Hors saga" en tête de liste si besoin
-        let sagasData = dataCampaigns.some((c) => !c.sagaId) ? [{ id: null, name: t('campaign.noSaga') }, ...dataSagas] : dataSagas;
+        // Ajout d'un groupe "Hors saga" (id = 0) en tête de liste si besoin
+        let sagasData = dataCampaigns.some((c) => !c.sagaId) ? [{ id: 0, name: t('campaign.noSaga') }, ...dataSagas] : dataSagas;
 
         // Ajout de l'image de la campagne la plus récente et calcul du nombre de campagnes par saga
         sagasData = sagasData.map((saga) => {
-            const filteredCampaigns = dataCampaigns.filter((c) => c.sagaId === saga.id);
+            const filteredCampaigns =
+                saga.id === 0 ? dataCampaigns.filter((c) => !c.sagaId) : dataCampaigns.filter((c) => c.sagaId === saga.id);
 
             return {
                 ...saga,
@@ -315,7 +316,10 @@ const Campaigns = () => {
                     if (sagaCampaigns?.isOpen) {
                         setSagaCampaigns({
                             ...sagaCampaigns,
-                            campaigns: updatedCampaigns.filter((c) => c.sagaId === sagaCampaigns.sagaId)
+                            campaigns:
+                                sagaCampaigns.sagaId === 0
+                                    ? updatedCampaigns.filter((c) => !c.sagaId)
+                                    : updatedCampaigns.filter((c) => c.sagaId === sagaCampaigns.sagaId)
                         });
                     }
 
@@ -461,7 +465,7 @@ const Campaigns = () => {
             // Clic sur une saga différente : on ferme l'actuelle et on ouvre la nouvelle
             return {
                 sagaId: sagaId,
-                campaigns: campaigns.filter((c) => c.sagaId === sagaId),
+                campaigns: sagaId === 0 ? campaigns.filter((c) => !c.sagaId) : campaigns.filter((c) => c.sagaId === sagaId),
                 isOpen: true
             };
         });

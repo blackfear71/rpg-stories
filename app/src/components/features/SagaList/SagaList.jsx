@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from 'react-bootstrap';
@@ -19,6 +19,33 @@ import './SagaList.css';
 const SagaList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCampaingModal, onConfirm, isSubmitting }) => {
     // Traductions
     const { t } = useTranslation();
+
+    // Local states
+    const sagaPanelRefs = useRef({});
+
+    /**
+     * Scroll vers le panneau de campagnes à l'ouverture d'une saga
+     */
+    useEffect(() => {
+        if (sagaCampaigns.isOpen && (sagaCampaigns.sagaId || sagaCampaigns.sagaId === 0)) {
+            requestAnimationFrame(() => {
+                sagaPanelRefs.current[sagaCampaigns.sagaId]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+    }, [sagaCampaigns.isOpen, sagaCampaigns.sagaId]);
+
+    /**
+     * Enregistre / efface la ref DOM du panneau d'une saga
+     * @param {*} sagaId Identifiant saga
+     * @param {*} panel Panneau affiché
+     */
+    const registerSagaPanelRef = (sagaId, panel) => {
+        if (panel) {
+            sagaPanelRefs.current[sagaId] = panel;
+        } else {
+            delete sagaPanelRefs.current[sagaId];
+        }
+    };
 
     return (
         <div className="gap-3 campaigns-list-container">
@@ -71,18 +98,18 @@ const SagaList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCam
 
                         {/* Campagnes d'une saga */}
                         {sagaCampaigns.isOpen && sagaCampaigns.sagaId === saga.id && (
-                            <div className="rounded p-3 saga-list-panel">
+                            <div ref={(panel) => registerSagaPanelRef(sagaCampaigns.sagaId, panel)} className="rounded p-3 saga-list-panel">
                                 {/* Entête */}
                                 <div className="d-flex align-items-center justify-content-between gap-1 mb-3">
                                     {/* Titre de la saga */}
                                     <div className="d-flex align-items-center gap-2">
-                                        <GiSpellBook size={30} className="saga-list-panel-icon" />
+                                        <GiBookshelf size={30} className="saga-list-panel-icon" />
                                         <div className="saga-list-panel-title">{saga.name}</div>
                                     </div>
 
                                     {/* Actions */}
                                     <div className="d-flex gap-1">
-                                        {sagaCampaigns.sagaId && (
+                                        {sagaCampaigns.sagaId !== 0 && (
                                             <>
                                                 {/* Suppression saga */}
                                                 <TooltipButton

@@ -36,6 +36,7 @@
     flex: 0 0 100%;
     max-width: 100%;
     background-color: var(--color-bg-tertiary);
+    scroll-margin-top: 70px;
 }
 
 .saga-list-panel-icon {

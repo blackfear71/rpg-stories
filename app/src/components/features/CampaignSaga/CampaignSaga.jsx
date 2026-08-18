@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
 import { Button } from 'react-bootstrap';
-import { GiSpellBook } from 'react-icons/gi';
+import { GiBookshelf, GiSpellBook } from 'react-icons/gi';
 
 import './CampaignSaga.css';
 
@@ -21,7 +21,10 @@ const CampaignSaga = ({ campaignId, saga, sagaCampaigns, isSubmitting }) => {
             {saga && sagaCampaigns && (
                 <div className="d-flex flex-column p-2 gap-2 rounded campaign-saga">
                     {/* Titre */}
-                    <div className="ms-1 campaign-saga-title">{t('campaign.sagaCampaigns', { name: saga.name })}</div>
+                    <div className="d-flex align-items-center gap-2 ms-1">
+                        <GiBookshelf size={20} className="campaign-saga-button-icon" />
+                        <div className="campaign-saga-title">{t('campaign.sagaCampaigns', { name: saga.name })}</div>
+                    </div>
 
                     {/* Campagnes */}
                     <div className="d-flex gap-2">
