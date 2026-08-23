@@ -60,13 +60,13 @@ const Message = ({ code, params = {}, type = 'error', inline = false, setMessage
         showMessage && (
             <Alert
                 variant={getVariantFromType(type)}
-                className={`d-flex align-items-center px-3 py-2 gap-2 message ${inline ? 'message-inline' : ''}`}
+                className={`d-flex align-items-center px-3 py-2 gap-2 justify-content-between message ${inline ? 'message-inline' : ''}`}
             >
                 {/* Message FRONT ou BACK */}
                 <span>{i18next.exists(code) ? t(code, params) : getMessageTranslationKey(code, params, t)}</span>
 
                 {/* Bouton de fermeture */}
-                {type !== 'success' && <Button variant="close" className="p-0 message-button-close" onClick={handleClose} />}
+                {!autoClose && <Button variant="close" className="p-0 message-button-close" onClick={handleClose} />}
             </Alert>
         )
     );
