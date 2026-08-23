@@ -1,6 +1,9 @@
 .campaign-saga {
     background-color: var(--color-bg-secondary);
     color: var(--color-text-white);
+}
+
+.campaign-saga-list {
     overflow-x: auto;
 }
 

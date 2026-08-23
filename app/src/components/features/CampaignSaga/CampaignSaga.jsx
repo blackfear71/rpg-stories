@@ -27,7 +27,7 @@ const CampaignSaga = ({ campaignId, saga, sagaCampaigns, isSubmitting }) => {
                     </div>
 
                     {/* Campagnes */}
-                    <div className="d-flex gap-2">
+                    <div className="d-flex gap-2 campaign-saga-list">
                         {sagaCampaigns.map((sagaCampaign) => (
                             <Button
                                 key={`sc-${sagaCampaign.id}`}

@@ -23,7 +23,6 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    z-index: 2;
     width: 40px;
     height: 100%;
     padding: 10px;
@@ -77,6 +76,10 @@
     flex: 1 1 auto;
     overflow: hidden;
     color: var(--color-text-primary);
+}
+
+.search-result-item-left svg {
+    flex-shrink: 0;
 }
 
 .search-result-item-right {

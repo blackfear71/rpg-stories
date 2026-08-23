@@ -1,6 +1,5 @@
 .story-entry-wrapper {
     position: relative;
-    z-index: 1;
 }
 
 .story-entry-navigation-container {
@@ -36,7 +35,6 @@
 
 .story-entry-header-symbols-container {
     position: relative;
-    z-index: 1;
 }
 
 .story-entry-header-symbols-panel {
