@@ -73,7 +73,7 @@ const Home = () => {
      * Redirection vers les campagnes si déjà connecté au chargement, sinon affichage du formulaire de connexion
      */
     useEffect(() => {
-        if (auth && auth.isLoggedIn) {
+        if (auth?.isLoggedIn) {
             // Redirection si déjà connecté (en évitant la navigation concurrente à la connexion)
             if (skipAutoRedirectRef.current) {
                 skipAutoRedirectRef.current = false;

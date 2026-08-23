@@ -184,7 +184,7 @@ const Campaign = () => {
      * Redirection vers l'accueil si non connecté
      */
     useEffect(() => {
-        if (!auth || !auth.isLoggedIn) {
+        if (!auth?.isLoggedIn) {
             navigate('/');
         }
     }, [auth]);
@@ -298,12 +298,12 @@ const Campaign = () => {
         const campaignsService = new CampaignsService();
 
         campaignsService
-            .updateCampaign(campaign.id, body)
+            .updateCampaign(campaign?.id, body)
             .pipe(
                 map((dataCampaign) => {
                     setMessage({ code: dataCampaign.response.message, type: dataCampaign.response.status });
                 }),
-                switchMap(() => campaignsService.getCampaign(campaign.id)),
+                switchMap(() => campaignsService.getCampaign(campaign?.id)),
                 map((newDataCampaign) => {
                     // Mise à jour des données de la campagne
                     setCampaign(newDataCampaign.response.data);
@@ -392,7 +392,7 @@ const Campaign = () => {
             case EnumAction.CREATE:
                 setIsSubmitting(true);
 
-                subscriptionStory = storiesService.createStory(campaign.id, { story: values.story });
+                subscriptionStory = storiesService.createStory(campaign?.id, { story: values.story });
                 break;
             case EnumAction.UPDATE:
                 setIsSubmitting(true);
@@ -406,7 +406,7 @@ const Campaign = () => {
                 map((dataStory) => {
                     setMessage({ code: dataStory.response.message, type: dataStory.response.status });
                 }),
-                switchMap(() => storiesService.getCampaignStories(campaign.id)),
+                switchMap(() => storiesService.getCampaignStories(campaign?.id)),
                 map((dataStories) => {
                     openCloseStoryInput();
                     setStories(dataStories.response.data);
@@ -429,7 +429,7 @@ const Campaign = () => {
     const handleConfirmDeleteCampaign = () => {
         // Ouverture de la modale de confirmation
         openCloseConfirmModal({
-            content: t('campaign.confirmDeleteCampaign', { name: campaign.name }),
+            content: t('campaign.confirmDeleteCampaign', { name: campaign?.name }),
             action: 'deleteCampaign',
             data: null
         });
@@ -443,7 +443,7 @@ const Campaign = () => {
     const handleConfirmDeleteStory = (storyId, date) => {
         // Ouverture de la modale de confirmation
         openCloseConfirmModal({
-            content: t('campaign.deleteStory', { date: date, name: campaign.name }),
+            content: t('campaign.deleteStory', { date: date, name: campaign?.name }),
             action: 'deleteStory',
             data: storyId
         });
@@ -501,7 +501,7 @@ const Campaign = () => {
         const campaignsService = new CampaignsService();
 
         campaignsService
-            .deleteCampaign(campaign.id)
+            .deleteCampaign(campaign?.id)
             .pipe(
                 map((dataCampaign) => {
                     // Fermeture modale de confirmation
@@ -568,7 +568,7 @@ const Campaign = () => {
                 map((dataStory) => {
                     setMessage({ code: dataStory.response.message, type: dataStory.response.status });
                 }),
-                switchMap(() => storiesService.getCampaignStories(campaign.id)),
+                switchMap(() => storiesService.getCampaignStories(campaign?.id)),
                 map((dataStories) => {
                     openCloseConfirmModal();
                     setStories(dataStories.response.data);

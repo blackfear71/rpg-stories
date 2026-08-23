@@ -150,7 +150,7 @@ const Settings = () => {
      */
     useEffect(() => {
         // Redirection vers l'accueil si non connecté
-        if (!auth || !auth.isLoggedIn) {
+        if (!auth?.isLoggedIn) {
             navigate('/');
             return;
         }

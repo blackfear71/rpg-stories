@@ -45,7 +45,7 @@ const CampaignModal = ({ sagas, formData, modalOptions, setModalOptions, onClose
     const handleChangeSelect = (e) => {
         formData.setValues((prev) => ({
             ...prev,
-            sagaId: e.target.value === '' ? '' : parseInt(e.target.value)
+            sagaId: e.target.value === '' ? '' : Number.parseInt(e.target.value)
         }));
     };
 
@@ -57,11 +57,11 @@ const CampaignModal = ({ sagas, formData, modalOptions, setModalOptions, onClose
         // Ajoute ou retire un joueur
         switch (action) {
             case 'add':
-                formData.setFieldValue('players', (parseInt(formData.values.players) || 0) + 1);
+                formData.setFieldValue('players', (Number.parseInt(formData.values.players) || 0) + 1);
                 break;
             case 'remove':
                 formData.setValues((prev) => {
-                    const currentPlayers = parseInt(prev.players) || 0;
+                    const currentPlayers = Number.parseInt(prev.players) || 0;
 
                     return {
                         ...prev,

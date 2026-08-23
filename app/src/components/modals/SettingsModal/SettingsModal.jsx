@@ -47,7 +47,7 @@ const SettingsModal = ({ user, formData, modalOptions, setModalOptions, onReset,
     const handleChangeSelect = (e) => {
         formData.setValues((prev) => ({
             ...prev,
-            level: e.target.value === '' ? null : parseInt(e.target.value)
+            level: e.target.value === '' ? null : Number.parseInt(e.target.value)
         }));
     };
 
