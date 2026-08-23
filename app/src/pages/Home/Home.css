@@ -3,12 +3,6 @@
     align-content: center;
 }
 
-.home-form-message {
-    position: absolute;
-    top: 20px;
-    width: calc(100% - 40px);
-}
-
 .home-logo {
     height: 100px;
 }

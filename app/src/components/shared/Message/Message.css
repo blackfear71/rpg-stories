@@ -1,0 +1,37 @@
+.message {
+    position: fixed;
+    z-index: 1000;
+    margin: 0;
+    top: 70px;
+    border-radius: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: calc(100% - 40px);
+    animation: messageSlideIn 0.2s ease-out forwards;
+}
+
+.message-button-close {
+    flex-shrink: 0;
+}
+
+.message.message-inline {
+    position: static;
+    transform: none;
+    width: auto;
+    max-width: 100%;
+    animation: none;
+    left: auto;
+    top: auto;
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}

@@ -39,12 +39,13 @@
 
 .saga-list-panel-icon {
     color: var(--color-text-white);
+    flex-shrink: 0;
 }
 
 .saga-list-panel-title {
     font-family:
         'Cinzel-Medium', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    font-size: x-large;
+    font-size: larger;
     color: var(--color-text-white);
 }
 

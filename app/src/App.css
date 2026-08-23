@@ -181,14 +181,6 @@ a {
     border-bottom: none;
 }
 
-.modal-body .modal-statistics {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px;
-    background-color: var(--color-border-separator);
-    border-bottom: 2px solid var(--color-border-separator);
-}
-
 .modal-body .modal-group-content {
     display: flex;
     flex-direction: column;
@@ -254,5 +246,4 @@ a {
     display: flex;
     justify-content: flex-end;
     width: 100%;
-    gap: 8px;
 }

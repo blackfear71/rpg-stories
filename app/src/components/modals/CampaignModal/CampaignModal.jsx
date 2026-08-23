@@ -231,13 +231,14 @@ const CampaignModal = ({ sagas, formData, modalOptions, setModalOptions, onClose
                                     code={modalOptions.message.code}
                                     params={modalOptions.message.params}
                                     type={modalOptions.message.type}
+                                    inline={true}
                                     setMessage={setModalMessage}
                                 />
                             </div>
                         )}
 
                         {/* Boutons d'action */}
-                        <div className="modal-footer-actions">
+                        <div className="gap-2 modal-footer-actions">
                             <Button type="button" variant="outline-text-action" onClick={() => onClose()} disabled={isSubmitting}>
                                 {t('common.close')}
                             </Button>

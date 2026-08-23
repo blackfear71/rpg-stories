@@ -139,11 +139,7 @@ const Home = () => {
             ) : (
                 <div className="home-form-container">
                     {/* Message */}
-                    {message && (
-                        <div className="home-form-message">
-                            <Message code={message.code} params={message.params} type={message.type} setMessage={setMessage} />
-                        </div>
-                    )}
+                    {message && <Message code={message.code} params={message.params} type={message.type} setMessage={setMessage} />}
 
                     {/* Contenu */}
                     <div className="d-flex flex-column align-items-center justify-content-center gap-3">

@@ -103,7 +103,7 @@ const SagaList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCam
                                 <div className="d-flex align-items-center justify-content-between gap-1 mb-3">
                                     {/* Titre de la saga */}
                                     <div className="d-flex align-items-center gap-2">
-                                        <GiBookshelf size={30} className="saga-list-panel-icon" />
+                                        <GiBookshelf size={25} className="saga-list-panel-icon" />
                                         <div className="saga-list-panel-title">{saga.name}</div>
                                     </div>
 

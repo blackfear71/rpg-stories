@@ -204,6 +204,7 @@ const SearchBar = () => {
                                     code={searchMessage.code}
                                     params={searchMessage.params}
                                     type={searchMessage.type}
+                                    inline={true}
                                     setMessage={setSearchMessage}
                                 />
                             </div>

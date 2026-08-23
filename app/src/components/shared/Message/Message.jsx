@@ -3,14 +3,16 @@ import { useTranslation } from 'react-i18next';
 
 import i18next from 'i18next';
 
-import { Alert } from 'react-bootstrap';
+import { Alert, Button } from 'react-bootstrap';
 
 import { getMessageTranslationKey } from '../../../utils/helpers/messageHelper';
+
+import './Message.css';
 
 /**
  * Message
  */
-const Message = ({ code, params = {}, type = 'error', setMessage }) => {
+const Message = ({ code, params = {}, type = 'error', inline = false, setMessage }) => {
     // Traductions
     const { t } = useTranslation();
 
@@ -56,9 +58,15 @@ const Message = ({ code, params = {}, type = 'error', setMessage }) => {
 
     return (
         showMessage && (
-            <Alert variant={getVariantFromType(type)} onClose={!autoClose && handleClose} dismissible={type !== 'success'}>
+            <Alert
+                variant={getVariantFromType(type)}
+                className={`d-flex align-items-center px-3 py-2 gap-2 message ${inline ? 'message-inline' : ''}`}
+            >
                 {/* Message FRONT ou BACK */}
-                {i18next.exists(code) ? t(code, params) : getMessageTranslationKey(code, params, t)}
+                <span>{i18next.exists(code) ? t(code, params) : getMessageTranslationKey(code, params, t)}</span>
+
+                {/* Bouton de fermeture */}
+                {type !== 'success' && <Button variant="close" className="p-0 message-button-close" onClick={handleClose} />}
             </Alert>
         )
     );

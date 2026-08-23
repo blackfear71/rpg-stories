@@ -161,6 +161,7 @@ const DraftsModal = ({ draftsState, modalOptions, setModalOptions, onClose, onCo
                             code={modalOptions.message.code}
                             params={modalOptions.message.params}
                             type={modalOptions.message.type}
+                            inline={true}
                             setMessage={setModalMessage}
                         />
                     </div>
