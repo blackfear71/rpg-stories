@@ -15,7 +15,11 @@
     flex-shrink: 0;
 }
 
-.message.message-inline {
+.message-shadow {
+    box-shadow: 0 1px 3px var(--color-bg-tertiary);
+}
+
+.message-inline {
     position: static;
     transform: none;
     width: auto;
