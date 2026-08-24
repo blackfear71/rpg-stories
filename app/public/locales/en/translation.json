@@ -33,7 +33,6 @@
         "updateFailed": "Update failed",
         "updatePasswordFailed": "Password update failed",
         "uploadFailed": "Image upload failed",
-        "userNotFound": "User not found",
         "webpConversionFailed": "Error while converting image to WebP format"
     },
     "messages": {

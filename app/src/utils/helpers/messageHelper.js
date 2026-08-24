@@ -62,7 +62,7 @@ export const getMessageTranslationKey = (code, params, t) => {
         ERR_RESET_PASSWORD_FAILED: 'errors.resetPasswordFailed',
         ERR_UNAUTHORIZED_ACTION: 'errors.unauthorizedAction',
         ERR_UPDATE_PASSWORD_FAILED: 'errors.updatePasswordFailed',
-        ERR_USER_NOT_FOUND: 'errors.userNotFound',
+        ERR_USER_NOT_FOUND: 'errors.invalidAuth',
         ERR_USER_PASSWORD_INVALID: 'errors.invalidAuth',
 
         MSG_LOGIN_SUCCESS: 'messages.loginSuccess',

@@ -33,7 +33,6 @@
         "updateFailed": "Modification échouée",
         "updatePasswordFailed": "Modification du mot de passe échouée",
         "uploadFailed": "Téléchargement de l'image échoué",
-        "userNotFound": "Utilisateur non trouvé",
         "webpConversionFailed": "Erreur lors de la conversion de l'image au format WebP"
     },
     "messages": {
