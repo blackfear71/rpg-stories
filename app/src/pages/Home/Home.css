@@ -5,6 +5,7 @@
 
 .home-logo {
     height: 100px;
+    filter: drop-shadow(0 1px 3px var(--color-transparent-bg-white-light));
 }
 
 .home-title-container {

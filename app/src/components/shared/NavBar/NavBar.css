@@ -10,6 +10,7 @@
 .navbar-logo {
     height: 40px;
     width: 40px;
+    filter: drop-shadow(0 1px 3px var(--color-transparent-bg-white-light));
 }
 
 .navbar-title-container {
