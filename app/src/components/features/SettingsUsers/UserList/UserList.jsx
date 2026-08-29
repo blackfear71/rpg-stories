@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { Button } from 'react-bootstrap';
 import { FaAngleRight, FaTrashCan } from 'react-icons/fa6';
+
+import { TooltipButton } from '../../../../components/shared';
 
 import { useAuth } from '../../../../utils/context/AuthContext';
 
@@ -48,27 +49,25 @@ const UserList = ({ users, onOpen, onConfirm, isSubmitting }) => {
 
                     {/* Supression */}
                     {u.login !== auth.login && (
-                        <Button
-                            onClick={() => handleDelete(u)}
+                        <TooltipButton
+                            tooltip={t('common.delete')}
+                            content={<FaTrashCan color={isSubmitting ? 'gray' : 'white'} />}
                             variant="filled-icon-action"
                             className="settings-item-button"
-                            style={{ cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
-                            disabled={isSubmitting}
-                        >
-                            <FaTrashCan color={isSubmitting ? 'gray' : 'white'} />
-                        </Button>
+                            onClick={() => handleDelete(u)}
+                            isSubmitting={isSubmitting}
+                        />
                     )}
 
                     {/* Modification */}
-                    <Button
-                        onClick={() => onOpen(EnumAction.UPDATE, u.id)}
+                    <TooltipButton
+                        tooltip={t('common.update')}
+                        content={<FaAngleRight color={isSubmitting ? 'gray' : 'white'} />}
                         variant="filled-icon-action"
                         className="settings-item-button"
-                        style={{ cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
-                        disabled={isSubmitting}
-                    >
-                        <FaAngleRight color={isSubmitting ? 'gray' : 'white'} />
-                    </Button>
+                        onClick={() => onOpen(EnumAction.UPDATE, u.id)}
+                        isSubmitting={isSubmitting}
+                    />
                 </div>
             ))}
         </>
