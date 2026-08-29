@@ -168,8 +168,8 @@ const Campaigns = () => {
      * Redirection vers l'accueil si non connecté
      */
     useEffect(() => {
+        // Redirection vers l'accueil si non connecté (en évitant la navigation concurrente à la déconnexion)
         if (!auth?.isLoggedIn) {
-            // Redirection si non connecté (en évitant la navigation concurrente à la déconnexion)
             if (skipAutoRedirectRef.current) {
                 skipAutoRedirectRef.current = false;
             } else {

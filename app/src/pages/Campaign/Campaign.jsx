@@ -44,7 +44,7 @@ const Campaign = () => {
     const navigate = useNavigate();
 
     // Contexte
-    const { auth, authMessage, refreshAuth, setAuthMessage } = useAuth();
+    const { auth, authMessage, refreshAuth, setAuthMessage, skipAutoRedirectRef } = useAuth();
     const draftsState = useDrafts(id);
 
     // Traductions
@@ -184,8 +184,13 @@ const Campaign = () => {
      * Redirection vers l'accueil si non connecté
      */
     useEffect(() => {
+        // Redirection vers l'accueil si non connecté (en évitant la navigation concurrente à la déconnexion)
         if (!auth?.isLoggedIn) {
-            navigate('/');
+            if (skipAutoRedirectRef.current) {
+                skipAutoRedirectRef.current = false;
+            } else {
+                navigate('/');
+            }
         }
     }, [auth]);
 

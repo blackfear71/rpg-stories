@@ -47,7 +47,7 @@ const Settings = () => {
     const navigate = useNavigate();
 
     // Contexte
-    const { auth, authMessage, setAuthMessage, refreshAuth } = useAuth();
+    const { auth, authMessage, refreshAuth, setAuthMessage, skipAutoRedirectRef } = useAuth();
 
     // Traductions
     const { t } = useTranslation();
@@ -149,10 +149,13 @@ const Settings = () => {
      * Récupération des données après contrôle de l'authentification
      */
     useEffect(() => {
-        // Redirection vers l'accueil si non connecté
+        // Redirection vers l'accueil si non connecté (en évitant la navigation concurrente à la déconnexion)
         if (!auth?.isLoggedIn) {
-            navigate('/');
-            return;
+            if (skipAutoRedirectRef.current) {
+                skipAutoRedirectRef.current = false;
+            } else {
+                navigate('/');
+            }
         }
 
         // Récupération des données utilisateurs
