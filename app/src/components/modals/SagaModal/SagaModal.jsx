@@ -44,8 +44,8 @@ const SagaModal = ({ formData, modalOptions, setModalOptions, onClose, isSubmitt
      */
     const getTitleFromAction = (action) =>
         ({
-            create: 'campaign.createSaga',
-            update: 'campaign.updateSaga'
+            create: 'sagas.createSaga',
+            update: 'sagas.updateSaga'
         })[action] || 'common.unknownLabel';
 
     /**
@@ -73,11 +73,11 @@ const SagaModal = ({ formData, modalOptions, setModalOptions, onClose, isSubmitt
                         <div className="modal-group">
                             <div className="modal-group-content">
                                 <TextInput
-                                    title={t('campaign.sagaName')}
+                                    title={t('sagas.sagaName')}
                                     icon={<GiBookshelf />}
                                     name={'name'}
                                     ref={nameInputRef}
-                                    placeholder={t('campaign.sagaName')}
+                                    placeholder={t('sagas.sagaName')}
                                     value={formData.values.name}
                                     onChange={formData.handleChange}
                                     error={formData.submitCount > 0 && formData.errors.name}

@@ -238,7 +238,7 @@ const Campaigns = () => {
      */
     const processSagasData = (dataCampaigns, dataSagas) => {
         // Ajout d'un groupe "Hors saga" (id = 0) en tête de liste si besoin
-        let sagasData = dataCampaigns.some((c) => !c.sagaId) ? [{ id: 0, name: t('campaign.noSaga') }, ...dataSagas] : dataSagas;
+        let sagasData = dataCampaigns.some((c) => !c.sagaId) ? [{ id: 0, name: null }, ...dataSagas] : dataSagas;
 
         // Ajout de l'image de la campagne la plus récente et calcul du nombre de campagnes par saga
         sagasData = sagasData.map((saga) => {
@@ -515,7 +515,7 @@ const Campaigns = () => {
     const handleConfirmDeleteSaga = (sagaId, name) => {
         // Ouverture de la modale de confirmation
         openCloseConfirmModal({
-            content: t('campaign.confirmDeleteSaga', { name: name }),
+            content: t('sagas.confirmDeleteSaga', { name: name }),
             action: 'deleteSaga',
             data: sagaId
         });
@@ -581,7 +581,7 @@ const Campaigns = () => {
                         className="p-1 mb-3 gap-1 justify-content-center page-tabs"
                     >
                         {/* Sagas */}
-                        <Tab eventKey="sagas" title={t('campaign.sagas')}>
+                        <Tab eventKey="sagas" title={t('sagas.sagas')}>
                             <SagaList
                                 sagas={sagas}
                                 sagaCampaigns={sagaCampaigns}

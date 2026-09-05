@@ -56,7 +56,7 @@ const SagaList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCam
                 disabled={isSubmitting}
             >
                 <IoAddCircleOutline size={30} />
-                {t('campaign.createSaga')}
+                {t('sagas.createSaga')}
             </Button>
 
             {/* Sagas */}
@@ -79,7 +79,7 @@ const SagaList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCam
                             {/* Nom de la saga */}
                             <div className="d-flex align-items-center gap-2 py-1 px-2 rounded campaigns-button-label">
                                 <GiBookshelf size={30} className="campaigns-button-icon" />
-                                <span className="campaigns-button-text">{saga.name}</span>
+                                <span className="campaigns-button-text">{saga.id === 0 ? t('sagas.noSaga') : saga.name}</span>
                             </div>
 
                             {/* Badges */}
@@ -88,7 +88,7 @@ const SagaList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCam
                                 <div className="d-flex align-items-center gap-1 py-1 px-2 rounded campaigns-button-badge">
                                     <GiSpellBook size={20} className="campaigns-button-icon" />
                                     <span className="campaigns-button-text">
-                                        {t(saga.campaignCount === 1 ? 'campaign.countCampaign' : 'campaign.countCampaigns', {
+                                        {t(saga.campaignCount === 1 ? 'sagas.countCampaign' : 'sagas.countCampaigns', {
                                             count: saga.campaignCount
                                         })}
                                     </span>
@@ -104,7 +104,7 @@ const SagaList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCam
                                     {/* Titre de la saga */}
                                     <div className="d-flex align-items-center gap-2">
                                         <GiBookshelf size={25} className="saga-list-panel-icon" />
-                                        <div className="saga-list-panel-title">{saga.name}</div>
+                                        <div className="saga-list-panel-title">{saga.id === 0 ? t('sagas.noSaga') : saga.name}</div>
                                     </div>
 
                                     {/* Actions */}

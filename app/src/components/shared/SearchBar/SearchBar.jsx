@@ -92,7 +92,7 @@ const SearchBar = () => {
                         setResults(
                             dataSearch.response.data.map((item) => ({
                                 ...item,
-                                sagaName: item.sagaName ?? t('campaign.noSaga')
+                                sagaName: item.sagaName
                             }))
                         );
                         setShowResults(true);
@@ -227,7 +227,7 @@ const SearchBar = () => {
 
                                     <div className="ms-3 search-result-item-right">
                                         <span className="search-result-item-text">
-                                            {item.universe ? `${item.sagaName} • ${item.universe}` : item.sagaName}
+                                            {item.universe ? `${item.sagaName ?? t('sagas.noSaga')} • ${item.universe}` : item.sagaName}
                                         </span>
                                     </div>
                                 </div>
