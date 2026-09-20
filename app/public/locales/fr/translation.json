@@ -67,7 +67,9 @@
     },
     "campaign": {
         "campaignName": "Nom de la campagne",
+        "campaign": "Campagne",
         "campaigns": "Campagnes",
+        "character": "Mon personnage",
         "chooseSaga": "Choisir une saga",
         "confirmDeleteCampaign": "Voulez-vous vraiment supprimer la campagne \"{{name}}\" ?",
         "confirmDeleteDrafts": "Voulez-vous vraiment supprimer tous les brouillons de la campagne ?",
@@ -96,6 +98,12 @@
         "symbols": "Symboles",
         "universe": "Univers",
         "updateCampaign": "Modifier la campagne"
+    },
+    "character": {
+        "createCharacter": "Créer un personnage",
+        "deleteCharacter": "Supprimer le personnage",
+        "importCharacter": "Importer un personnage",
+        "updateCharacter": "Modifier le personnage"
     },
     "home": {
         "rpg": "RPG",

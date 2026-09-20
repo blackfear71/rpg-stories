@@ -8,9 +8,9 @@ import * as Yup from 'yup';
 import { combineLatest, of, switchMap } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
 
-import { Spinner } from 'react-bootstrap';
+import { Spinner, Tab, Tabs } from 'react-bootstrap';
 
-import { CampaignHeader, CampaignSaga, StoryList } from '../../components/features';
+import { CampaignHeader, CampaignSaga, Character, StoryList } from '../../components/features';
 import { CampaignModal, ConfirmModal, DraftsModal } from '../../components/modals';
 import { Message } from '../../components/shared';
 
@@ -53,6 +53,7 @@ const Campaign = () => {
     // Local states
     const newStoryRef = useRef(null);
     const storyRefs = useRef({});
+    const [disabled, setDisabled] = useState(false);
     const [inputOptionsStory, setInputOptionsStory] = useState({
         action: null,
         storyId: 0,
@@ -594,6 +595,15 @@ const Campaign = () => {
     };
 
     /**
+     * Changement d'onglet
+     * @param {*} tab Onglet sélectionné
+     */
+    const handleSelectTab = (tab) => {
+        // Si on quitte l'onglet Campagne, on désactive certaines actions
+        setDisabled(tab !== 'campaign');
+    };
+
+    /**
      * Enregistre / efface la ref DOM d'une histoire
      */
     const registerStoryRef = (storyId, node) => {
@@ -640,34 +650,60 @@ const Campaign = () => {
                                 onOpenDraftsModal={openCloseDraftsModal}
                                 onOpenCampaignModal={openCloseCampaignModal}
                                 onConfirm={handleConfirmDeleteCampaign}
+                                disabled={disabled}
                                 isSubmitting={isSubmitting}
                             />
 
-                            {/* Saga */}
-                            {sagas && sagaCampaigns && sagaCampaigns.length > 0 && (
-                                <CampaignSaga
-                                    campaignId={campaign.id}
-                                    saga={sagas.find((s) => s.id === campaign.sagaId)}
-                                    sagaCampaigns={sagaCampaigns}
-                                    isSubmitting={isSubmitting}
-                                />
-                            )}
+                            {/* Onglets */}
+                            <Tabs
+                                variant="pills"
+                                defaultActiveKey="campaign"
+                                onSelect={handleSelectTab}
+                                id="campaign-tabs"
+                                className="p-1 gap-1 justify-content-center page-tabs"
+                            >
+                                {/* Campagne */}
+                                <Tab eventKey="campaign" title={t('campaign.campaign')}>
+                                    <div className="d-flex flex-column gap-3">
+                                        {/* Saga */}
+                                        {sagas && sagaCampaigns && sagaCampaigns.length > 0 && (
+                                            <CampaignSaga
+                                                campaignId={campaign.id}
+                                                saga={sagas.find((s) => s.id === campaign.sagaId)}
+                                                sagaCampaigns={sagaCampaigns}
+                                                isSubmitting={isSubmitting}
+                                            />
+                                        )}
 
-                            {/* Timeline */}
-                            <StoryList
-                                stories={stories}
-                                inputOptions={inputOptionsStory}
-                                newStoryRef={newStoryRef}
-                                campaignId={id}
-                                formData={formStory}
-                                draftsState={draftsState}
-                                onConfirm={handleConfirmDeleteStory}
-                                onOpenClose={openCloseStoryInput}
-                                onNavigate={handleNavigateStory}
-                                registerRef={registerStoryRef}
-                                setMessage={setMessage}
-                                isSubmitting={isSubmitting}
-                            />
+                                        {/* Timeline */}
+                                        <StoryList
+                                            stories={stories}
+                                            inputOptions={inputOptionsStory}
+                                            newStoryRef={newStoryRef}
+                                            campaignId={id}
+                                            formData={formStory}
+                                            draftsState={draftsState}
+                                            onConfirm={handleConfirmDeleteStory}
+                                            onOpenClose={openCloseStoryInput}
+                                            onNavigate={handleNavigateStory}
+                                            registerRef={registerStoryRef}
+                                            setMessage={setMessage}
+                                            isSubmitting={isSubmitting}
+                                        />
+                                    </div>
+                                </Tab>
+
+                                {/* Personnage */}
+                                <Tab eventKey="character" title={t('campaign.character')}>
+                                    <Character
+                                        character={null}
+                                        onOpenCharacter={null}
+                                        onOpenImport={null}
+                                        onConfirm={null}
+                                        isSubmitting={isSubmitting}
+                                    />
+                                </Tab>
+                            </Tabs>
 
                             {/* Modale de modification de campagne */}
                             {formCampaign && modalOptionsCampaign.isOpen && (

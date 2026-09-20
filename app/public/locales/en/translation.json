@@ -67,7 +67,9 @@
     },
     "campaign": {
         "campaignName": "Campaign name",
+        "campaign": "Campaign",
         "campaigns": "Campaigns",
+        "character": "My character",
         "chooseSaga": "Choose saga",
         "confirmDeleteCampaign": "Do you really want to delete the campaign \"{{name}}\"?",
         "confirmDeleteDrafts": "Do you really want to delete all the drafts from the campaign ?",
@@ -96,6 +98,12 @@
         "symbols": "Symbols",
         "universe": "Universe",
         "updateCampaign": "Edit the campaign"
+    },
+    "character": {
+        "createCharacter": "Create character",
+        "deleteCharacter": "Delete character",
+        "importCharacter": "Import character",
+        "updateCharacter": "Update character"
     },
     "home": {
         "rpg": "RPG",

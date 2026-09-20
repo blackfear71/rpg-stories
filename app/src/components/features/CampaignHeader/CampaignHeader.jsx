@@ -22,6 +22,7 @@ const CampaignHeader = ({
     onOpenDraftsModal,
     onOpenCampaignModal,
     onConfirm,
+    disabled,
     isSubmitting
 }) => {
     // Traductions
@@ -79,7 +80,7 @@ const CampaignHeader = ({
             {/* Actions */}
             <div className="d-flex flex-column gap-2 ms-auto">
                 {/* Ajout histoire */}
-                {!inputOptions?.isOpen && (
+                {!disabled && !inputOptions?.isOpen && (
                     <TooltipButton
                         tooltip={t('campaign.createStory')}
                         content={<FaPlus size={25} />}
@@ -91,7 +92,7 @@ const CampaignHeader = ({
                 )}
 
                 {/* Brouillons */}
-                {!inputOptions?.isOpen && !draftLoading && drafts && drafts.length > 0 && (
+                {!disabled && !inputOptions?.isOpen && !draftLoading && drafts && drafts.length > 0 && (
                     <TooltipButton
                         tooltip={t('campaign.drafts')}
                         content={<MdRestorePage size={25} />}
