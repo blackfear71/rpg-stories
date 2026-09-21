@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Form, Modal } from 'react-bootstrap';
-import { GiHills, GiPointyHat, GiSwordsPower } from 'react-icons/gi';
+import { GiPointyHat, GiPortrait, GiSwordsPower } from 'react-icons/gi';
 
 import { PictureInput, TextInput } from '../../inputs';
 
@@ -110,7 +110,7 @@ const CharacterModal = ({ formData, modalOptions, setModalOptions, onClose, isSu
                             <div className="modal-group-content">
                                 <PictureInput
                                     title={t('campaign.picture')}
-                                    icon={<GiHills />}
+                                    icon={<GiPortrait />}
                                     name={'picture'}
                                     value={formData.values.picture}
                                     onChange={handleChangeFile}
