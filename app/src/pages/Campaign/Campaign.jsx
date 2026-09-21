@@ -11,7 +11,7 @@ import { catchError, finalize, map, take } from 'rxjs/operators';
 import { Spinner, Tab, Tabs } from 'react-bootstrap';
 
 import { CampaignHeader, CampaignSaga, Character, StoryList } from '../../components/features';
-import { CampaignModal, ConfirmModal, DraftsModal } from '../../components/modals';
+import { CampaignModal, CharacterModal, ConfirmModal, DraftsModal } from '../../components/modals';
 import { Message } from '../../components/shared';
 
 import { useAuth } from '../../utils/context/AuthContext';
@@ -27,6 +27,12 @@ const initialCampaignValues = {
     name: '',
     universe: null,
     players: 0,
+    picture: null,
+    pictureAction: null
+};
+const initialCharacterValues = {
+    id: null,
+    name: '',
     picture: null,
     pictureAction: null
 };
@@ -67,6 +73,11 @@ const Campaign = () => {
         isOpen: false,
         message: null
     });
+    const [modalOptionsCharacter, setModalOptionsCharacter] = useState({
+        action: null,
+        isOpen: false,
+        message: null
+    });
     const [modalOptionsConfirm, setModalOptionsConfirm] = useState({
         content: '',
         action: null,
@@ -81,6 +92,7 @@ const Campaign = () => {
 
     // API states
     const [campaign, setCampaign] = useState();
+    const [character, setCharacter] = useState();
     const [sagaCampaigns, setSagaCampaigns] = useState([]);
     const [sagas, setSagas] = useState([]);
     const [stories, setStories] = useState([]);
@@ -96,6 +108,24 @@ const Campaign = () => {
                 .min(1, 'errors.invalidPlayers')
                 .typeError('errors.invalidPlayers')
                 .required('errors.invalidPlayers'),
+            picture: Yup.mixed()
+                .nullable()
+                .test('file-type', 'errors.invalidFileType', (value) => {
+                    if (!value || typeof value === 'string') {
+                        return true;
+                    }
+
+                    return ['image/jpeg', 'image/png', 'image/webp'].includes(value.type);
+                })
+        });
+    }, []);
+
+    /**
+     * Schéma de validation Yup du personnage
+     */
+    const characterValidationSchema = useMemo(() => {
+        return Yup.object({
+            name: Yup.string().required('errors.invalidName'),
             picture: Yup.mixed()
                 .nullable()
                 .test('file-type', 'errors.invalidFileType', (value) => {
@@ -133,6 +163,15 @@ const Campaign = () => {
         initialValues: initialStoryValues,
         validationSchema: storyValidationSchema,
         onSubmit: (values) => handleSubmitStory(values)
+    });
+
+    /**
+     * Formik personnage
+     */
+    const formCharacter = useFormik({
+        initialValues: initialCharacterValues,
+        validationSchema: characterValidationSchema,
+        onSubmit: (values) => handleSubmitCharacter(values)
     });
 
     /**
@@ -264,6 +303,25 @@ const Campaign = () => {
     }, [inputOptionsStory.isOpen, inputOptionsStory.storyId, inputOptionsStory.action]);
 
     /**
+     * Mise à jour du formulaire du personnage aux changements de sa modale
+     */
+    useEffect(() => {
+        // Initialisation à l'ouverture de la modale
+        if (modalOptionsCharacter.isOpen && character) {
+            formCharacter.setValues({
+                name: character.name,
+                picture: character.picture,
+                pictureAction: null
+            });
+        }
+
+        // Réinitialisation à la fermeture de la modale
+        if (!modalOptionsCharacter.isOpen) {
+            formCharacter.resetForm();
+        }
+    }, [modalOptionsCharacter.isOpen, character]);
+
+    /**
      * Ouverture/fermeture des brouillons
      */
     const openCloseDraftsModal = () => {
@@ -299,7 +357,7 @@ const Campaign = () => {
         setModalOptionsCampaign((prev) => ({ ...prev, message: null }));
 
         // Formatage des données
-        const body = formatDataCampaign(values);
+        const body = formatBody(values);
 
         const campaignsService = new CampaignsService();
 
@@ -341,29 +399,6 @@ const Campaign = () => {
                 })
             )
             .subscribe();
-    };
-
-    /**
-     * Formate les données campagne
-     * @param {*} values Données du formulaire
-     * @returns Données formatées
-     */
-    const formatDataCampaign = (values) => {
-        const formData = new FormData();
-
-        // Champs textes
-        Object.entries(values).forEach(([key, value]) => {
-            if (key !== 'picture' && value) {
-                formData.append(key, value);
-            }
-        });
-
-        // Images (s'il y a une image à traiter)
-        if (values.pictureAction === EnumAction.CREATE && values.picture) {
-            formData.append('picture', values.picture);
-        }
-
-        return formData;
     };
 
     /**
@@ -487,6 +522,8 @@ const Campaign = () => {
         switch (modalOptionsConfirm?.action) {
             case 'deleteCampaign':
                 return handleDeleteCampaign();
+            case 'deleteCharacter':
+                return handleDeleteCharacter();
             case 'deleteDrafts':
                 return handleDeleteDrafts();
             case 'deleteStory':
@@ -519,6 +556,39 @@ const Campaign = () => {
                             navMessage: { code: dataCampaign.response.message, type: dataCampaign.response.status }
                         }
                     });
+                }),
+                take(1),
+                catchError((err) => {
+                    setModalOptionsConfirm((prev) => ({
+                        ...prev,
+                        message: { code: err?.response?.message, type: err?.response?.status }
+                    }));
+                    return of();
+                }),
+                finalize(() => {
+                    setIsSubmitting(false);
+                })
+            )
+            .subscribe();
+    };
+
+    /**
+     * Suppression du personnage
+     */
+    const handleDeleteCharacter = () => {
+        setMessage(null);
+        setIsSubmitting(true);
+        setModalOptionsConfirm((prev) => ({ ...prev, message: null }));
+
+        const campaignsService = new CampaignsService();
+
+        campaignsService
+            .deleteCharacter(character?.id)
+            .pipe(
+                map((dataCharacter) => {
+                    // Fermeture modale de confirmation
+                    openCloseConfirmModal();
+                    setMessage({ code: dataCharacter.response.message, type: dataCharacter.response.status });
                 }),
                 take(1),
                 catchError((err) => {
@@ -595,15 +665,6 @@ const Campaign = () => {
     };
 
     /**
-     * Changement d'onglet
-     * @param {*} tab Onglet sélectionné
-     */
-    const handleSelectTab = (tab) => {
-        // Si on quitte l'onglet Campagne, on désactive certaines actions
-        setDisabled(tab !== 'campaign');
-    };
-
-    /**
      * Enregistre / efface la ref DOM d'une histoire
      */
     const registerStoryRef = (storyId, node) => {
@@ -624,6 +685,118 @@ const Campaign = () => {
         const targetStory = stories[targetIndex];
 
         targetStory && storyRefs.current[targetStory.id]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    /**
+     * Changement d'onglet
+     * @param {*} tab Onglet sélectionné
+     */
+    const handleSelectTab = (tab) => {
+        // Si on quitte l'onglet Campagne, on désactive certaines actions
+        setDisabled(tab !== 'campaign');
+    };
+
+    /**
+     * Ouverture/fermeture de la modale de création / modification de personnage
+     * @param {*} action Action à réaliser
+     */
+    const openCloseCharacterModal = (action = null) => {
+        // Ouverture ou fermeture
+        setModalOptionsCharacter((prev) => ({
+            ...prev,
+            action: action,
+            isOpen: !prev.isOpen,
+            message: null
+        }));
+    };
+
+    /**
+     * Création / modification de la campagne
+     * @param {*} values Données du formulaire
+     */
+    const handleSubmitCharacter = (values) => {
+        setMessage(null);
+        setIsSubmitting(true);
+        setModalOptionsCharacter((prev) => ({ ...prev, message: null }));
+
+        // Formatage des données
+        const body = formatBody(values);
+
+        const campaignsService = new CampaignsService();
+
+        let subscriptionCharacter = null;
+
+        switch (modalOptionsCharacter?.action) {
+            case EnumAction.CREATE:
+                setIsSubmitting(true);
+
+                subscriptionCharacter = campaignsService.createCharacter(campaign?.id, body);
+                break;
+            case EnumAction.UPDATE:
+                setIsSubmitting(true);
+
+                subscriptionCharacter = campaignsService.updateCharacter(values.id, body);
+                break;
+        }
+
+        subscriptionCharacter
+            ?.pipe(
+                map((dataCharacter) => {
+                    setMessage({ code: dataCharacter.response.message, type: dataCharacter.response.status });
+                }),
+                switchMap(() => campaignsService.getCharacter(campaign?.id)),
+                map((dataCampaignCharacter) => {
+                    openCloseCharacterModal();
+                    setCharacter(dataCampaignCharacter.response.data);
+                }),
+                take(1),
+                catchError((err) => {
+                    setModalOptionsCharacter((prev) => ({
+                        ...prev,
+                        message: { code: err?.response?.message, type: err?.response?.status }
+                    }));
+                    return of();
+                }),
+                finalize(() => {
+                    setIsSubmitting(false);
+                })
+            )
+            .subscribe();
+    };
+
+    /**
+     * Ouvre la modale de suppression de personnage
+     */
+    const handleConfirmDeleteCharacter = () => {
+        // Ouverture de la modale de confirmation
+        openCloseConfirmModal({
+            content: t('campaign.confirmDeleteCharacter', { name: character?.name }),
+            action: 'deleteCharacter',
+            data: null
+        });
+    };
+
+    /**
+     * Formate les données body
+     * @param {*} values Données du formulaire
+     * @returns Données formatées
+     */
+    const formatBody = (values) => {
+        const formData = new FormData();
+
+        // Champs textes
+        Object.entries(values).forEach(([key, value]) => {
+            if (key !== 'picture' && value) {
+                formData.append(key, value);
+            }
+        });
+
+        // Images (s'il y a une image à traiter)
+        if (values.pictureAction === EnumAction.CREATE && values.picture) {
+            formData.append('picture', values.picture);
+        }
+
+        return formData;
     };
 
     return (
@@ -696,10 +869,10 @@ const Campaign = () => {
                                 {/* Personnage */}
                                 <Tab eventKey="character" title={t('campaign.character')}>
                                     <Character
-                                        character={null}
-                                        onOpenCharacter={null}
-                                        onOpenImport={null}
-                                        onConfirm={null}
+                                        character={character}
+                                        onOpenCharacter={openCloseCharacterModal}
+                                        onOpenImport={null} // TODO : ouverture modale import
+                                        onConfirm={handleConfirmDeleteCharacter}
                                         isSubmitting={isSubmitting}
                                     />
                                 </Tab>
@@ -729,6 +902,30 @@ const Campaign = () => {
                                     isSubmitting={isSubmitting}
                                 />
                             )}
+
+                            {/* Modale de création / modification de personnage */}
+                            {formCharacter && modalOptionsCharacter.isOpen && (
+                                <CharacterModal
+                                    formData={formCharacter}
+                                    modalOptions={modalOptionsCharacter}
+                                    setModalOptions={setModalOptionsCharacter}
+                                    onClose={openCloseCharacterModal}
+                                    isSubmitting={isSubmitting}
+                                />
+                            )}
+
+                            {/* Modale d'import de personnage */}
+                            {/* TODO : modale import */}
+                            {/* {formImportCharacter && modalOptionsImportCharacter.isOpen && (
+                                <ImportCharacterModal
+                                    characters={characters}
+                                    modalOptions={modalOptionsImportCharacter}
+                                    setModalOptions={setModalOptionsImportCharacter}
+                                    onSelectCharacter={}
+                                    onClose={openCloseImportCharacterModal}
+                                    isSubmitting={isSubmitting}
+                                />
+                            )} */}
 
                             {/* Modale de confirmation */}
                             {modalOptionsConfirm.isOpen && (

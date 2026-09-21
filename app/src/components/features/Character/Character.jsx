@@ -29,6 +29,9 @@ const Character = ({ character, onOpenCharacter, onOpenImport, onConfirm, isSubm
                         {t('character.updateCharacter')}
                     </Button>
 
+                    {/* Détachement */}
+                    {/* TODO : bouton pour détacher (sans suppression, modale confirmation, adapter pour avoir 3 boutons) */}
+
                     {/* Suppression */}
                     <Button
                         variant="filled-icon-action"

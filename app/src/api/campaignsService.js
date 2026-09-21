@@ -77,12 +77,46 @@ class CampaignsService {
     };
 
     /**
+     * Récupération d'un personnage
+     * @param {*} campaignId Identifiant campagne
+     * @returns Personnage
+     */
+    getCharacter = (campaignId) => {
+        const url = `${this.apiUrl}/character/${campaignId}`;
+        // TODO : back à faire
+        return ajax({
+            url,
+            method: 'GET',
+            headers: this.headers,
+            withCredentials: true
+        });
+    };
+
+    /**
      * Création campagne
      * @param {*} body Données campagne
      * @returns Message retour
      */
     createCampaign = (body) => {
         const url = `${this.apiUrl}/create`;
+        return ajax({
+            url,
+            method: 'POST', // La méthode doit être POST pour remplir $_POST et $_FILES côté back
+            headers: undefined, // Si le body est de type FormData, le Content-Type ne doit pas être précisé dans le header
+            body,
+            withCredentials: true
+        });
+    };
+
+    /**
+     * Création personnage
+     * @param {*} campaignId Identifiant campagne
+     * @param {*} body Données personnage
+     * @returns Message retour
+     */
+    createCharacter = (campaignId, body) => {
+        const url = `${this.apiUrl}/create/character/${campaignId}`;
+        // TODO : back à faire
         return ajax({
             url,
             method: 'POST', // La méthode doit être POST pour remplir $_POST et $_FILES côté back
@@ -110,6 +144,24 @@ class CampaignsService {
     };
 
     /**
+     * Mise à jour personnage
+     * @param {*} characterId Identifiant personnage
+     * @param {*} body Données personnage
+     * @returns Message retour
+     */
+    updateCharacter = (characterId, body) => {
+        const url = `${this.apiUrl}/update/${characterId}`;
+        // TODO : back à faire
+        return ajax({
+            url,
+            method: 'POST', // La méthode doit être POST pour remplir $_POST et $_FILES côté back
+            headers: undefined, // Si le body est de type FormData, le Content-Type ne doit pas être précisé dans le header
+            body,
+            withCredentials: true
+        });
+    };
+
+    /**
      * Suppression campagne
      * @param {*} campaignId Identifiant campagne
      * @returns Message retour
@@ -123,6 +175,24 @@ class CampaignsService {
             withCredentials: true
         });
     };
+
+    /**
+     * Suppression personnage
+     * @param {*} characterId Identifiant personnage
+     * @returns Message retour
+     */
+    deleteCharacter = (characterId) => {
+        const url = `${this.apiUrl}/delete/character/${characterId}`;
+        // TODO : back à faire
+        return ajax({
+            url,
+            method: 'DELETE',
+            headers: this.headers,
+            withCredentials: true
+        });
+    };
+
+    // TODO : importCharacter + unlinkCharacter
 }
 
 export default CampaignsService;

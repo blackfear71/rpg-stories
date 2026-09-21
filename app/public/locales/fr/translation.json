@@ -100,6 +100,8 @@
         "updateCampaign": "Modifier la campagne"
     },
     "character": {
+        "characterName": "Nom du personnage",
+        "confirmDeleteCampaign": "Voulez-vous vraiment supprimer le personnage \"{{name}}\" ? Attention, celui-ci sera supprimé de toutes les campagnes auxquelles il est lié.",
         "createCharacter": "Créer un personnage",
         "deleteCharacter": "Supprimer le personnage",
         "importCharacter": "Importer un personnage",
