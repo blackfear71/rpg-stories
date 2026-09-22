@@ -53,7 +53,7 @@ class SagasService {
      * @returns Message retour
      */
     updateSaga = (sagaId, body) => {
-        const url = `${this.apiUrl}/update/${sagaId}`;
+        const url = `${this.apiUrl}/saga/${sagaId}/update`;
         return ajax({
             url,
             method: 'POST', // La méthode doit être POST pour remplir $_POST et $_FILES côté back
@@ -69,7 +69,7 @@ class SagasService {
      * @returns Message retour
      */
     deleteSaga = (sagaId) => {
-        const url = `${this.apiUrl}/delete/${sagaId}`;
+        const url = `${this.apiUrl}/saga/${sagaId}/delete`;
         return ajax({
             url,
             method: 'DELETE',

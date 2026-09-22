@@ -22,7 +22,7 @@ $router->get('/stories/campaign/:campaignId', function (array $params) use ($db)
 /**
  * Insertion d'un enregistrement
  */
-$router->post('/stories/create/campaign/:campaignId', function (array $params) use ($db): void {
+$router->post('/stories/campaign/:campaignId/create', function (array $params) use ($db): void {
     // Token
     $token = $_COOKIE['token'] ?? null;
 
@@ -39,7 +39,7 @@ $router->post('/stories/create/campaign/:campaignId', function (array $params) u
 /**
  * Modification d'un enregistrement
  */
-$router->patch('/stories/update/:storyId', function (array $params) use ($db): void {
+$router->patch('/stories/story/:storyId/update', function (array $params) use ($db): void {
     // Token
     $token = $_COOKIE['token'] ?? null;
 
@@ -56,7 +56,7 @@ $router->patch('/stories/update/:storyId', function (array $params) use ($db): v
 /**
  * Suppression logique d'un enregistrement
  */
-$router->delete('/stories/delete/:storyId', function (array $params) use ($db): void {
+$router->delete('/stories/story/:storyId/delete', function (array $params) use ($db): void {
     // Token
     $token = $_COOKIE['token'] ?? null;
 

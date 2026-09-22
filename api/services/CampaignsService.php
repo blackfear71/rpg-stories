@@ -86,12 +86,12 @@ class CampaignsService
     }
 
     /**
-     * Lecture des campagnes de la même saga
+     * Lecture des campagnes de la saga liée
      */
-    public function getSagaCampaigns(int $sagaId, int $userId): array
+    public function getSagaCampaigns(int $campaignId, int $userId): array
     {
         // Lecture des campagnes
-        $campaigns = $this->campaignsRepository->getSagaCampaigns($sagaId, $userId);
+        $campaigns = $this->campaignsRepository->getSagaCampaigns($campaignId, $userId);
 
         return array_map(fn($campaign) => new CampaignOutputDTO(
             id: $campaign->id,

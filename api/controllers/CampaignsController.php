@@ -75,16 +75,16 @@ class CampaignsController
     }
 
     /**
-     * Lecture des campagnes de la même saga
+     * Lecture des campagnes de la saga liée
      */
-    public function getSagaCampaigns(?string $token, int $sagaId): void
+    public function getSagaCampaigns(?string $token, int $campaignId): void
     {
         try {
             // Contrôle authentification et niveau utilisateur
             $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
 
             // Lecture de tous les enregistrements
-            $campaigns = $this->campaignsService->getSagaCampaigns($sagaId, $user->id);
+            $campaigns = $this->campaignsService->getSagaCampaigns($campaignId, $user->id);
 
             // Succès
             ResponseHelper::success($campaigns);

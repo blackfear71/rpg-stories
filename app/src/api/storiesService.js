@@ -38,7 +38,7 @@ class StoriesService {
      * @returns Données retour
      */
     createStory = (campaignId, body) => {
-        const url = `${this.apiUrl}/create/campaign/${campaignId}`;
+        const url = `${this.apiUrl}/campaign/${campaignId}/create`;
         return ajax({
             url,
             method: 'POST',
@@ -55,7 +55,7 @@ class StoriesService {
      * @returns Données retour
      */
     updateStory = (storyId, body) => {
-        const url = `${this.apiUrl}/update/${storyId}`;
+        const url = `${this.apiUrl}/story/${storyId}/update`;
         return ajax({
             url,
             method: 'PATCH',
@@ -71,7 +71,7 @@ class StoriesService {
      * @returns Données retour
      */
     deleteStory = (storyId) => {
-        const url = `${this.apiUrl}/delete/${storyId}`;
+        const url = `${this.apiUrl}/story/${storyId}/delete`;
         return ajax({
             url,
             method: 'DELETE',
