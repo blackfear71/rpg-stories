@@ -69,7 +69,7 @@ const SagaList = ({ sagas, sagaCampaigns, onOpenSaga, onOpenSagaModal, onOpenCam
                             style={
                                 saga.picture
                                     ? {
-                                          backgroundImage: `url(${import.meta.env.VITE_API_URL}/serve-file/images?file=${encodeURIComponent(saga.picture)})`
+                                          backgroundImage: `url(${import.meta.env.VITE_API_URL}/serve-file/campaigns?file=${encodeURIComponent(saga.picture)})`
                                       }
                                     : undefined
                             }

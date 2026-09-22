@@ -36,7 +36,7 @@ const CampaignHeader = ({
             style={
                 campaign.picture
                     ? {
-                          backgroundImage: `url(${import.meta.env.VITE_API_URL}/serve-file/images?file=${encodeURIComponent(campaign.picture)})`
+                          backgroundImage: `url(${import.meta.env.VITE_API_URL}/serve-file/campaigns?file=${encodeURIComponent(campaign.picture)})`
                       }
                     : undefined
             }

@@ -35,7 +35,7 @@ const CampaignSaga = ({ campaignId, saga, sagaCampaigns, isSubmitting }) => {
                                 style={
                                     sagaCampaign.picture
                                         ? {
-                                              backgroundImage: `url(${import.meta.env.VITE_API_URL}/serve-file/images?file=${encodeURIComponent(sagaCampaign.picture)})`
+                                              backgroundImage: `url(${import.meta.env.VITE_API_URL}/serve-file/campaigns?file=${encodeURIComponent(sagaCampaign.picture)})`
                                           }
                                         : undefined
                                 }
