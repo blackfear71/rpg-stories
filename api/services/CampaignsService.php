@@ -72,7 +72,7 @@ class CampaignsService
         }
 
         // Vérification image existante et génération URL
-        $picture = $dataCampaign->picture ? FileHelper::checkFile('images', $dataCampaign->picture) : null;
+        $picture = $dataCampaign->picture ? FileHelper::checkFile('campaigns', $dataCampaign->picture) : null;
 
         // Récupération des données campagne
         return new CampaignOutputDTO(
@@ -264,18 +264,18 @@ class CampaignsService
         switch ($action) {
             case EnumAction::CREATE->value:
                 // Import de la nouvelle image
-                $fileName = FileHelper::uploadImage('images', $file);
+                $fileName = FileHelper::uploadImage('campaigns', $file);
 
                 // Suppression de l'ancienne image si pas d'erreur (hors création)
                 if ($fileName && $picture) {
-                    FileHelper::deleteFile('images', $picture);
+                    FileHelper::deleteFile('campaigns', $picture);
                 }
 
                 return $fileName;
             case EnumAction::DELETE->value:
                 // Suppression de l'ancienne image (hors création)
                 if ($picture) {
-                    FileHelper::deleteFile('images', $picture);
+                    FileHelper::deleteFile('campaigns', $picture);
                 }
 
                 return null;

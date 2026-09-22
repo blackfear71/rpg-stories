@@ -82,7 +82,7 @@ class FileHelper
         }
 
         // Contrôle que le dossier des fichiers existe sinon il est créé
-        $uploadDir = self::$env['FILES_DIR'] . '/' . $destination;
+        $uploadDir = self::$env['FILES_DIR'] . '/images/' . $destination;
 
         if (!is_dir($uploadDir) && !mkdir($uploadDir, 0775, true)) {
             throw new \RuntimeException(MessageHelper::ERR_CREATION_FOLDER_FAILED);
@@ -194,7 +194,7 @@ class FileHelper
         }
 
         // Construction du chemin vers le fichier et contrôle que le fichier existe
-        $destination = trim($destination, '/\\');
+        $destination = 'images/' . trim($destination, '/\\');
         $fileName = basename($fileName);
 
         $dir = rtrim(self::$env['FILES_DIR'], '/\\');
@@ -234,7 +234,7 @@ class FileHelper
         }
 
         // Construction du chemin vers le fichier et contrôle que le fichier existe
-        $destination = trim($destination, '/\\');
+        $destination = 'images/' . trim($destination, '/\\');
         $fileName = basename($fileName);
 
         $dir = rtrim(self::$env['FILES_DIR'], '/\\');
