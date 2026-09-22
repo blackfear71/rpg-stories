@@ -109,9 +109,10 @@ const CharacterModal = ({ formData, modalOptions, setModalOptions, onClose, isSu
                         <div className="modal-group">
                             <div className="modal-group-content">
                                 <PictureInput
-                                    title={t('campaign.picture')}
+                                    title={t('common.picture')}
                                     icon={<GiPortrait />}
                                     name={'picture'}
+                                    destination={'characters'}
                                     value={formData.values.picture}
                                     onChange={handleChangeFile}
                                     error={formData.submitCount > 0 && formData.errors.picture}

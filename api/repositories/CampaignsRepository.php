@@ -82,8 +82,11 @@ class CampaignsRepository
     {
         $sql = "SELECT sagaCampaigns.id, sagaCampaigns.saga_id, sagaCampaigns.name, sagaCampaigns.universe, sagaCampaigns.players, sagaCampaigns.picture
             FROM {$this->campaignsTable} AS currentCampaign
-            INNER JOIN {$this->campaignsTable} AS sagaCampaigns ON sagaCampaigns.saga_id = currentCampaign.saga_id
-            WHERE currentCampaign.id = :id AND currentCampaign.saga_id IS NOT NULL AND sagaCampaigns.created_by = :created_by AND sagaCampaigns.is_active = 1
+            INNER JOIN {$this->campaignsTable} AS sagaCampaigns ON sagaCampaigns.saga_id = currentCampaign.saga_id AND sagaCampaigns.is_active = 1
+            WHERE currentCampaign.id = :id
+              AND currentCampaign.saga_id IS NOT NULL
+              AND currentCampaign.is_active = 1
+              AND sagaCampaigns.created_by = :created_by
             ORDER BY sagaCampaigns.id DESC";
 
         $stmt = $this->db->prepare($sql);
@@ -110,7 +113,9 @@ class CampaignsRepository
         $sql = "SELECT c.id, c.name AS campaign_name, c.saga_id, s.name AS saga_name, c.universe
             FROM {$this->campaignsTable} AS c
             LEFT JOIN {$this->sagasTable} AS s ON s.id = c.saga_id
-            WHERE (c.name LIKE :search OR c.universe LIKE :search OR (s.name LIKE :search AND s.created_by = :created_by AND s.is_active = 1)) AND c.is_active = 1 AND c.created_by = :created_by
+            WHERE (c.name LIKE :search OR c.universe LIKE :search OR (s.name LIKE :search AND s.created_by = :created_by AND s.is_active = 1))
+              AND c.is_active = 1
+              AND c.created_by = :created_by
             GROUP BY c.id
             ORDER BY c.name ASC";
 

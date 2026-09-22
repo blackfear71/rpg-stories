@@ -22,12 +22,15 @@ $router->get('/characters/campaign/:campaignId', function (array $params) use ($
 /**
  * Insertion d'un enregistrement
  */
-$router->post('/characters/create', function () use ($db): void {
+$router->post('/characters/campaign/:campaignId/create', function (array $params) use ($db): void {
     // Token
     $token = $_COOKIE['token'] ?? null;
 
+    // Paramètres
+    $campaignId = DataHelper::parseIntParam($params['campaignId']);
+
     // Appel contrôleur
-    (new CharactersController($db))->createCharacter($token, $_POST);
+    (new CharactersController($db))->createCharacter($token, $campaignId, $_POST, $_FILES);
 });
 
 /**
@@ -41,7 +44,7 @@ $router->post('/characters/character/:characterId/update', function (array $para
     $characterId = DataHelper::parseIntParam($params['characterId']);
 
     // Appel contrôleur
-    (new CharactersController($db))->updateCharacter($token, $characterId, $_POST);
+    (new CharactersController($db))->updateCharacter($token, $characterId, $_POST, $_FILES);
 });
 
 /**

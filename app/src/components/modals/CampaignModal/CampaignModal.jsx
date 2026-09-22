@@ -211,9 +211,10 @@ const CampaignModal = ({ sagas, formData, modalOptions, setModalOptions, onClose
                         <div className="modal-group">
                             <div className="modal-group-content">
                                 <PictureInput
-                                    title={t('campaign.picture')}
+                                    title={t('common.picture')}
                                     icon={<GiHills />}
                                     name={'picture'}
+                                    destination={'campaigns'}
                                     value={formData.values.picture}
                                     onChange={handleChangeFile}
                                     error={formData.submitCount > 0 && formData.errors.picture}

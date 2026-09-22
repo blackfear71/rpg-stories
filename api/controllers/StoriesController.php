@@ -67,7 +67,7 @@ class StoriesController
             $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
 
             // Insertion d'un enregistrement
-            $this->storiesService->createStory($campaignId, $dataDTO, $user);
+            $this->storiesService->createStory($campaignId, $dataDTO, $user->id);
 
             // Succès
             ResponseHelper::success(null, MessageHelper::MSG_CREATION_SUCCESS);
@@ -90,7 +90,7 @@ class StoriesController
             $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
 
             // Modification d'un enregistrement
-            $this->storiesService->updateStory($storyId, $dataDTO, $user);
+            $this->storiesService->updateStory($storyId, $dataDTO, $user->id);
 
             // Succès
             ResponseHelper::success(null, MessageHelper::MSG_UPDATE_SUCCESS);

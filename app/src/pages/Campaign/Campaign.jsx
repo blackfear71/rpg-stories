@@ -32,7 +32,6 @@ const initialCampaignValues = {
 };
 const initialCharacterValues = {
     id: null,
-    campaignId: null,
     name: '',
     picture: null,
     pictureAction: null
@@ -196,9 +195,9 @@ const Campaign = () => {
 
         combineLatest([subscriptionCampaign, subscriptionCharacter, subscriptionSagaCampaigns, subscriptionSagas, subscriptionStories])
             .pipe(
-                map(([dataCampaign, dataCharacters, dataSagaCampaigns, dataSagas, dataStories]) => {
+                map(([dataCampaign, dataCharacter, dataSagaCampaigns, dataSagas, dataStories]) => {
                     setCampaign(dataCampaign.response.data);
-                    setCharacter(dataCharacters.response.data);
+                    setCharacter(dataCharacter.response.data);
                     setSagaCampaigns(dataSagaCampaigns.response.data);
                     setSagas(dataSagas.response.data);
                     setStories(dataStories.response.data);
@@ -301,11 +300,10 @@ const Campaign = () => {
      * Mise à jour du formulaire du personnage aux changements de sa modale
      */
     useEffect(() => {
-        // Initialisation à l'ouverture de la modale
-        if (modalOptionsCharacter.isOpen && campaign && character) {
+        // Initialisation à l'ouverture de la modale en modification
+        if (modalOptionsCharacter.isOpen && modalOptionsCharacter.action === EnumAction.UPDATE && campaign && character) {
             formCharacter.setValues({
                 id: character.id,
-                campaignId: campaign.id,
                 name: character.name,
                 picture: character.picture,
                 pictureAction: null
@@ -316,7 +314,7 @@ const Campaign = () => {
         if (!modalOptionsCharacter.isOpen) {
             formCharacter.resetForm();
         }
-    }, [modalOptionsCharacter.isOpen, character]);
+    }, [modalOptionsCharacter.isOpen, campaign, character]);
 
     /**
      * Ouverture/fermeture des brouillons
@@ -576,9 +574,9 @@ const Campaign = () => {
             .deleteCharacter(character?.id)
             .pipe(
                 map((dataCharacter) => {
-                    // Fermeture modale de confirmation
-                    openCloseConfirmModal();
                     setMessage({ code: dataCharacter.response.message, type: dataCharacter.response.status });
+                    openCloseConfirmModal();
+                    setCharacter();
                 }),
                 take(1),
                 catchError((err) => {
@@ -725,7 +723,7 @@ const Campaign = () => {
             case EnumAction.UPDATE:
                 setIsSubmitting(true);
 
-                subscriptionCharacter = charactersService.updateCharacter(body);
+                subscriptionCharacter = charactersService.updateCharacter(values.id, body);
                 break;
         }
 
@@ -760,7 +758,7 @@ const Campaign = () => {
     const handleConfirmDeleteCharacter = () => {
         // Ouverture de la modale de confirmation
         openCloseConfirmModal({
-            content: t('campaign.confirmDeleteCharacter', { name: character?.name }),
+            content: t('character.confirmDeleteCharacter', { name: character?.name }),
             action: 'deleteCharacter',
             data: null
         });
@@ -861,7 +859,7 @@ const Campaign = () => {
                                     <Character
                                         character={character}
                                         onOpenCharacter={openCloseCharacterModal}
-                                        onOpenImport={null} // TODO : ouverture modale import
+                                        onOpenImport={null} // TODO : ouverture modale import à faire dans le style de la modale des brouillons
                                         onConfirm={handleConfirmDeleteCharacter}
                                         isSubmitting={isSubmitting}
                                     />
@@ -905,7 +903,7 @@ const Campaign = () => {
                             )}
 
                             {/* Modale d'import de personnage */}
-                            {/* TODO : modale import */}
+                            {/* TODO : modale import à faire */}
                             {/* {formImportCharacter && modalOptionsImportCharacter.isOpen && (
                                 <ImportCharacterModal
                                     characters={characters}

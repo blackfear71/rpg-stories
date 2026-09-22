@@ -23,7 +23,6 @@ class CharactersService {
      */
     getCharacter = (campaignId) => {
         const url = `${this.apiUrl}/campaign/${campaignId}`;
-        // TODO : back à faire
         return ajax({
             url,
             method: 'GET',
@@ -39,8 +38,7 @@ class CharactersService {
      * @returns Message retour
      */
     createCharacter = (campaignId, body) => {
-        const url = `${this.apiUrl}/create`;
-        // TODO : back à faire
+        const url = `${this.apiUrl}/campaign/${campaignId}/create`;
         return ajax({
             url,
             method: 'POST', // La méthode doit être POST pour remplir $_POST et $_FILES côté back
@@ -58,7 +56,6 @@ class CharactersService {
      */
     updateCharacter = (characterId, body) => {
         const url = `${this.apiUrl}/character/${characterId}/update`;
-        // TODO : back à faire
         return ajax({
             url,
             method: 'POST', // La méthode doit être POST pour remplir $_POST et $_FILES côté back
@@ -75,7 +72,6 @@ class CharactersService {
      */
     deleteCharacter = (characterId) => {
         const url = `${this.apiUrl}/character/${characterId}/delete`;
-        // TODO : back à faire
         return ajax({
             url,
             method: 'DELETE',
@@ -84,7 +80,7 @@ class CharactersService {
         });
     };
 
-    // TODO : importCharacter + unlinkCharacter
+    // TODO : importCharacter + unlinkCharacter à faire
 }
 
 export default CharactersService;

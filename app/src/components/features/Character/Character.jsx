@@ -42,6 +42,8 @@ const Character = ({ character, onOpenCharacter, onOpenImport, onConfirm, isSubm
                         <MdDelete size={30} />
                         {t('character.deleteCharacter')}
                     </Button>
+
+                    {/* TODO : affichage personnage à faire */}
                 </div>
             ) : (
                 <div className="d-flex gap-2">

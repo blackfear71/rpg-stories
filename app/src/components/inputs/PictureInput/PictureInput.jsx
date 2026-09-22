@@ -11,7 +11,7 @@ import './PictureInput.css';
 /**
  * Saisie image avec aperçu et suppression
  */
-const PictureInput = ({ title, icon, name, value, onChange, error, isSubmitting, required = false }) => {
+const PictureInput = ({ title, icon, name, destination, value, onChange, error, isSubmitting, required = false }) => {
     // Traductions
     const { t } = useTranslation();
 
@@ -33,7 +33,7 @@ const PictureInput = ({ title, icon, name, value, onChange, error, isSubmitting,
         if (value) {
             // Si c'est le nom d'un fichier existant sur le serveur
             if (typeof value === 'string') {
-                setPreviewUrl(`${import.meta.env.VITE_API_URL}/serve-file/campaigns?file=${encodeURIComponent(value)}`);
+                setPreviewUrl(`${import.meta.env.VITE_API_URL}/serve-file/${destination}?file=${encodeURIComponent(value)}`);
                 setFileName(value);
             }
             // Si c'est un fichier saisi (File object)

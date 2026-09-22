@@ -60,16 +60,16 @@ class StoriesService
     /**
      * Création d'une histoire
      */
-    public function createStory(int $campaignId, StoryInputDTO $data, UserOutputDTO $user): void
+    public function createStory(int $campaignId, StoryInputDTO $data, int $userId): void
     {
         // Contrôle des données
-        $this->isValidCreateStoryData($campaignId, $data, $user->level);
+        $this->isValidCreateStoryData($campaignId, $data);
 
         // Construction de l'objet
         $story = new Story(
             campaignId: $campaignId,
             story: rtrim($data->story),
-            createdBy: $user->id
+            createdBy: $userId
         );
 
         // Insertion
@@ -81,17 +81,17 @@ class StoriesService
     /**
      * Modification d'une histoire
      */
-    public function updateStory(int $storyId, StoryInputDTO $data, UserOutputDTO $user): void
+    public function updateStory(int $storyId, StoryInputDTO $data, int $userId): void
     {
         // Contrôle des données
-        $this->isValidUpdateStoryData($storyId, $data, $user->level);
+        $this->isValidUpdateStoryData($storyId, $data);
 
         // Construction de l'objet
         $story = new Story(
             id: $storyId,
             story: rtrim($data->story),
-            createdBy: $user->id,
-            updatedBy: $user->id
+            createdBy: $userId,
+            updatedBy: $userId
         );
 
         // Modification
@@ -151,7 +151,7 @@ class StoriesService
     /**
      * Contrôle des données saisies (création)
      */
-    private function isValidCreateStoryData(int $campaignId, StoryInputDTO $data, int $level): void
+    private function isValidCreateStoryData(int $campaignId, StoryInputDTO $data): void
     {
         // Identifiant campagne renseigné
         if (!$campaignId) {
@@ -167,7 +167,7 @@ class StoriesService
     /**
      * Contrôle des données saisies (modification)
      */
-    private function isValidUpdateStoryData(int $storyId, StoryInputDTO $data, int $level): void
+    private function isValidUpdateStoryData(int $storyId, StoryInputDTO $data): void
     {
         // Identifiant histoire renseigné
         if (!$storyId) {

@@ -134,7 +134,7 @@ class CampaignsService
         $this->isValidCampaignData($data);
 
         // Traitement de l'image
-        $picture = $this->uploadImage(null, $userId, $data->pictureAction, $file['picture'] ?? null);
+        $picture = $this->processImage(null, $userId, $data->pictureAction, $file['picture'] ?? null);
 
         // Construction de l'objet
         $campaign = new Campaign(
@@ -165,7 +165,7 @@ class CampaignsService
         $this->isValidCampaignData($data);
 
         // Traitement de l'image
-        $picture = $this->uploadImage($campaignId, $userId, $data->pictureAction, $file['picture'] ?? null);
+        $picture = $this->processImage($campaignId, $userId, $data->pictureAction, $file['picture'] ?? null);
 
         // Construction de l'objet
         $campaign = new Campaign(
@@ -255,8 +255,10 @@ class CampaignsService
     /**
      * Traitement de l'image
      */
-    private function uploadImage(?int $campaignId, int $userId, ?string $action, ?array $file): ?string
+    private function processImage(?int $campaignId, int $userId, ?string $action, ?array $file): ?string
     {
+        $destination = 'campaigns';
+
         // Récupération de l'image de la campagne
         $picture = $campaignId ? $this->campaignsRepository->getCampaignPicture($campaignId, $userId) : null;
 
@@ -264,18 +266,18 @@ class CampaignsService
         switch ($action) {
             case EnumAction::CREATE->value:
                 // Import de la nouvelle image
-                $fileName = FileHelper::uploadImage('campaigns', $file);
+                $fileName = FileHelper::uploadImage($destination, $file);
 
                 // Suppression de l'ancienne image si pas d'erreur (hors création)
                 if ($fileName && $picture) {
-                    FileHelper::deleteFile('campaigns', $picture);
+                    FileHelper::deleteFile($destination, $picture);
                 }
 
                 return $fileName;
             case EnumAction::DELETE->value:
                 // Suppression de l'ancienne image (hors création)
                 if ($picture) {
-                    FileHelper::deleteFile('campaigns', $picture);
+                    FileHelper::deleteFile($destination, $picture);
                 }
 
                 return null;
