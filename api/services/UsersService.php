@@ -2,11 +2,19 @@
 // Imports
 require_once 'models/dtos/UserOutputDTO.php';
 
+require_once 'services/CampaignsService.php';
+require_once 'services/SagasService.php';
+require_once 'services/StoriesService.php';
+
 require_once 'repositories/UsersRepository.php';
 
 class UsersService
 {
     private PDO $db;
+
+    private ?CampaignsService $campaignsService = null;
+    private ?SagasService $sagasService = null;
+    private ?StoriesService $storiesService = null;
 
     private UsersRepository $usersRepository;
 
@@ -17,6 +25,42 @@ class UsersService
     {
         $this->db = $db;
         $this->usersRepository = new UsersRepository($db);
+    }
+
+    /**
+     * Instancie le CampaignsService si besoin
+     */
+    private function getCampaignsService(): CampaignsService
+    {
+        if ($this->campaignsService === null) {
+            $this->campaignsService = new CampaignsService($this->db);
+        }
+
+        return $this->campaignsService;
+    }
+
+    /**
+     * Instancie le SagasService si besoin
+     */
+    private function getSagasService(): SagasService
+    {
+        if ($this->sagasService === null) {
+            $this->sagasService = new SagasService($this->db);
+        }
+
+        return $this->sagasService;
+    }
+
+    /**
+     * Instancie le StoriesService si besoin
+     */
+    private function getStoriesService(): StoriesService
+    {
+        if ($this->storiesService === null) {
+            $this->storiesService = new StoriesService($this->db);
+        }
+
+        return $this->storiesService;
     }
 
     /**
@@ -249,6 +293,15 @@ class UsersService
         if ($user->level == EnumUserRole::ADMIN->value && $this->usersRepository->isLastAdmin()) {
             throw new \WarningException(MessageHelper::WRN_LAST_ADMIN);
         }
+
+        // Suppression logique des histoires
+        $this->getStoriesService()->deleteStoriesByUserId($userDeleteId, $userId);
+
+        // Suppression logique des campagnes
+        $this->getCampaignsService()->deleteCampaignsByUserId($userDeleteId, $userId);
+
+        // Suppression logique des sagas
+        $this->getSagasService()->deleteSagasByUserId($userDeleteId, $userId);
 
         // Suppression logique de l'utilisateur
         if (!$this->usersRepository->deleteUser($userDeleteId, $userId)) {
