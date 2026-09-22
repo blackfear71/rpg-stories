@@ -19,7 +19,7 @@ import { useDrafts } from '../../utils/hooks/useDrafts';
 
 import { EnumAction } from '../../enums';
 
-import { CampaignsService, SagasService, StoriesService } from '../../api';
+import { CampaignsService, CharactersService, SagasService, StoriesService } from '../../api';
 
 // Valeurs initiales des formulaires
 const initialCampaignValues = {
@@ -181,19 +181,22 @@ const Campaign = () => {
         // Rafraichissement du contexte d'authentification
         refreshAuth(false);
 
-        // Récupération de la campagne et de ses histoires
+        // Récupération des données de la campagne
         const campaignsService = new CampaignsService();
+        const charactersService = new CharactersService();
         const sagasService = new SagasService();
         const storiesService = new StoriesService();
 
         const subscriptionCampaign = campaignsService.getCampaign(id);
+        const subscriptionCharacter = charactersService.getCharacter(id);
         const subscriptionSagas = sagasService.getSagas();
         const subscriptionStories = storiesService.getCampaignStories(id);
 
-        combineLatest([subscriptionCampaign, subscriptionSagas, subscriptionStories])
+        combineLatest([subscriptionCampaign, subscriptionCharacter, subscriptionSagas, subscriptionStories])
             .pipe(
-                map(([dataCampaign, dataSagas, dataStories]) => {
+                map(([dataCampaign, dataCharacters, dataSagas, dataStories]) => {
                     setCampaign(dataCampaign.response.data);
+                    setCharacter(dataCharacters.response.data);
                     setSagas(dataSagas.response.data);
                     setStories(dataStories.response.data);
 
@@ -580,9 +583,9 @@ const Campaign = () => {
         setIsSubmitting(true);
         setModalOptionsConfirm((prev) => ({ ...prev, message: null }));
 
-        const campaignsService = new CampaignsService();
+        const charactersService = new CharactersService();
 
-        campaignsService
+        charactersService
             .deleteCharacter(character?.id)
             .pipe(
                 map((dataCharacter) => {
@@ -722,7 +725,7 @@ const Campaign = () => {
         // Formatage des données
         const body = formatBody(values);
 
-        const campaignsService = new CampaignsService();
+        const charactersService = new CharactersService();
 
         let subscriptionCharacter = null;
 
@@ -730,12 +733,12 @@ const Campaign = () => {
             case EnumAction.CREATE:
                 setIsSubmitting(true);
 
-                subscriptionCharacter = campaignsService.createCharacter(campaign?.id, body);
+                subscriptionCharacter = charactersService.createCharacter(campaign?.id, body);
                 break;
             case EnumAction.UPDATE:
                 setIsSubmitting(true);
 
-                subscriptionCharacter = campaignsService.updateCharacter(values.id, body);
+                subscriptionCharacter = charactersService.updateCharacter(body);
                 break;
         }
 
@@ -744,7 +747,7 @@ const Campaign = () => {
                 map((dataCharacter) => {
                     setMessage({ code: dataCharacter.response.message, type: dataCharacter.response.status });
                 }),
-                switchMap(() => campaignsService.getCharacter(campaign?.id)),
+                switchMap(() => charactersService.getCharacter(campaign?.id)),
                 map((dataCampaignCharacter) => {
                     openCloseCharacterModal();
                     setCharacter(dataCampaignCharacter.response.data);
