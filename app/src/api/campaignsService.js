@@ -47,11 +47,11 @@ class CampaignsService {
 
     /**
      * Récupération des campagnes de la même saga
-     * @param {*} sagaId Identifiant saga
+     * @param {*} campaignId Identifiant campagne
      * @returns Liste des campagnes de la même saga
      */
-    getSagaCampaigns = (sagaId) => {
-        const url = `${this.apiUrl}/saga/${sagaId}`;
+    getSagaCampaigns = (campaignId) => {
+        const url = `${this.apiUrl}/campaign/${campaignId}/saga`;
         return ajax({
             url,
             method: 'GET',
@@ -99,7 +99,7 @@ class CampaignsService {
      * @returns Message retour
      */
     updateCampaign = (campaignId, body) => {
-        const url = `${this.apiUrl}/update/${campaignId}`;
+        const url = `${this.apiUrl}/campaign/${campaignId}/update`;
         return ajax({
             url,
             method: 'POST', // La méthode doit être POST pour remplir $_POST et $_FILES côté back
@@ -115,7 +115,7 @@ class CampaignsService {
      * @returns Message retour
      */
     deleteCampaign = (campaignId) => {
-        const url = `${this.apiUrl}/delete/${campaignId}`;
+        const url = `${this.apiUrl}/campaign/${campaignId}/delete`;
         return ajax({
             url,
             method: 'DELETE',

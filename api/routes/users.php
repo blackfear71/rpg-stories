@@ -83,7 +83,7 @@ $router->patch('/users/password', function () use ($db): void {
 /**
  * Modification d'un enregistrement
  */
-$router->patch('/users/update/:userId', function (array $params) use ($db): void {
+$router->patch('/users/user/:userId/update', function (array $params) use ($db): void {
     // Token
     $token = $_COOKIE['token'] ?? null;
 
@@ -100,7 +100,7 @@ $router->patch('/users/update/:userId', function (array $params) use ($db): void
 /**
  * Modification d'un enregistrement
  */
-$router->patch('/users/reset/:userId', function (array $params) use ($db): void {
+$router->patch('/users/user/:userId/reset', function (array $params) use ($db): void {
     // Token
     $token = $_COOKIE['token'] ?? null;
 
@@ -114,7 +114,7 @@ $router->patch('/users/reset/:userId', function (array $params) use ($db): void 
 /**
  * Suppression logique d'un enregistrement
  */
-$router->delete('/users/delete/:userId', function (array $params) use ($db): void {
+$router->delete('/users/user/:userId/delete', function (array $params) use ($db): void {
     // Token
     $token = $_COOKIE['token'] ?? null;
 

@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { combineLatest, of, switchMap } from 'rxjs';
+import { combineLatest, forkJoin, of, switchMap } from 'rxjs';
 import { catchError, finalize, map, take } from 'rxjs/operators';
 
 import { Spinner } from 'react-bootstrap';
@@ -147,26 +147,17 @@ const Campaign = () => {
         const storiesService = new StoriesService();
 
         const subscriptionCampaign = campaignsService.getCampaign(id);
+        const subscriptionSagaCampaigns = campaignsService.getSagaCampaigns(id);
         const subscriptionSagas = sagasService.getSagas();
         const subscriptionStories = storiesService.getCampaignStories(id);
 
-        combineLatest([subscriptionCampaign, subscriptionSagas, subscriptionStories])
+        combineLatest([subscriptionCampaign, subscriptionSagaCampaigns, subscriptionSagas, subscriptionStories])
             .pipe(
-                map(([dataCampaign, dataSagas, dataStories]) => {
+                map(([dataCampaign, dataSagaCampaigns, dataSagas, dataStories]) => {
                     setCampaign(dataCampaign.response.data);
+                    setSagaCampaigns(dataSagaCampaigns.response.data);
                     setSagas(dataSagas.response.data);
                     setStories(dataStories.response.data);
-
-                    return dataCampaign.response.data;
-                }),
-                switchMap((campaignData) => (campaignData?.sagaId ? campaignsService.getSagaCampaigns(campaignData.sagaId) : of(null))),
-                map((dataSagaCampaigns) => {
-                    // Mise à jour des données de la saga liée à la campagne
-                    if (dataSagaCampaigns?.response?.data) {
-                        setSagaCampaigns(dataSagaCampaigns.response.data);
-                    } else {
-                        setSagaCampaigns([]);
-                    }
                 }),
                 take(1),
                 catchError((err) => {
@@ -302,27 +293,20 @@ const Campaign = () => {
 
         const campaignsService = new CampaignsService();
 
+        const subscriptionCampaign = campaignsService.getCampaign(campaign?.id);
+        const subscriptionSagaCampaigns = campaignsService.getSagaCampaigns(campaign?.id);
+
         campaignsService
             .updateCampaign(campaign?.id, body)
             .pipe(
                 map((dataCampaign) => {
                     setMessage({ code: dataCampaign.response.message, type: dataCampaign.response.status });
                 }),
-                switchMap(() => campaignsService.getCampaign(campaign?.id)),
-                map((newDataCampaign) => {
+                switchMap(() => forkJoin([subscriptionCampaign, subscriptionSagaCampaigns])),
+                map(([newDataCampaign, dataSagaCampaigns]) => {
                     // Mise à jour des données de la campagne
                     setCampaign(newDataCampaign.response.data);
-
-                    return newDataCampaign.response.data;
-                }),
-                switchMap((campaignData) => (campaignData?.sagaId ? campaignsService.getSagaCampaigns(campaignData.sagaId) : of(null))),
-                map((dataSagaCampaigns) => {
-                    // Mise à jour des données de la saga liée à la campagne
-                    if (dataSagaCampaigns?.response?.data) {
-                        setSagaCampaigns(dataSagaCampaigns.response.data);
-                    } else {
-                        setSagaCampaigns([]);
-                    }
+                    setSagaCampaigns(dataSagaCampaigns.response.data);
 
                     // Fermeture de la modale de modification de campagne
                     openCloseCampaignModal();

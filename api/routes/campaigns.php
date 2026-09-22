@@ -31,17 +31,17 @@ $router->get('/campaigns/campaign/:campaignId', function (array $params) use ($d
 });
 
 /**
- * Lecture des campagnes de la même saga
+ * Lecture des campagnes de la saga liée
  */
-$router->get('/campaigns/saga/:sagaId', function (array $params) use ($db): void {
+$router->get('/campaigns/campaign/:campaignId/saga', function (array $params) use ($db): void {
     // Token
     $token = $_COOKIE['token'] ?? null;
 
     // Paramètres
-    $sagaId = DataHelper::parseIntParam($params['sagaId']);
+    $campaignId = DataHelper::parseIntParam($params['campaignId']);
 
     // Appel contrôleur
-    (new CampaignsController($db))->getSagaCampaigns($token, $sagaId);
+    (new CampaignsController($db))->getSagaCampaigns($token, $campaignId);
 });
 
 /**
@@ -72,7 +72,7 @@ $router->post('/campaigns/create', function () use ($db): void {
 /**
  * Modification d'un enregistrement
  */
-$router->post('/campaigns/update/:campaignId', function (array $params) use ($db): void {
+$router->post('/campaigns/campaign/:campaignId/update', function (array $params) use ($db): void {
     // Token
     $token = $_COOKIE['token'] ?? null;
 
@@ -86,7 +86,7 @@ $router->post('/campaigns/update/:campaignId', function (array $params) use ($db
 /**
  * Suppression logique d'un enregistrement
  */
-$router->delete('/campaigns/delete/:campaignId', function (array $params) use ($db): void {
+$router->delete('/campaigns/campaign/:campaignId/delete', function (array $params) use ($db): void {
     // Token
     $token = $_COOKIE['token'] ?? null;
 

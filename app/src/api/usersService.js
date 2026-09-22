@@ -114,7 +114,7 @@ class UsersService {
      * @returns Liste des utilisateurs
      */
     updateUser = (userId, body) => {
-        const url = `${this.apiUrl}/update/${userId}`;
+        const url = `${this.apiUrl}/user/${userId}/update`;
         return ajax({
             url,
             method: 'PATCH',
@@ -130,7 +130,7 @@ class UsersService {
      * @returns Message retour
      */
     resetPassword = (userId) => {
-        const url = `${this.apiUrl}/reset/${userId}`;
+        const url = `${this.apiUrl}/user/${userId}/reset`;
         return ajax({
             url,
             method: 'PATCH',
@@ -145,7 +145,7 @@ class UsersService {
      * @returns Liste des utilisateurs
      */
     deleteUser = (userId) => {
-        const url = `${this.apiUrl}/delete/${userId}`;
+        const url = `${this.apiUrl}/user/${userId}/delete`;
         return ajax({
             url,
             method: 'DELETE',

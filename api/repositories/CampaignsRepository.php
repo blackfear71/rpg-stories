@@ -76,18 +76,19 @@ class CampaignsRepository
     }
 
     /**
-     * Lecture des campagnes de la même saga
+     * Lecture des campagnes de la saga liée
      */
-    public function getSagaCampaigns(int $sagaId, int $userId): array
+    public function getSagaCampaigns(int $campaignId, int $userId): array
     {
-        $sql = "SELECT id, saga_id, name, universe, players, picture
-            FROM {$this->campaignsTable}
-            WHERE saga_id = :saga_id AND created_by = :created_by AND is_active = 1
-            ORDER BY id DESC";
+        $sql = "SELECT sagaCampaigns.id, sagaCampaigns.saga_id, sagaCampaigns.name, sagaCampaigns.universe, sagaCampaigns.players, sagaCampaigns.picture
+            FROM {$this->campaignsTable} AS currentCampaign
+            INNER JOIN {$this->campaignsTable} AS sagaCampaigns ON sagaCampaigns.saga_id = currentCampaign.saga_id
+            WHERE currentCampaign.id = :id AND currentCampaign.saga_id IS NOT NULL AND sagaCampaigns.created_by = :created_by AND sagaCampaigns.is_active = 1
+            ORDER BY sagaCampaigns.id DESC";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
-            'saga_id' => $sagaId,
+            'id' => $campaignId,
             'created_by' => $userId
         ]);
 

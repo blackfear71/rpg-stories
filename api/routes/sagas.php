@@ -30,7 +30,7 @@ $router->post('/sagas/create', function () use ($db): void {
 /**
  * Modification d'un enregistrement
  */
-$router->post('/sagas/update/:sagaId', function (array $params) use ($db): void {
+$router->post('/sagas/saga/:sagaId/update', function (array $params) use ($db): void {
     // Token
     $token = $_COOKIE['token'] ?? null;
 
@@ -44,7 +44,7 @@ $router->post('/sagas/update/:sagaId', function (array $params) use ($db): void 
 /**
  * Suppression logique d'un enregistrement
  */
-$router->delete('/sagas/delete/:sagaId', function (array $params) use ($db): void {
+$router->delete('/sagas/saga/:sagaId/delete', function (array $params) use ($db): void {
     // Token
     $token = $_COOKIE['token'] ?? null;
 
