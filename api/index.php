@@ -68,12 +68,14 @@ $router = new Router();
 
 if (str_starts_with($uri, '/campaigns')) {
     require_once __DIR__ . '/routes/campaigns.php';
+} elseif (str_starts_with($uri, '/characters')) {
+    require_once __DIR__ . '/routes/characters.php';
 } elseif (str_starts_with($uri, '/sagas')) {
     require_once __DIR__ . '/routes/sagas.php';
-} elseif (str_starts_with($uri, '/stories')) {
-    require_once __DIR__ . '/routes/stories.php';
 } elseif (str_starts_with($uri, '/serve-file')) {
     require_once __DIR__ . '/routes/serve-file.php';
+} elseif (str_starts_with($uri, '/stories')) {
+    require_once __DIR__ . '/routes/stories.php';
 } elseif (str_starts_with($uri, '/users')) {
     require_once __DIR__ . '/routes/users.php';
 } else {

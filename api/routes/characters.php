@@ -1,0 +1,59 @@
+<?php
+
+/** @var PDO $db */
+
+// Imports
+require_once 'controllers/CharactersController.php';
+
+/**
+ * Lecture d'un enregistrement
+ */
+$router->get('/characters/campaign/:campaignId', function (array $params) use ($db): void {
+    // Token
+    $token = $_COOKIE['token'] ?? null;
+
+    // Paramètres
+    $campaignId = DataHelper::parseIntParam($params['campaignId']);
+
+    // Appel contrôleur
+    (new CharactersController($db))->getCharacter($token, $campaignId);
+});
+
+/**
+ * Insertion d'un enregistrement
+ */
+$router->post('/characters/create', function () use ($db): void {
+    // Token
+    $token = $_COOKIE['token'] ?? null;
+
+    // Appel contrôleur
+    (new CharactersController($db))->createCharacter($token, $_POST);
+});
+
+/**
+ * Modification d'un enregistrement
+ */
+$router->post('/characters/character/:characterId/update', function (array $params) use ($db): void {
+    // Token
+    $token = $_COOKIE['token'] ?? null;
+
+    // Paramètres
+    $characterId = DataHelper::parseIntParam($params['characterId']);
+
+    // Appel contrôleur
+    (new CharactersController($db))->updateCharacter($token, $characterId, $_POST);
+});
+
+/**
+ * Suppression logique d'un enregistrement
+ */
+$router->delete('/characters/character/:characterId/delete', function (array $params) use ($db): void {
+    // Token
+    $token = $_COOKIE['token'] ?? null;
+
+    // Paramètres
+    $characterId = DataHelper::parseIntParam($params['characterId']);
+
+    // Appel contrôleur
+    (new CharactersController($db))->deleteCharacter($token, $characterId);
+});

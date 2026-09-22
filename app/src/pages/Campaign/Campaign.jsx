@@ -32,6 +32,7 @@ const initialCampaignValues = {
 };
 const initialCharacterValues = {
     id: null,
+    campaignId: null,
     name: '',
     picture: null,
     pictureAction: null
@@ -301,8 +302,10 @@ const Campaign = () => {
      */
     useEffect(() => {
         // Initialisation à l'ouverture de la modale
-        if (modalOptionsCharacter.isOpen && character) {
+        if (modalOptionsCharacter.isOpen && campaign && character) {
             formCharacter.setValues({
+                id: character.id,
+                campaignId: campaign.id,
                 name: character.name,
                 picture: character.picture,
                 pictureAction: null

@@ -28,7 +28,7 @@ class FileHelper
         }
 
         // Construction du chemin vers le fichier et contrôle que le fichier existe
-        $destination = trim($destination, '/\\');
+        $destination = 'images/' . trim($destination, '/\\');
         $fileName = basename($fileName);
 
         $dir = rtrim(self::$env['FILES_DIR'], '/\\');

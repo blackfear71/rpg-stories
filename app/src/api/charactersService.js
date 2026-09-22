@@ -22,7 +22,7 @@ class CharactersService {
      * @returns Personnage
      */
     getCharacter = (campaignId) => {
-        const url = `${this.apiUrl}/character/campaign/${campaignId}`;
+        const url = `${this.apiUrl}/campaign/${campaignId}`;
         // TODO : back à faire
         return ajax({
             url,
@@ -39,7 +39,7 @@ class CharactersService {
      * @returns Message retour
      */
     createCharacter = (campaignId, body) => {
-        const url = `${this.apiUrl}/create/campaign/${campaignId}`;
+        const url = `${this.apiUrl}/create`;
         // TODO : back à faire
         return ajax({
             url,
@@ -57,7 +57,7 @@ class CharactersService {
      * @returns Message retour
      */
     updateCharacter = (characterId, body) => {
-        const url = `${this.apiUrl}/update/${characterId}`;
+        const url = `${this.apiUrl}/character/${characterId}/update`;
         // TODO : back à faire
         return ajax({
             url,
@@ -74,7 +74,7 @@ class CharactersService {
      * @returns Message retour
      */
     deleteCharacter = (characterId) => {
-        const url = `${this.apiUrl}/delete/${characterId}`;
+        const url = `${this.apiUrl}/character/${characterId}/delete`;
         // TODO : back à faire
         return ajax({
             url,
