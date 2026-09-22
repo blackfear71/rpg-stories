@@ -115,6 +115,22 @@ class SagasService
     }
 
     /**
+     * Suppression logique des enregistrements d'un utilisateur
+     */
+    public function deleteSagasByUserId(int $userDeleteId, int $userId): void
+    {
+        // Contrôle des données
+        if (!$userDeleteId) {
+            throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
+        }
+
+        // Suppression logique des sagas
+        if (!$this->sagasRepository->deleteSagasByUserId($userDeleteId, $userId)) {
+            throw new \RuntimeException(MessageHelper::ERR_DELETION_FAILED);
+        }
+    }
+
+    /**
      * Contrôle des données saisies (création / modification)
      */
     private function isValidSagaData(SagaInputDTO $data): void

@@ -118,4 +118,23 @@ class StoriesRepository
             'is_active'   => 0
         ]);
     }
+
+    /**
+     * Suppression logique des histoires des campagnes d'un utilisateur
+     */
+    public function deleteStoriesByUserId(int $userDeleteId, int $userId): bool
+    {
+        $sql = "UPDATE {$this->storiesTable}
+            SET deleted_at = :deleted_at, deleted_by = :deleted_by, is_active = :is_active
+            WHERE created_by = :created_by AND is_active = 1";
+
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            'created_by'  => $userDeleteId,
+            'deleted_at'  => date('Y-m-d H:i:s'),
+            'deleted_by'  => $userId,
+            'is_active'   => 0
+        ]);
+    }
 }

@@ -126,7 +126,24 @@ class StoriesService
             throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
         }
 
+        // Suppression logique des histoires
         if (!$this->storiesRepository->deleteStories($campaignId, $userId)) {
+            throw new \RuntimeException(MessageHelper::ERR_DELETION_FAILED);
+        }
+    }
+
+    /**
+     * Suppression logique des enregistrements d'un utilisateur
+     */
+    public function deleteStoriesByUserId(int $userDeleteId, int $userId): void
+    {
+        // Contrôle des données
+        if (!$userDeleteId) {
+            throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
+        }
+
+        // Suppression logique des histoires
+        if (!$this->storiesRepository->deleteStoriesByUserId($userDeleteId, $userId)) {
             throw new \RuntimeException(MessageHelper::ERR_DELETION_FAILED);
         }
     }
