@@ -1,6 +1,7 @@
 <?php
 // Imports
 require_once 'models/dtos/CharacterInputDTO.php';
+require_once 'models/dtos/ImportCharacterInputDTO.php';
 
 require_once 'services/CharactersService.php';
 require_once 'services/UsersService.php';
@@ -32,6 +33,26 @@ class CharactersController
         }
 
         return $this->usersService;
+    }
+
+    /**
+     * Lecture de tous les enregistrements
+     */
+    public function getCharacters(?string $token): void
+    {
+        try {
+            // Contrôle authentification et niveau utilisateur
+            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
+
+            // Lecture de tous les enregistrements
+            $characters = $this->charactersService->getCharacters($user->id);
+
+            // Succès
+            ResponseHelper::success($characters);
+        } catch (Exception $e) {
+            // Exception
+            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, []);
+        }
     }
 
     /**
@@ -97,6 +118,49 @@ class CharactersController
         } catch (Exception $e) {
             // Exception
             ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$characterId, json_encode($data), json_encode($file)]);
+        }
+    }
+
+    /**
+     * Modification d'un enregistrement
+     */
+    public function importCharacter(?string $token, array $data): void
+    {
+        try {
+            // Conversion DTO
+            $dataDTO = ImportCharacterInputDTO::fromArray($data);
+
+            // Contrôle authentification et niveau utilisateur
+            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
+
+            // Modification d'un enregistrement
+            $this->charactersService->importCharacter($dataDTO, $user->id);
+
+            // Succès
+            ResponseHelper::success(null, MessageHelper::MSG_UPDATE_SUCCESS);
+        } catch (Exception $e) {
+            // Exception
+            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [json_encode($data)]);
+        }
+    }
+
+    /**
+     * Modification d'un enregistrement
+     */
+    public function detachCharacter(?string $token, int $campaignId): void
+    {
+        try {
+            // Contrôle authentification et niveau utilisateur
+            $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
+
+            // Modification d'un enregistrement
+            $this->charactersService->detachCharacter($campaignId, $user->id);
+
+            // Succès
+            ResponseHelper::success(null, MessageHelper::MSG_UPDATE_SUCCESS);
+        } catch (Exception $e) {
+            // Exception
+            ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$campaignId]);
         }
     }
 

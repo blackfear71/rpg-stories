@@ -102,9 +102,12 @@
     "character": {
         "characterName": "Nom du personnage",
         "confirmDeleteCharacter": "Voulez-vous vraiment supprimer le personnage \"{{name}}\" ? Attention, celui-ci sera supprimé de toutes les campagnes auxquelles il est lié.",
+        "confirmDetachCharacter": "Voulez-vous vraiment détacher le personnage \"{{name}}\" de la campagne ? Cette action ne supprime pas le personnage et il pourra être rattaché à une autre campagne plus tard.",
         "createCharacter": "Créer un personnage",
         "deleteCharacter": "Supprimer le personnage",
+        "detachCharacter": "Détacher le personnage",
         "importCharacter": "Importer un personnage",
+        "noCharacters": "Aucun personnage disponible",
         "updateCharacter": "Modifier le personnage"
     },
     "home": {

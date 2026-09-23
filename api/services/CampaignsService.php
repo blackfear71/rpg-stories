@@ -202,6 +202,22 @@ class CampaignsService
     }
 
     /**
+     * Modification du personnage de la campagne
+     */
+    public function updateCampaignCharacter(int $campaignId, ?int $characterId, int $userId): void
+    {
+        // Contrôle des données
+        if (!$campaignId) {
+            throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
+        }
+
+        // Modification
+        if (!$this->campaignsRepository->updateCampaignCharacter($campaignId, $characterId, $userId)) {
+            throw new \RuntimeException(MessageHelper::ERR_UPDATE_FAILED);
+        }
+    }
+
+    /**
      * Suppression logique d'un enregistrement
      */
     public function deleteCampaign(int $campaignId, int $userId): void
@@ -216,6 +232,22 @@ class CampaignsService
 
         // Suppression logique de la campagne
         if (!$this->campaignsRepository->deleteCampaign($campaignId, $userId)) {
+            throw new \RuntimeException(MessageHelper::ERR_DELETION_FAILED);
+        }
+    }
+
+    /**
+     * Suppression du personnage des campagnes liées
+     */
+    public function deleteCampaignsCharacter(int $characterId, int $userId): void
+    {
+        // Contrôle des données
+        if (!$characterId) {
+            throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
+        }
+
+        // Modification
+        if (!$this->campaignsRepository->deleteCampaignsCharacter($characterId, $userId)) {
             throw new \RuntimeException(MessageHelper::ERR_DELETION_FAILED);
         }
     }

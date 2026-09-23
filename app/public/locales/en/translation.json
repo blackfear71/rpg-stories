@@ -102,9 +102,12 @@
     "character": {
         "characterName": "Character name",
         "confirmDeleteCharacter": "Do you really want to delete the character \"{{name}}\"? Please note that this character will be removed from all campaigns they're linked to.",
+        "confirmDetachCharacter": "Do you really want to detach the character \"{{name}}\" from the campaign? This action doesn't delete the character and it can be attached to another campaign later.",
         "createCharacter": "Create character",
         "deleteCharacter": "Delete character",
+        "detachCharacter": "Detach character",
         "importCharacter": "Import character",
+        "noCharacters": "No characters available",
         "updateCharacter": "Update character"
     },
     "home": {

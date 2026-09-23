@@ -11,7 +11,7 @@ import { catchError, finalize, map, take } from 'rxjs/operators';
 import { Spinner, Tab, Tabs } from 'react-bootstrap';
 
 import { CampaignHeader, CampaignSaga, Character, StoryList } from '../../components/features';
-import { CampaignModal, CharacterModal, ConfirmModal, DraftsModal } from '../../components/modals';
+import { CampaignModal, CharacterModal, ConfirmModal, DraftsModal, ImportCharacterModal } from '../../components/modals';
 import { Message } from '../../components/shared';
 
 import { useAuth } from '../../utils/context/AuthContext';
@@ -89,10 +89,16 @@ const Campaign = () => {
         isOpen: false,
         message: null
     });
+    const [modalOptionsImportCharacter, setModalOptionsImportCharacter] = useState({
+        action: null,
+        isOpen: false,
+        message: null
+    });
 
     // API states
     const [campaign, setCampaign] = useState();
     const [character, setCharacter] = useState();
+    const [characters, setCharacters] = useState();
     const [sagaCampaigns, setSagaCampaigns] = useState([]);
     const [sagas, setSagas] = useState([]);
     const [stories, setStories] = useState([]);
@@ -157,21 +163,21 @@ const Campaign = () => {
     });
 
     /**
-     * Formik histoire
-     */
-    const formStory = useFormik({
-        initialValues: initialStoryValues,
-        validationSchema: storyValidationSchema,
-        onSubmit: (values) => handleSubmitStory(values)
-    });
-
-    /**
      * Formik personnage
      */
     const formCharacter = useFormik({
         initialValues: initialCharacterValues,
         validationSchema: characterValidationSchema,
         onSubmit: (values) => handleSubmitCharacter(values)
+    });
+
+    /**
+     * Formik histoire
+     */
+    const formStory = useFormik({
+        initialValues: initialStoryValues,
+        validationSchema: storyValidationSchema,
+        onSubmit: (values) => handleSubmitStory(values)
     });
 
     /**
@@ -189,15 +195,24 @@ const Campaign = () => {
 
         const subscriptionCampaign = campaignsService.getCampaign(id);
         const subscriptionCharacter = charactersService.getCharacter(id);
+        const subscriptionCharacters = charactersService.getCharacters();
         const subscriptionSagaCampaigns = campaignsService.getSagaCampaigns(id);
         const subscriptionSagas = sagasService.getSagas();
         const subscriptionStories = storiesService.getCampaignStories(id);
 
-        combineLatest([subscriptionCampaign, subscriptionCharacter, subscriptionSagaCampaigns, subscriptionSagas, subscriptionStories])
+        combineLatest([
+            subscriptionCampaign,
+            subscriptionCharacter,
+            subscriptionCharacters,
+            subscriptionSagaCampaigns,
+            subscriptionSagas,
+            subscriptionStories
+        ])
             .pipe(
-                map(([dataCampaign, dataCharacter, dataSagaCampaigns, dataSagas, dataStories]) => {
+                map(([dataCampaign, dataCharacter, dataCharacters, dataSagaCampaigns, dataSagas, dataStories]) => {
                     setCampaign(dataCampaign.response.data);
                     setCharacter(dataCharacter.response.data);
+                    setCharacters(dataCharacters.response.data);
                     setSagaCampaigns(dataSagaCampaigns.response.data);
                     setSagas(dataSagas.response.data);
                     setStories(dataStories.response.data);
@@ -516,6 +531,8 @@ const Campaign = () => {
                 return handleDeleteDrafts();
             case 'deleteStory':
                 return handleDeleteStory(modalOptionsConfirm.data);
+            case 'detachCharacter':
+                return handleDetachCharacter();
             default:
                 return;
         }
@@ -575,8 +592,15 @@ const Campaign = () => {
             .pipe(
                 map((dataCharacter) => {
                     setMessage({ code: dataCharacter.response.message, type: dataCharacter.response.status });
-                    openCloseConfirmModal();
+                }),
+                switchMap(() => charactersService.getCharacters()),
+                map((dataCharacters) => {
+                    // Mise à jour des données des personnages
                     setCharacter();
+                    setCharacters(dataCharacters.response.data);
+
+                    // Fermeture de la modale de confirmation
+                    openCloseConfirmModal();
                 }),
                 take(1),
                 catchError((err) => {
@@ -653,6 +677,39 @@ const Campaign = () => {
     };
 
     /**
+     * Détachement du personnage
+     */
+    const handleDetachCharacter = () => {
+        setMessage(null);
+        setIsSubmitting(true);
+        setModalOptionsConfirm((prev) => ({ ...prev, message: null }));
+
+        const charactersService = new CharactersService();
+
+        charactersService
+            .detachCharacter(campaign?.id)
+            .pipe(
+                map((dataCharacter) => {
+                    setMessage({ code: dataCharacter.response.message, type: dataCharacter.response.status });
+                    openCloseConfirmModal();
+                    setCharacter();
+                }),
+                take(1),
+                catchError((err) => {
+                    setModalOptionsConfirm((prev) => ({
+                        ...prev,
+                        message: { code: err?.response?.message, type: err?.response?.status }
+                    }));
+                    return of();
+                }),
+                finalize(() => {
+                    setIsSubmitting(false);
+                })
+            )
+            .subscribe();
+    };
+
+    /**
      * Enregistre / efface la ref DOM d'une histoire
      */
     const registerStoryRef = (storyId, node) => {
@@ -699,7 +756,7 @@ const Campaign = () => {
     };
 
     /**
-     * Création / modification de la campagne
+     * Création / modification d'un personnage
      * @param {*} values Données du formulaire
      */
     const handleSubmitCharacter = (values) => {
@@ -713,6 +770,8 @@ const Campaign = () => {
         const charactersService = new CharactersService();
 
         let subscriptionCharacter = null;
+        const subscriptionCampaignCharacter = charactersService.getCharacter(campaign?.id);
+        const subscriptionCharacters = charactersService.getCharacters();
 
         switch (modalOptionsCharacter?.action) {
             case EnumAction.CREATE:
@@ -732,10 +791,14 @@ const Campaign = () => {
                 map((dataCharacter) => {
                     setMessage({ code: dataCharacter.response.message, type: dataCharacter.response.status });
                 }),
-                switchMap(() => charactersService.getCharacter(campaign?.id)),
-                map((dataCampaignCharacter) => {
-                    openCloseCharacterModal();
+                switchMap(() => forkJoin([subscriptionCampaignCharacter, subscriptionCharacters])),
+                map(([dataCampaignCharacter, dataCharacters]) => {
+                    // Mise à jour des données des personnages
                     setCharacter(dataCampaignCharacter.response.data);
+                    setCharacters(dataCharacters.response.data);
+
+                    // Fermeture de la modale de création / modification de personnage
+                    openCloseCharacterModal();
                 }),
                 take(1),
                 catchError((err) => {
@@ -750,6 +813,69 @@ const Campaign = () => {
                 })
             )
             .subscribe();
+    };
+
+    /**
+     * Ouverture/fermeture de la modale d'import de personnage
+     * @param {*} action Action à réaliser
+     */
+    const openCloseImportCharacterModal = (action = null) => {
+        // Ouverture ou fermeture
+        setModalOptionsImportCharacter((prev) => ({
+            ...prev,
+            action: action,
+            isOpen: !prev.isOpen,
+            message: null
+        }));
+    };
+
+    /**
+     * Import d'un personnage
+     * @param {*} characterId Identifiant personnage
+     */
+    const handleImportCharacter = (characterId) => {
+        setMessage(null);
+        setIsSubmitting(true);
+        setModalOptionsImportCharacter((prev) => ({ ...prev, message: null }));
+
+        const charactersService = new CharactersService();
+
+        charactersService
+            .importCharacter({ campaignId: campaign?.id, characterId: characterId })
+            .pipe(
+                map((dataCharacter) => {
+                    setMessage({ code: dataCharacter.response.message, type: dataCharacter.response.status });
+                }),
+                switchMap(() => charactersService.getCharacter(campaign?.id)),
+                map((dataCampaignCharacter) => {
+                    openCloseImportCharacterModal();
+                    setCharacter(dataCampaignCharacter.response.data);
+                }),
+                take(1),
+                catchError((err) => {
+                    setModalOptionsImportCharacter((prev) => ({
+                        ...prev,
+                        message: { code: err?.response?.message, type: err?.response?.status }
+                    }));
+                    return of();
+                }),
+                finalize(() => {
+                    setIsSubmitting(false);
+                })
+            )
+            .subscribe();
+    };
+
+    /**
+     * Ouvre la modale de détachement de personnage
+     */
+    const handleConfirmDetachCharacter = () => {
+        // Ouverture de la modale de confirmation
+        openCloseConfirmModal({
+            content: t('character.confirmDetachCharacter', { name: character?.name }),
+            action: 'detachCharacter',
+            data: null
+        });
     };
 
     /**
@@ -859,8 +985,9 @@ const Campaign = () => {
                                     <Character
                                         character={character}
                                         onOpenCharacter={openCloseCharacterModal}
-                                        onOpenImport={null} // TODO : ouverture modale import à faire dans le style de la modale des brouillons
-                                        onConfirm={handleConfirmDeleteCharacter}
+                                        onOpenImport={openCloseImportCharacterModal}
+                                        onConfirmDetach={handleConfirmDetachCharacter}
+                                        onConfirmDelete={handleConfirmDeleteCharacter}
                                         isSubmitting={isSubmitting}
                                     />
                                 </Tab>
@@ -903,17 +1030,16 @@ const Campaign = () => {
                             )}
 
                             {/* Modale d'import de personnage */}
-                            {/* TODO : modale import à faire */}
-                            {/* {formImportCharacter && modalOptionsImportCharacter.isOpen && (
+                            {modalOptionsImportCharacter.isOpen && (
                                 <ImportCharacterModal
                                     characters={characters}
                                     modalOptions={modalOptionsImportCharacter}
                                     setModalOptions={setModalOptionsImportCharacter}
-                                    onSelectCharacter={}
+                                    onSelectCharacter={handleImportCharacter}
                                     onClose={openCloseImportCharacterModal}
                                     isSubmitting={isSubmitting}
                                 />
-                            )} */}
+                            )}
 
                             {/* Modale de confirmation */}
                             {modalOptionsConfirm.isOpen && (

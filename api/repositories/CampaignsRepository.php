@@ -221,6 +221,26 @@ class CampaignsRepository
     }
 
     /**
+     * Modification du personnage de la campagne
+     */
+    public function updateCampaignCharacter(int $campaignId, ?int $characterId, int $userId): bool
+    {
+        $sql = "UPDATE {$this->campaignsTable}
+            SET character_id = :character_id, updated_at = :updated_at, updated_by = :updated_by
+            WHERE id = :id AND created_by = :created_by";
+
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            'id'           => $campaignId,
+            'character_id' => $characterId,
+            'created_by'   => $userId,
+            'updated_at'   => date('Y-m-d H:i:s'),
+            'updated_by'   => $userId
+        ]);
+    }
+
+    /**
      * Suppression logique d'un enregistrement
      */
     public function deleteCampaign(int $campaignId, int $userId): bool
@@ -237,6 +257,26 @@ class CampaignsRepository
             'deleted_at' => date('Y-m-d H:i:s'),
             'deleted_by' => $userId,
             'is_active'  => 0
+        ]);
+    }
+
+    /**
+     * Suppression du personnage des campagnes liées
+     */
+    public function deleteCampaignsCharacter(int $characterId, int $userId): bool
+    {
+        $sql = "UPDATE {$this->campaignsTable}
+            SET character_id = :new_character_id, updated_at = :updated_at, updated_by = :updated_by
+            WHERE character_id = :character_id AND created_by = :created_by";
+
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            'character_id'     => $characterId,
+            'new_character_id' => NULL,
+            'created_by'       => $userId,
+            'updated_at'       => date('Y-m-d H:i:s'),
+            'updated_by'       => $userId
         ]);
     }
 

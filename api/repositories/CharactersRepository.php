@@ -18,6 +18,28 @@ class CharactersRepository
     }
 
     /**
+     * Lecture de tous les enregistrements
+     */
+    public function getCharacters(int $userId): array
+    {
+        $sql = "SELECT id, name, picture
+            FROM {$this->charactersTable}
+            WHERE created_by = :created_by AND is_active = 1
+            ORDER BY id DESC";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'created_by' => $userId
+        ]);
+
+        return array_map(fn($row) => new Campaign(
+            id: (int) $row['id'],
+            name: $row['name'],
+            picture: $row['picture']
+        ), $stmt->fetchAll(PDO::FETCH_ASSOC));
+    }
+
+    /**
      * Lecture d'un enregistrement par Id
      */
     public function getCharacter(int $campaignId, int $userId): ?Character
@@ -72,20 +94,21 @@ class CharactersRepository
     /**
      * Insertion d'un personnage
      */
-    public function createCharacter(Character $character): bool
+    public function createCharacter(Character $character): int
     {
         $sql = "INSERT INTO {$this->charactersTable} (name, picture, created_at, created_by, is_active)
             VALUES (:name, :picture, :created_at, :created_by, :is_active)";
 
         $stmt = $this->db->prepare($sql);
-
-        return $stmt->execute([
+        $stmt->execute([
             'name'       => $character->name,
             'picture'    => $character->picture,
             'created_at' => date('Y-m-d H:i:s'),
             'created_by' => $character->createdBy,
             'is_active'  => 1
         ]);
+
+        return (int) $this->db->lastInsertId();
     }
 
     /**

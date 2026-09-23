@@ -36,6 +36,28 @@ class CharactersService
     }
 
     /**
+     * Lecture de tous les enregistrements
+     */
+    public function getCharacters(int $userId): array
+    {
+        // Lecture des personnages
+        $characters = $this->charactersRepository->getCharacters($userId);
+
+        // Génération des DTO
+        return array_map(function ($character) {
+            // Vérification de l'image existante et génération de l'URL
+            $picture = $character->picture ? FileHelper::checkFile('characters', $character->picture) : null;
+
+            // Récupération des données personnage
+            return new CharacterOutputDTO(
+                id: $character->id,
+                name: $character->name,
+                picture: $picture
+            );
+        }, $characters);
+    }
+
+    /**
      * Lecture d'un enregistrement
      */
     public function getCharacter(int $campaignId, int $userId): ?CharacterOutputDTO
@@ -52,7 +74,7 @@ class CharactersService
             // Vérification image existante et génération URL
             $picture = $dataCharacter->picture ? FileHelper::checkFile('characters', $dataCharacter->picture) : null;
 
-            // Récupération des données campagne
+            // Récupération des données personnage
             return new CharacterOutputDTO(
                 id: $dataCharacter->id,
                 name: $dataCharacter->name,
@@ -82,11 +104,14 @@ class CharactersService
         );
 
         // Insertion
-        if (!$this->charactersRepository->createCharacter($character)) {
+        $characterId = $this->charactersRepository->createCharacter($character);
+
+        if (!$characterId) {
             throw new \RuntimeException(MessageHelper::ERR_CREATION_FAILED);
         }
 
-        // TODO : reste à mettre à jour la campagne avec l'id du personnage
+        // Mise à jour de la campagne avec le personnage
+        $this->getCampaignsService()->updateCampaignCharacter($campaignId, $characterId, $userId);
     }
 
     /**
@@ -113,8 +138,24 @@ class CharactersService
         if (!$this->charactersRepository->updateCharacter($character)) {
             throw new \RuntimeException(MessageHelper::ERR_UPDATE_FAILED);
         }
+    }
 
-        // TODO : reste à mettre à jour la campagne avec l'id du personnage
+    /**
+     * Import d'un personnage
+     */
+    public function importCharacter(ImportCharacterInputDTO $data, int $userId): void
+    {
+        // Mise à jour de la campagne avec le personnage
+        $this->getCampaignsService()->updateCampaignCharacter($data->campaignId, $data->characterId, $userId);
+    }
+
+    /**
+     * Détachement d'un personnage
+     */
+    public function detachCharacter(int $campaignId, int $userId): void
+    {
+        // Mise à jour de la campagne avec le personnage
+        $this->getCampaignsService()->updateCampaignCharacter($campaignId, NULL, $userId);
     }
 
     /**
@@ -132,12 +173,10 @@ class CharactersService
             throw new \RuntimeException(MessageHelper::ERR_DELETION_FAILED);
         }
 
-        // TODO : reste à mettre à jour les campagnes utilisant le personnage en supprimant l'id du personnage partout comme ci-dessous pour les sagas
         // Suppression du personnage des campagnes liées
-        // $this->getCampaignsService()->updateCampaignsSaga($sagaId, $userId);
+        $this->getCampaignsService()->deleteCampaignsCharacter($characterId, $userId);
     }
 
-    // TODO : à utiliser à la suppression de l'utilisateur
     /**
      * Suppression logique des enregistrements d'un utilisateur
      */
@@ -193,7 +232,7 @@ class CharactersService
     {
         $destination = 'characters';
 
-        // Récupération de l'image de la campagne
+        // Récupération de l'image du personnage
         $picture = $characterId ? $this->charactersRepository->getCharacterPicture($characterId, $userId) : null;
 
         // Traitement de l'image

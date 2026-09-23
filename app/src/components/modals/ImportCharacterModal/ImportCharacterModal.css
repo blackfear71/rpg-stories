@@ -1,0 +1,19 @@
+.btn.import-character-modal-button-inject {
+    background-color: var(--color-bg-secondary) !important;
+    border: 2px solid var(--color-border-tertiary) !important;
+    color: var(--color-bg-white) !important;
+    height: 36px;
+    width: 36px;
+    margin-left: auto;
+}
+
+.btn.import-character-modal-button-inject:hover,
+.btn.import-character-modal-button-inject:active {
+    background-color: var(--color-bg-tertiary) !important;
+}
+
+.import-character-modal-button-inject svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
