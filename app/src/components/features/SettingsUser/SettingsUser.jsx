@@ -14,7 +14,7 @@ const SettingsUser = ({ user, onOpen, isSubmitting }) => {
     return (
         <>
             {/* Utilisateur */}
-            <div className="d-flex align-items-center gap-2 p-2 mt-3 settings-item">
+            <div className="d-flex align-items-center gap-2 p-2 settings-item">
                 {/* Icône */}
                 <div className="d-flex align-items-center justify-content-center settings-item-icon">{user.role?.icon}</div>
 
@@ -36,7 +36,7 @@ const SettingsUser = ({ user, onOpen, isSubmitting }) => {
             </div>
 
             {/* Description */}
-            {user.level !== '' && <div className="mt-3 px-2 py-1 settings-description">{t(`settings.levelDescription${user.level}`)}</div>}
+            {user.level !== '' && <div className="mt-2 px-2 py-1 settings-description">{t(`settings.levelDescription${user.level}`)}</div>}
         </>
     );
 };

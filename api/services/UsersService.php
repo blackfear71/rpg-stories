@@ -3,6 +3,7 @@
 require_once 'models/dtos/UserOutputDTO.php';
 
 require_once 'services/CampaignsService.php';
+require_once 'services/CharactersService.php';
 require_once 'services/SagasService.php';
 require_once 'services/StoriesService.php';
 
@@ -13,6 +14,7 @@ class UsersService
     private PDO $db;
 
     private ?CampaignsService $campaignsService = null;
+    private ?CharactersService $charactersService = null;
     private ?SagasService $sagasService = null;
     private ?StoriesService $storiesService = null;
 
@@ -37,6 +39,18 @@ class UsersService
         }
 
         return $this->campaignsService;
+    }
+
+    /**
+     * Instancie le CharactersService si besoin
+     */
+    private function getCharactersService(): CharactersService
+    {
+        if ($this->charactersService === null) {
+            $this->charactersService = new CharactersService($this->db);
+        }
+
+        return $this->charactersService;
     }
 
     /**
@@ -293,6 +307,9 @@ class UsersService
         if ($user->level == EnumUserRole::ADMIN->value && $this->usersRepository->isLastAdmin()) {
             throw new \WarningException(MessageHelper::WRN_LAST_ADMIN);
         }
+
+        // Suppression logique des personnages
+        $this->getCharactersService()->deleteCharactersByUserId($userDeleteId, $userId);
 
         // Suppression logique des histoires
         $this->getStoriesService()->deleteStoriesByUserId($userDeleteId, $userId);

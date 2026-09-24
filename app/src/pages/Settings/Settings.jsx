@@ -19,7 +19,7 @@ import { Message } from '../../components/shared';
 
 import { useAuth } from '../../utils/context/AuthContext';
 
-import { EnumAction, EnumUserRole } from '../../enums';
+import { EnumAction, EnumTab, EnumUserRole } from '../../enums';
 
 import { UsersService } from '../../api';
 
@@ -519,27 +519,33 @@ const Settings = () => {
                             </h1>
 
                             {rights.isAdmin && connectedUser && users ? (
-                                <Tabs
-                                    variant="pills"
-                                    defaultActiveKey="user"
-                                    id="settings-tabs"
-                                    className="p-1 mb-3 gap-1 justify-content-center page-tabs"
-                                >
-                                    {/* Utilisateur connecté */}
-                                    <Tab eventKey="user" title={t('settings.level0')}>
-                                        <SettingsUser user={connectedUser} onOpen={openClosePasswordModal} isSubmitting={isSubmitting} />
-                                    </Tab>
+                                <div className="d-flex flex-column gap-3">
+                                    <Tabs
+                                        variant="pills"
+                                        defaultActiveKey={EnumTab.USER}
+                                        id="settings-tabs"
+                                        className="p-1 gap-1 page-tabs"
+                                    >
+                                        {/* Utilisateur connecté */}
+                                        <Tab eventKey={EnumTab.USER} title={t('settings.level0')}>
+                                            <SettingsUser
+                                                user={connectedUser}
+                                                onOpen={openClosePasswordModal}
+                                                isSubmitting={isSubmitting}
+                                            />
+                                        </Tab>
 
-                                    {/* Gestion utilisateurs */}
-                                    <Tab eventKey="users" title={t('settings.manageUsers')}>
-                                        <SettingsUsers
-                                            users={users}
-                                            onOpen={openCloseUserModal}
-                                            onConfirm={openCloseConfirmModal}
-                                            isSubmitting={isSubmitting}
-                                        />
-                                    </Tab>
-                                </Tabs>
+                                        {/* Gestion utilisateurs */}
+                                        <Tab eventKey={EnumTab.USERS} title={t('settings.manageUsers')}>
+                                            <SettingsUsers
+                                                users={users}
+                                                onOpen={openCloseUserModal}
+                                                onConfirm={openCloseConfirmModal}
+                                                isSubmitting={isSubmitting}
+                                            />
+                                        </Tab>
+                                    </Tabs>
+                                </div>
                             ) : (
                                 <>
                                     {/* Utilisateur connecté */}

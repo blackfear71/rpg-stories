@@ -134,7 +134,7 @@ class CampaignsService
         $this->isValidCampaignData($data);
 
         // Traitement de l'image
-        $picture = $this->uploadImage(null, $userId, $data->pictureAction, $file['picture'] ?? null);
+        $picture = $this->processImage(null, $userId, $data->pictureAction, $file['picture'] ?? null);
 
         // Construction de l'objet
         $campaign = new Campaign(
@@ -165,7 +165,7 @@ class CampaignsService
         $this->isValidCampaignData($data);
 
         // Traitement de l'image
-        $picture = $this->uploadImage($campaignId, $userId, $data->pictureAction, $file['picture'] ?? null);
+        $picture = $this->processImage($campaignId, $userId, $data->pictureAction, $file['picture'] ?? null);
 
         // Construction de l'objet
         $campaign = new Campaign(
@@ -202,6 +202,22 @@ class CampaignsService
     }
 
     /**
+     * Modification du personnage de la campagne
+     */
+    public function updateCampaignCharacter(int $campaignId, ?int $characterId, int $userId): void
+    {
+        // Contrôle des données
+        if (!$campaignId) {
+            throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
+        }
+
+        // Modification
+        if (!$this->campaignsRepository->updateCampaignCharacter($campaignId, $characterId, $userId)) {
+            throw new \RuntimeException(MessageHelper::ERR_UPDATE_FAILED);
+        }
+    }
+
+    /**
      * Suppression logique d'un enregistrement
      */
     public function deleteCampaign(int $campaignId, int $userId): void
@@ -216,6 +232,22 @@ class CampaignsService
 
         // Suppression logique de la campagne
         if (!$this->campaignsRepository->deleteCampaign($campaignId, $userId)) {
+            throw new \RuntimeException(MessageHelper::ERR_DELETION_FAILED);
+        }
+    }
+
+    /**
+     * Suppression du personnage des campagnes liées
+     */
+    public function deleteCampaignsCharacter(int $characterId, int $userId): void
+    {
+        // Contrôle des données
+        if (!$characterId) {
+            throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
+        }
+
+        // Modification
+        if (!$this->campaignsRepository->deleteCampaignsCharacter($characterId, $userId)) {
             throw new \RuntimeException(MessageHelper::ERR_DELETION_FAILED);
         }
     }
@@ -255,8 +287,10 @@ class CampaignsService
     /**
      * Traitement de l'image
      */
-    private function uploadImage(?int $campaignId, int $userId, ?string $action, ?array $file): ?string
+    private function processImage(?int $campaignId, int $userId, ?string $action, ?array $file): ?string
     {
+        $destination = 'campaigns';
+
         // Récupération de l'image de la campagne
         $picture = $campaignId ? $this->campaignsRepository->getCampaignPicture($campaignId, $userId) : null;
 
@@ -264,18 +298,18 @@ class CampaignsService
         switch ($action) {
             case EnumAction::CREATE->value:
                 // Import de la nouvelle image
-                $fileName = FileHelper::uploadImage('campaigns', $file);
+                $fileName = FileHelper::uploadImage($destination, $file);
 
                 // Suppression de l'ancienne image si pas d'erreur (hors création)
                 if ($fileName && $picture) {
-                    FileHelper::deleteFile('campaigns', $picture);
+                    FileHelper::deleteFile($destination, $picture);
                 }
 
                 return $fileName;
             case EnumAction::DELETE->value:
                 // Suppression de l'ancienne image (hors création)
                 if ($picture) {
-                    FileHelper::deleteFile('campaigns', $picture);
+                    FileHelper::deleteFile($destination, $picture);
                 }
 
                 return null;

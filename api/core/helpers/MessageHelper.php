@@ -100,7 +100,7 @@ class MessageHelper
         self::ERR_INVALID_PLAYERS    => ['http' => 400, 'message' => 'Le nombre de participants est invalide'],
 
         // Histoires
-        self::ERR_INVALID_STORY   => ['http' => 400, 'message' => 'L\histoire doit être renseignée'],
+        self::ERR_INVALID_STORY => ['http' => 400, 'message' => 'L\'histoire doit être renseignée'],
 
         // Utilisateurs
         self::ERR_INVALID_AUTH           => ['http' => 401, 'message' => 'Authentification invalide'],

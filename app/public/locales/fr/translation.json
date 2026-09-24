@@ -60,6 +60,7 @@
         "french": "Français",
         "home": "Accueil",
         "noFilesSelected": "Aucun fichier sélectionné",
+        "picture": "Image",
         "reset": "Réinitialiser",
         "unknownLabel": "Libellé inconnu",
         "update": "Modifier",
@@ -67,7 +68,9 @@
     },
     "campaign": {
         "campaignName": "Nom de la campagne",
+        "campaign": "Campagne",
         "campaigns": "Campagnes",
+        "character": "Mon personnage",
         "chooseSaga": "Choisir une saga",
         "confirmDeleteCampaign": "Voulez-vous vraiment supprimer la campagne \"{{name}}\" ?",
         "confirmDeleteDrafts": "Voulez-vous vraiment supprimer tous les brouillons de la campagne ?",
@@ -87,7 +90,6 @@
         "newStory": "NOUVELLE HISTOIRE",
         "noDrafts": "Aucun brouillon sauvegardé",
         "pause": "Repos court",
-        "picture": "Image",
         "playersCount": "Nombre de joueurs (MJ compris)",
         "rest": "Long repos",
         "saga": "Saga",
@@ -96,6 +98,18 @@
         "symbols": "Symboles",
         "universe": "Univers",
         "updateCampaign": "Modifier la campagne"
+    },
+    "character": {
+        "characterName": "Nom du personnage",
+        "confirmDeleteCharacter": "Voulez-vous vraiment supprimer le personnage \"{{name}}\" ? Attention, celui-ci sera supprimé de toutes les campagnes auxquelles il est lié.",
+        "confirmDetachCharacter": "Voulez-vous vraiment détacher le personnage \"{{name}}\" de la campagne ? Cette action ne supprime pas le personnage et il pourra être rattaché à une autre campagne plus tard.",
+        "createCharacter": "Créer un personnage",
+        "deleteCharacter": "Supprimer le personnage",
+        "detachCharacter": "Détacher le personnage",
+        "importCharacter": "Importer un personnage",
+        "noCharacter": "Aucun personnage attaché",
+        "noCharacters": "Aucun personnage disponible",
+        "updateCharacter": "Modifier le personnage"
     },
     "home": {
         "rpg": "RPG",

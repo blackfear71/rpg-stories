@@ -14,9 +14,3 @@
     height: 100%;
     background-color: var(--color-bg-tertiary);
 }
-
-.story-list-empty {
-    background-color: var(--color-bg-secondary);
-    color: var(--color-text-white);
-    text-align: center;
-}

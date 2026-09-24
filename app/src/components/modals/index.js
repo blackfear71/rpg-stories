@@ -1,6 +1,8 @@
 export { default as CampaignModal } from './CampaignModal/CampaignModal';
+export { default as CharacterModal } from './CharacterModal/CharacterModal';
 export { default as ConfirmModal } from './ConfirmModal/ConfirmModal';
 export { default as DraftsModal } from './DraftsModal/DraftsModal';
+export { default as ImportCharacterModal } from './ImportCharacterModal/ImportCharacterModal';
 export { default as PasswordModal } from './PasswordModal/PasswordModal';
 export { default as SagaModal } from './SagaModal/SagaModal';
 export { default as SettingsModal } from './SettingsModal/SettingsModal';

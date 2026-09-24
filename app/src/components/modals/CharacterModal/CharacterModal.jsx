@@ -2,18 +2,18 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Form, Modal } from 'react-bootstrap';
-import { FaWandSparkles } from 'react-icons/fa6';
-import { GiBookshelf, GiCastle, GiHills, GiMeepleGroup, GiSpellBook } from 'react-icons/gi';
+import { GiPointyHat, GiPortrait, GiSwordsPower } from 'react-icons/gi';
 
-import { IncrementInput, PictureInput, SelectInput, TextInput } from '../../../components/inputs';
-import { Message, SpinnerButton } from '../../../components/shared';
+import { PictureInput, TextInput } from '../../inputs';
 
 import { EnumAction } from '../../../enums';
 
+import { Message, SpinnerButton } from '../../shared';
+
 /**
- * Modale campagne
+ * Modale personnage
  */
-const CampaignModal = ({ sagas, formData, modalOptions, setModalOptions, onClose, isSubmitting }) => {
+const CharacterModal = ({ formData, modalOptions, setModalOptions, onClose, isSubmitting }) => {
     // Traductions
     const { t } = useTranslation();
 
@@ -36,40 +36,6 @@ const CampaignModal = ({ sagas, formData, modalOptions, setModalOptions, onClose
      */
     const setModalMessage = (message) => {
         setModalOptions((prev) => ({ ...prev, message: message }));
-    };
-
-    /**
-     * Met à jour le formulaire à la saisie
-     * @param {*} e Evènement
-     */
-    const handleChangeSelect = (e) => {
-        formData.setValues((prev) => ({
-            ...prev,
-            sagaId: e.target.value === '' ? '' : Number.parseInt(e.target.value)
-        }));
-    };
-
-    /**
-     * Met à jour le formulaire à la saisie d'un numérique
-     * @param {*} action Action à réaliser
-     */
-    const handleChangePlayers = (action) => {
-        // Ajoute ou retire un joueur
-        switch (action) {
-            case 'add':
-                formData.setFieldValue('players', (Number.parseInt(formData.values.players) || 0) + 1);
-                break;
-            case 'remove':
-                formData.setValues((prev) => {
-                    const currentPlayers = Number.parseInt(prev.players) || 0;
-
-                    return {
-                        ...prev,
-                        players: currentPlayers <= 0 ? 0 : currentPlayers - 1
-                    };
-                });
-                break;
-        }
     };
 
     /**
@@ -96,27 +62,9 @@ const CampaignModal = ({ sagas, formData, modalOptions, setModalOptions, onClose
      */
     const getTitleFromAction = (action) =>
         ({
-            create: 'campaign.createCampaign',
-            update: 'campaign.updateCampaign'
+            create: 'character.createCharacter',
+            update: 'character.updateCharacter'
         })[action] || 'common.unknownLabel';
-
-    /**
-     * Renvoie une liste de sagas sélectionnables (avec un choix vide et sans le choix "Hors sagas")
-     */
-    const getSagasOptions = () => {
-        return (
-            sagas &&
-            [{ key: 0, value: '', label: '' }].concat(
-                sagas
-                    .filter((s) => s.id)
-                    .map((s) => ({
-                        key: s.id,
-                        value: s.id,
-                        label: s.name
-                    }))
-            )
-        );
-    };
 
     /**
      * Détermination du bouton selon l'action à réaliser
@@ -133,7 +81,7 @@ const CampaignModal = ({ sagas, formData, modalOptions, setModalOptions, onClose
                 <fieldset disabled={isSubmitting}>
                     <Modal.Header closeButton>
                         <Modal.Title>
-                            <FaWandSparkles />
+                            <GiPointyHat />
                             {t(getTitleFromAction(modalOptions.action))}
                         </Modal.Title>
                     </Modal.Header>
@@ -143,65 +91,15 @@ const CampaignModal = ({ sagas, formData, modalOptions, setModalOptions, onClose
                         <div className="modal-group">
                             <div className="modal-group-content">
                                 <TextInput
-                                    title={t('campaign.campaignName')}
-                                    icon={<GiSpellBook />}
+                                    title={t('character.characterName')}
+                                    icon={<GiSwordsPower />}
                                     name={'name'}
                                     ref={nameInputRef}
-                                    placeholder={t('campaign.campaignName')}
+                                    placeholder={t('character.characterName')}
                                     value={formData.values.name}
                                     onChange={formData.handleChange}
                                     error={formData.submitCount > 0 && formData.errors.name}
                                     maxLength={100}
-                                    required={true}
-                                />
-                            </div>
-                        </div>
-
-                        {/* Saga */}
-                        {sagas && (
-                            <div className="modal-group">
-                                <div className="modal-group-content">
-                                    <SelectInput
-                                        title={t('campaign.saga')}
-                                        icon={<GiBookshelf />}
-                                        name={'sagaId'}
-                                        defaultOption={{ key: 0, value: '', label: t('campaign.chooseSaga') }}
-                                        options={getSagasOptions()}
-                                        value={formData.values.sagaId}
-                                        onChange={handleChangeSelect}
-                                        error={formData.submitCount > 0 && formData.errors.sagaId}
-                                    />
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Univers */}
-                        <div className="modal-group">
-                            <div className="modal-group-content">
-                                <TextInput
-                                    title={t('campaign.universe')}
-                                    icon={<GiCastle />}
-                                    name={'universe'}
-                                    placeholder={t('campaign.universe')}
-                                    value={formData.values.universe}
-                                    onChange={formData.handleChange}
-                                    error={formData.submitCount > 0 && formData.errors.universe}
-                                    maxLength={100}
-                                />
-                            </div>
-                        </div>
-
-                        {/* Nombre de joueurs */}
-                        <div className="modal-group">
-                            <div className="modal-group-content">
-                                <IncrementInput
-                                    title={t('campaign.playersCount')}
-                                    icon={<GiMeepleGroup />}
-                                    name={'players'}
-                                    value={formData.values.players}
-                                    onChangeDown={() => handleChangePlayers('remove')}
-                                    onChangeUp={() => handleChangePlayers('add')}
-                                    error={formData.submitCount > 0 && formData.errors.players}
                                     required={true}
                                 />
                             </div>
@@ -212,9 +110,9 @@ const CampaignModal = ({ sagas, formData, modalOptions, setModalOptions, onClose
                             <div className="modal-group-content">
                                 <PictureInput
                                     title={t('common.picture')}
-                                    icon={<GiHills />}
+                                    icon={<GiPortrait />}
                                     name={'picture'}
-                                    destination={'campaigns'}
+                                    destination={'characters'}
                                     value={formData.values.picture}
                                     onChange={handleChangeFile}
                                     error={formData.submitCount > 0 && formData.errors.picture}
@@ -258,4 +156,4 @@ const CampaignModal = ({ sagas, formData, modalOptions, setModalOptions, onClose
     );
 };
 
-export default CampaignModal;
+export default CharacterModal;

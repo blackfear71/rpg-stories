@@ -22,7 +22,6 @@ a {
 .page-empty {
     background-color: var(--color-bg-secondary);
     color: var(--color-text-white);
-    font-size: large;
     text-align: center;
     border-radius: var(--bs-border-radius);
     border: 2px dashed var(--color-border-gray-bold);
@@ -31,14 +30,18 @@ a {
 .page-tabs {
     background-color: var(--color-bg-secondary) !important;
     border-radius: 50rem;
-    width: fit-content;
+    max-width: 100%;
+    overflow-x: auto;
     margin: 0 auto;
+    flex-wrap: nowrap !important;
 }
 
 .page-tabs .nav-link {
     background-color: var(--color-bg-secondary) !important;
     color: var(--color-text-white) !important;
     border-radius: 50rem;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .page-tabs .nav-link.active {

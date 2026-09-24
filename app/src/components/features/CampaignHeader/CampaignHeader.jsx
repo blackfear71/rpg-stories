@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next';
 
+import { BiLink } from 'react-icons/bi';
 import { FaPlus } from 'react-icons/fa6';
 import { GiCastle, GiDoorway, GiMeepleGroup, GiSpellBook } from 'react-icons/gi';
 import { MdDelete, MdEdit, MdRestorePage } from 'react-icons/md';
 
 import { TooltipButton } from '../../../components/shared';
 
-import { EnumAction } from '../../../enums';
+import { EnumAction, EnumTab } from '../../../enums';
 
 import './CampaignHeader.css';
 
@@ -14,13 +15,17 @@ import './CampaignHeader.css';
  * Liste des histoires
  */
 const CampaignHeader = ({
+    activeTab,
     campaign,
     storyCount,
     draftsState,
+    hasCharacter,
     inputOptions,
     onOpenStoryInput,
     onOpenDraftsModal,
     onOpenCampaignModal,
+    onOpenCharacterModal,
+    onOpenImportModal,
     onConfirm,
     isSubmitting
 }) => {
@@ -78,28 +83,56 @@ const CampaignHeader = ({
 
             {/* Actions */}
             <div className="d-flex flex-column gap-2 ms-auto">
-                {/* Ajout histoire */}
-                {!inputOptions?.isOpen && (
-                    <TooltipButton
-                        tooltip={t('campaign.createStory')}
-                        content={<FaPlus size={25} />}
-                        variant="outline-icon-action"
-                        className="campaign-header-button"
-                        onClick={() => onOpenStoryInput(EnumAction.CREATE)}
-                        isSubmitting={isSubmitting}
-                    />
+                {/* Personnage */}
+                {activeTab === EnumTab.CHARACTER && !hasCharacter && (
+                    <>
+                        {/* Création personnage */}
+                        <TooltipButton
+                            tooltip={t('character.createCharacter')}
+                            content={<FaPlus size={25} />}
+                            variant="outline-icon-action"
+                            className="campaign-header-button"
+                            onClick={() => onOpenCharacterModal(EnumAction.CREATE)}
+                            isSubmitting={isSubmitting}
+                        />
+
+                        {/* Import personnage*/}
+                        <TooltipButton
+                            tooltip={t('character.importCharacter')}
+                            content={<BiLink size={25} />}
+                            variant="outline-icon-action"
+                            className="campaign-header-button"
+                            onClick={onOpenImportModal}
+                            isSubmitting={isSubmitting}
+                        />
+                    </>
                 )}
 
-                {/* Brouillons */}
-                {!inputOptions?.isOpen && !draftLoading && drafts && drafts.length > 0 && (
-                    <TooltipButton
-                        tooltip={t('campaign.drafts')}
-                        content={<MdRestorePage size={25} />}
-                        variant="outline-icon-action"
-                        className="campaign-header-button"
-                        onClick={onOpenDraftsModal}
-                        isSubmitting={isSubmitting}
-                    />
+                {/* Campagne */}
+                {activeTab === EnumTab.CAMPAIGN && !inputOptions?.isOpen && (
+                    <>
+                        {/* Ajout histoire */}
+                        <TooltipButton
+                            tooltip={t('campaign.createStory')}
+                            content={<FaPlus size={25} />}
+                            variant="outline-icon-action"
+                            className="campaign-header-button"
+                            onClick={() => onOpenStoryInput(EnumAction.CREATE)}
+                            isSubmitting={isSubmitting}
+                        />
+
+                        {/* Brouillons */}
+                        {!draftLoading && drafts && drafts.length > 0 && (
+                            <TooltipButton
+                                tooltip={t('campaign.drafts')}
+                                content={<MdRestorePage size={25} />}
+                                variant="outline-icon-action"
+                                className="campaign-header-button"
+                                onClick={onOpenDraftsModal}
+                                isSubmitting={isSubmitting}
+                            />
+                        )}
+                    </>
                 )}
 
                 {/* Modification campagne */}

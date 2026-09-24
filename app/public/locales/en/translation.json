@@ -60,6 +60,7 @@
         "french": "French",
         "home": "Home",
         "noFilesSelected": "No files selected",
+        "picture": "Picture",
         "reset": "Reset",
         "unknownLabel": "Unknown label",
         "update": "Edit",
@@ -67,7 +68,9 @@
     },
     "campaign": {
         "campaignName": "Campaign name",
+        "campaign": "Campaign",
         "campaigns": "Campaigns",
+        "character": "My character",
         "chooseSaga": "Choose saga",
         "confirmDeleteCampaign": "Do you really want to delete the campaign \"{{name}}\"?",
         "confirmDeleteDrafts": "Do you really want to delete all the drafts from the campaign ?",
@@ -87,7 +90,6 @@
         "newStory": "NEW STORY",
         "noDrafts": "No saved drafts",
         "pause": "Short rest",
-        "picture": "Picture",
         "playersCount": "Number of players (including GM)",
         "rest": "Long rest",
         "saga": "Saga",
@@ -96,6 +98,18 @@
         "symbols": "Symbols",
         "universe": "Universe",
         "updateCampaign": "Edit the campaign"
+    },
+    "character": {
+        "characterName": "Character name",
+        "confirmDeleteCharacter": "Do you really want to delete the character \"{{name}}\"? Please note that this character will be removed from all campaigns they're linked to.",
+        "confirmDetachCharacter": "Do you really want to detach the character \"{{name}}\" from the campaign? This action doesn't delete the character and it can be attached to another campaign later.",
+        "createCharacter": "Create character",
+        "deleteCharacter": "Delete character",
+        "detachCharacter": "Detach character",
+        "importCharacter": "Import character",
+        "noCharacter": "No character set",
+        "noCharacters": "No characters available",
+        "updateCharacter": "Update character"
     },
     "home": {
         "rpg": "RPG",
