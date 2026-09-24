@@ -1,104 +1,80 @@
 import { useTranslation } from 'react-i18next';
 
-import { Button, Image } from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 import { BiUnlink } from 'react-icons/bi';
-import { IoAddCircleOutline, IoDuplicateOutline } from 'react-icons/io5';
+import { GiBlackKnightHelm } from 'react-icons/gi';
 import { MdDelete, MdEdit } from 'react-icons/md';
 
+import { TooltipButton } from '../../../components/shared';
+
 import { EnumAction } from '../../../enums';
+
+import './Character.css';
 
 /**
  * Liste des campagnes
  */
-const Character = ({ character, onOpenCharacter, onOpenImport, onConfirmDetach, onConfirmDelete, isSubmitting }) => {
+const Character = ({ character, onOpenCharacterModal, onConfirmDetach, onConfirmDelete, isSubmitting }) => {
     // Traductions
     const { t } = useTranslation();
 
     return (
-        <>
+        <div className="d-flex justify-content-center w-100">
             {/* Personnage */}
             {character ? (
-                <>
-                    {/* TODO : penser à un style différent pour les boutons */}
-                    {/* Boutons */}
-                    <div className="d-flex flex-wrap gap-2">
-                        {/* Modification */}
-                        <Button
-                            variant="filled-icon-action"
-                            className="d-flex align-items-center justify-content-center gap-1 flex-grow-1"
-                            onClick={() => onOpenCharacter(EnumAction.UPDATE)}
-                            disabled={isSubmitting}
-                        >
-                            <MdEdit size={25} />
-                            {t('character.updateCharacter')}
-                        </Button>
-
-                        {/* Détachement */}
-                        <Button
-                            variant="filled-icon-action"
-                            className="d-flex align-items-center justify-content-center gap-1 flex-grow-1"
-                            onClick={onConfirmDetach}
-                            disabled={isSubmitting}
-                        >
-                            <BiUnlink size={25} />
-                            {t('character.detachCharacter')}
-                        </Button>
-
-                        {/* Suppression */}
-                        <Button
-                            variant="filled-icon-action"
-                            className="d-flex align-items-center justify-content-center gap-1 flex-grow-1"
-                            onClick={onConfirmDelete}
-                            disabled={isSubmitting}
-                        >
-                            <MdDelete size={25} />
-                            {t('character.deleteCharacter')}
-                        </Button>
-                    </div>
-
-                    {/* TODO : affichage personnage à faire */}
-                    <div>
-                        <div className="text-white">{character.name}</div>
-                        {character.picture && (
+                <div className="d-flex flex-column align-items-center gap-3 p-3 rounded character-container">
+                    {/* Image */}
+                    <div className="d-flex align-items-center justify-content-center character-icon">
+                        {character.picture ? (
                             <Image
                                 src={`${import.meta.env.VITE_API_URL}/serve-file/characters?file=${encodeURIComponent(character.picture)}`}
                                 alt={character.picture}
-                                className={'w-100'}
                             />
+                        ) : (
+                            <GiBlackKnightHelm size={70} />
                         )}
                     </div>
-                </>
-            ) : (
-                <>
-                    {/* Boutons */}
-                    <div className="d-flex gap-2">
-                        {/* Création */}
-                        <Button
-                            variant="filled-icon-action"
-                            className="d-flex align-items-center justify-content-center gap-1 w-50"
-                            onClick={() => onOpenCharacter(EnumAction.CREATE)}
-                            disabled={isSubmitting}
-                        >
-                            <IoAddCircleOutline size={25} />
-                            {t('character.createCharacter')}
-                        </Button>
 
-                        {/* Import */}
-                        <Button
-                            variant="filled-icon-action"
-                            className="d-flex align-items-center justify-content-center gap-1 w-50"
-                            onClick={onOpenImport}
-                            disabled={isSubmitting}
-                        >
-                            <IoDuplicateOutline size={25} />
-                            {t('character.importCharacter')}
-                        </Button>
+                    {/* Boutons */}
+                    <div className="d-flex flex-wrap gap-2">
+                        {/* Modification */}
+                        <TooltipButton
+                            tooltip={t('character.updateCharacter')}
+                            content={<MdEdit size={25} />}
+                            variant="outline-icon-action"
+                            className="character-button"
+                            onClick={() => onOpenCharacterModal(EnumAction.UPDATE)}
+                            isSubmitting={isSubmitting}
+                        />
+
+                        {/* Détachement */}
+                        <TooltipButton
+                            tooltip={t('character.detachCharacter')}
+                            content={<BiUnlink size={25} />}
+                            variant="outline-icon-action"
+                            className="character-button"
+                            onClick={onConfirmDetach}
+                            isSubmitting={isSubmitting}
+                        />
+
+                        {/* Suppression */}
+                        <TooltipButton
+                            tooltip={t('character.deleteCharacter')}
+                            content={<MdDelete size={25} />}
+                            variant="outline-icon-action"
+                            className="character-button"
+                            onClick={onConfirmDelete}
+                            isSubmitting={isSubmitting}
+                        />
                     </div>
 
-                    {/* TODO : afficher message personnage vide */}
-                </>
+                    {/* Nom */}
+                    <div className="p-2 rounded character-name">{character.name}</div>
+                </div>
+            ) : (
+                <div className="w-100 px-2 py-3 page-empty">{t('character.noCharacter')}</div>
             )}
-        </>
+        </div>
     );
 };
 

@@ -107,6 +107,7 @@
         "deleteCharacter": "Supprimer le personnage",
         "detachCharacter": "Détacher le personnage",
         "importCharacter": "Importer un personnage",
+        "noCharacter": "Aucun personnage attaché",
         "noCharacters": "Aucun personnage disponible",
         "updateCharacter": "Modifier le personnage"
     },

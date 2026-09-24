@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Image, Modal } from 'react-bootstrap';
 import { BiLink } from 'react-icons/bi';
 import { FaArrowRight } from 'react-icons/fa6';
+import { GiBlackKnightHelm } from 'react-icons/gi';
 
 import './ImportCharacterModal.css';
 
@@ -41,18 +42,20 @@ const ImportCharacterModal = ({ characters, modalOptions, setModalOptions, onSel
                                 <div className="d-flex flex-row align-items-center justify-content-between gap-3 modal-group-content">
                                     {/* Personnage */}
                                     <div className="d-flex gap-2 align-items-center">
-                                        {/* TODO : style, voir DraftModal */}
                                         {/* Image */}
-                                        {character.picture && (
-                                            <Image
-                                                src={`${import.meta.env.VITE_API_URL}/serve-file/characters?file=${encodeURIComponent(character.picture)}`}
-                                                alt={character.picture}
-                                                width={50}
-                                            />
-                                        )}
+                                        <div className="d-flex align-items-center justify-content-center import-character-modal-icon">
+                                            {character.picture ? (
+                                                <Image
+                                                    src={`${import.meta.env.VITE_API_URL}/serve-file/characters?file=${encodeURIComponent(character.picture)}`}
+                                                    alt={character.picture}
+                                                />
+                                            ) : (
+                                                <GiBlackKnightHelm size={20} />
+                                            )}
+                                        </div>
 
                                         {/* Nom */}
-                                        {character.name}
+                                        <span className="import-character-modal-name">{character.name}</span>
                                     </div>
 
                                     {/* Bouton de sélection */}

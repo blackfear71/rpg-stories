@@ -69,7 +69,7 @@ const StoryList = ({
                     ))}
                 </div>
             ) : (
-                <div className="p-5 rounded story-list-empty">{t('campaign.emptyStories')}</div>
+                <div className="p-5 rounded page-empty">{t('campaign.emptyStories')}</div>
             )}
         </>
     );

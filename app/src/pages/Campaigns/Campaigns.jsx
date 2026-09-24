@@ -16,7 +16,7 @@ import { Message } from '../../components/shared';
 
 import { useAuth } from '../../utils/context/AuthContext';
 
-import { EnumAction } from '../../enums';
+import { EnumAction, EnumTab } from '../../enums';
 
 import { CampaignsService, SagasService } from '../../api';
 
@@ -261,7 +261,7 @@ const Campaigns = () => {
      */
     const handleSelectTab = (tab) => {
         // Si on quitte l'onglet Sagas, on réinitialise la saga ouverte
-        if (tab !== 'sagas') {
+        if (tab !== EnumTab.SAGAS) {
             setSagaCampaigns({ sagaId: null, campaigns: [], isOpen: false });
         }
     };
@@ -568,20 +568,20 @@ const Campaigns = () => {
                     <Spinner animation="border" role="status" variant="light" />
                 </div>
             ) : (
-                <div className="campaigns-container">
+                <div className="d-flex flex-column gap-3 campaigns-container">
                     {/* Message */}
                     {message && <Message code={message.code} params={message.params} type={message.type} setMessage={setMessage} />}
 
                     {/* Onglets */}
                     <Tabs
                         variant="pills"
-                        defaultActiveKey="sagas"
+                        defaultActiveKey={EnumTab.SAGAS}
                         onSelect={handleSelectTab}
                         id="campaigns-tabs"
-                        className="p-1 mb-3 gap-1 justify-content-center page-tabs"
+                        className="p-1 gap-1 page-tabs"
                     >
                         {/* Sagas */}
-                        <Tab eventKey="sagas" title={t('sagas.sagas')}>
+                        <Tab eventKey={EnumTab.SAGAS} title={t('sagas.sagas')}>
                             <SagaList
                                 sagas={sagas}
                                 sagaCampaigns={sagaCampaigns}
@@ -594,7 +594,7 @@ const Campaigns = () => {
                         </Tab>
 
                         {/* Campagnes */}
-                        <Tab eventKey="campaigns" title={t('campaign.campaigns')}>
+                        <Tab eventKey={EnumTab.CAMPAIGNS} title={t('campaign.campaigns')}>
                             <CampaignList campaigns={campaigns} onOpen={openCloseCampaignModal} isSubmitting={isSubmitting} />
                         </Tab>
                     </Tabs>

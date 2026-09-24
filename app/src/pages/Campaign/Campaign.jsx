@@ -17,7 +17,7 @@ import { Message } from '../../components/shared';
 import { useAuth } from '../../utils/context/AuthContext';
 import { useDrafts } from '../../utils/hooks/useDrafts';
 
-import { EnumAction } from '../../enums';
+import { EnumAction, EnumTab } from '../../enums';
 
 import { CampaignsService, CharactersService, SagasService, StoriesService } from '../../api';
 
@@ -59,7 +59,7 @@ const Campaign = () => {
     // Local states
     const newStoryRef = useRef(null);
     const storyRefs = useRef({});
-    const [disabled, setDisabled] = useState(false);
+    const [activeTab, setActiveTab] = useState(EnumTab.CAMPAIGN);
     const [inputOptionsStory, setInputOptionsStory] = useState({
         action: null,
         storyId: 0,
@@ -733,15 +733,6 @@ const Campaign = () => {
     };
 
     /**
-     * Changement d'onglet
-     * @param {*} tab Onglet sélectionné
-     */
-    const handleSelectTab = (tab) => {
-        // Si on quitte l'onglet Campagne, on désactive certaines actions
-        setDisabled(tab !== 'campaign');
-    };
-
-    /**
      * Ouverture/fermeture de la modale de création / modification de personnage
      * @param {*} action Action à réaliser
      */
@@ -929,28 +920,31 @@ const Campaign = () => {
                         <div className="d-flex flex-column gap-3">
                             {/* Entete */}
                             <CampaignHeader
+                                activeTab={activeTab}
                                 campaign={campaign}
                                 storyCount={stories?.length ?? 0}
                                 draftsState={draftsState}
+                                hasCharacter={!!character}
                                 inputOptions={inputOptionsStory}
                                 onOpenStoryInput={openCloseStoryInput}
                                 onOpenDraftsModal={openCloseDraftsModal}
                                 onOpenCampaignModal={openCloseCampaignModal}
+                                onOpenCharacterModal={openCloseCharacterModal}
+                                onOpenImportModal={openCloseImportCharacterModal}
                                 onConfirm={handleConfirmDeleteCampaign}
-                                disabled={disabled}
                                 isSubmitting={isSubmitting}
                             />
 
                             {/* Onglets */}
                             <Tabs
                                 variant="pills"
-                                defaultActiveKey="campaign"
-                                onSelect={handleSelectTab}
+                                defaultActiveKey={EnumTab.CAMPAIGN}
+                                onSelect={(key) => setActiveTab(key)}
                                 id="campaign-tabs"
-                                className="p-1 gap-1 justify-content-center page-tabs"
+                                className="p-1 gap-1 page-tabs"
                             >
                                 {/* Campagne */}
-                                <Tab eventKey="campaign" title={t('campaign.campaign')}>
+                                <Tab eventKey={EnumTab.CAMPAIGN} title={t('campaign.campaign')}>
                                     <div className="d-flex flex-column gap-3">
                                         {/* Saga */}
                                         {sagas && sagaCampaigns && sagaCampaigns.length > 0 && (
@@ -981,11 +975,10 @@ const Campaign = () => {
                                 </Tab>
 
                                 {/* Personnage */}
-                                <Tab eventKey="character" title={t('campaign.character')}>
+                                <Tab eventKey={EnumTab.CHARACTER} title={t('campaign.character')}>
                                     <Character
                                         character={character}
-                                        onOpenCharacter={openCloseCharacterModal}
-                                        onOpenImport={openCloseImportCharacterModal}
+                                        onOpenCharacterModal={openCloseCharacterModal}
                                         onConfirmDetach={handleConfirmDetachCharacter}
                                         onConfirmDelete={handleConfirmDeleteCharacter}
                                         isSubmitting={isSubmitting}

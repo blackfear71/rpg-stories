@@ -107,6 +107,7 @@
         "deleteCharacter": "Delete character",
         "detachCharacter": "Detach character",
         "importCharacter": "Import character",
+        "noCharacter": "No character set",
         "noCharacters": "No characters available",
         "updateCharacter": "Update character"
     },
