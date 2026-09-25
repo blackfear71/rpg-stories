@@ -84,7 +84,7 @@ class FileHelper
         }
 
         // Contrôle que le dossier des fichiers existe sinon il est créé
-        $uploadDir = self::$env['FILES_DIR'] . '/images/' . $destination;
+        $uploadDir = self::$env['FILES_DIR'] . '/' . $destination;
 
         if (!is_dir($uploadDir) && !mkdir($uploadDir, 0775, true)) {
             throw new \RuntimeException(MessageHelper::ERR_CREATION_FOLDER_FAILED);
