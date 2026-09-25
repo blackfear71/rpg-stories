@@ -62,7 +62,7 @@ class ResponseHelper
     /**
      * Gestion du retour en cas d'alerte
      */
-    public static function warning(string $code, string $class = '', string $function = '', array $inputData = []): void
+    public static function warning(string $code, string $class = '', string $function = '', array $inputData = [], mixed $outputData = null): void
     {
         // Message et code HTTP
         $logMessage = MessageHelper::message($code, $class, $function, $inputData);
@@ -76,7 +76,7 @@ class ResponseHelper
         http_response_code($httpCode);
         echo json_encode(new ApiResponseDTO(
             status: 'warning',
-            data: null,
+            data: $outputData,
             message: $code,
         ));
     }

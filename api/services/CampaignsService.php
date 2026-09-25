@@ -57,8 +57,10 @@ class CampaignsService
     /**
      * Lecture d'un enregistrement
      */
-    public function getCampaign(int $campaignId, int $userId): CampaignOutputDTO
+    public function getCampaign(int $campaignId, int $userId): array
     {
+        $pictureError = false;
+
         // Contrôle des données
         if (!$campaignId) {
             throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
@@ -73,16 +75,17 @@ class CampaignsService
 
         // Vérification image existante et génération URL
         $picture = $dataCampaign->picture ? FileHelper::checkFile('images/campaigns', $dataCampaign->picture) : null;
+        $pictureError = $dataCampaign->picture && !$picture;
 
         // Récupération des données campagne
-        return new CampaignOutputDTO(
+        return [new CampaignOutputDTO(
             id: $dataCampaign->id,
             sagaId: $dataCampaign->sagaId,
             name: $dataCampaign->name,
             universe: $dataCampaign->universe,
             players: $dataCampaign->players,
             picture: $picture
-        );
+        ), $pictureError];
     }
 
     /**
@@ -300,6 +303,7 @@ class CampaignsService
                 // Import de la nouvelle image
                 $fileName = FileHelper::uploadImage($destination, $file);
 
+                // TODO : ne pas planter pour une suppression d'image
                 // Suppression de l'ancienne image si pas d'erreur (hors création)
                 if ($fileName && $picture) {
                     FileHelper::deleteFile($destination, $picture);

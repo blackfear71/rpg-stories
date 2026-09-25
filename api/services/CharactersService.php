@@ -60,8 +60,11 @@ class CharactersService
     /**
      * Lecture d'un enregistrement
      */
-    public function getCharacter(int $campaignId, int $userId): ?CharacterOutputDTO
+    public function getCharacter(int $campaignId, int $userId): array
     {
+        $character = null;
+        $pictureError = false;
+
         // Contrôle des données
         if (!$campaignId) {
             throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
@@ -73,16 +76,17 @@ class CharactersService
         if ($dataCharacter) {
             // Vérification image existante et génération URL
             $picture = $dataCharacter->picture ? FileHelper::checkFile('images/characters', $dataCharacter->picture) : null;
+            $pictureError = $dataCharacter->picture && !$picture;
 
             // Récupération des données personnage
-            return new CharacterOutputDTO(
+            $character = new CharacterOutputDTO(
                 id: $dataCharacter->id,
                 name: $dataCharacter->name,
                 picture: $picture
             );
-        } else {
-            return null;
         }
+
+        return [$character, $pictureError];
     }
 
     /**
@@ -241,6 +245,7 @@ class CharactersService
                 // Import de la nouvelle image
                 $fileName = FileHelper::uploadImage($destination, $file);
 
+                // TODO : ne pas planter pour une suppression d'image
                 // Suppression de l'ancienne image si pas d'erreur (hors création)
                 if ($fileName && $picture) {
                     FileHelper::deleteFile($destination, $picture);

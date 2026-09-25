@@ -47,6 +47,7 @@
     },
     "warnings": {
         "lastAdmin": "At least one active Administrator must remain",
+        "pictureNotFound": "The image could not be loaded",
         "userExists": "The username has already been used"
     },
     "common": {

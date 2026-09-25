@@ -47,6 +47,7 @@
     },
     "warnings": {
         "lastAdmin": "Il doit rester au moins un Administrateur actif",
+        "pictureNotFound": "L'image n'a pas pu être récupérée",
         "userExists": "L'identifiant a déjà été utilisé"
     },
     "common": {

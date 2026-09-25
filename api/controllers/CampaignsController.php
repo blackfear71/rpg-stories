@@ -64,10 +64,14 @@ class CampaignsController
             $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
 
             // Lecture d'un enregistrement
-            $campaign = $this->campaignsService->getCampaign($campaignId, $user->id);
+            [$campaign, $pictureError] = $this->campaignsService->getCampaign($campaignId, $user->id);
 
             // Succès
-            ResponseHelper::success($campaign);
+            if (!$pictureError) {
+                ResponseHelper::success($campaign);
+            } else {
+                ResponseHelper::warning(MessageHelper::WRN_PICTURE_NOT_FOUND, self::controllerName, __FUNCTION__, [$campaignId], $campaign);
+            }
         } catch (Exception $e) {
             // Exception
             ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$campaignId]);

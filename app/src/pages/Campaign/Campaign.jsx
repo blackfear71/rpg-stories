@@ -216,6 +216,15 @@ const Campaign = () => {
                     setSagaCampaigns(dataSagaCampaigns.response.data);
                     setSagas(dataSagas.response.data);
                     setStories(dataStories.response.data);
+
+                    // Affichage des alertes si besoin
+                    // TODO : faire un enum des status
+                    // TODO : à faire aussi sur campaigns pour les images des campagnes
+                    if (dataCampaign?.response?.status === 'warning') {
+                        setMessage({ code: dataCampaign?.response?.message, type: dataCampaign?.response?.status });
+                    } else if (dataCharacter?.response?.status === 'warning') {
+                        setMessage({ code: dataCharacter?.response?.message, type: dataCharacter?.response?.status });
+                    }
                 }),
                 take(1),
                 catchError((err) => {

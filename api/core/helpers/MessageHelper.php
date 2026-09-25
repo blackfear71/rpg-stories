@@ -40,6 +40,9 @@ class MessageHelper
     // Histoires
     const ERR_INVALID_STORY = 'ERR_INVALID_STORY';
 
+    // Personnage
+    const WRN_PICTURE_NOT_FOUND = 'WRN_PICTURE_NOT_FOUND';
+
     // Utilisateurs
     const ERR_INVALID_AUTH           = 'ERR_INVALID_AUTH';
     const ERR_INVALID_ID_MATCH       = 'ERR_INVALID_ID_MATCH';
@@ -101,6 +104,9 @@ class MessageHelper
 
         // Histoires
         self::ERR_INVALID_STORY => ['http' => 400, 'message' => 'L\'histoire doit être renseignée'],
+
+        // Personnage
+        self::WRN_PICTURE_NOT_FOUND => ['http' => 200, 'message' => 'Image non trouvée'],
 
         // Utilisateurs
         self::ERR_INVALID_AUTH           => ['http' => 401, 'message' => 'Authentification invalide'],

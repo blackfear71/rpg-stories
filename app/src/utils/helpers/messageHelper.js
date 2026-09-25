@@ -50,6 +50,9 @@ export const getMessageTranslationKey = (code, params, t) => {
         ERR_GET_DRAFTS: 'errors.getDrafts',
         ERR_SAVE_DRAFT: 'errors.saveDraft',
 
+        // Personnage
+        WRN_PICTURE_NOT_FOUND: 'warnings.pictureNotFound',
+
         // Utilisateurs
         ERR_INVALID_AUTH: 'errors.invalidAuth',
         ERR_INVALID_ID_MATCH: 'errors.unknownError',

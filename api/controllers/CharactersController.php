@@ -48,6 +48,7 @@ class CharactersController
             $characters = $this->charactersService->getCharacters($user->id);
 
             // Succès
+            // TODO : prévoir le warning image ici
             ResponseHelper::success($characters);
         } catch (Exception $e) {
             // Exception
@@ -65,10 +66,14 @@ class CharactersController
             $user = $this->getUsersService()->checkAuthAndLevel($token, EnumUserRole::USER->value);
 
             // Lecture d'un enregistrement
-            $character = $this->charactersService->getCharacter($campaignId, $user->id);
+            [$character, $pictureError] = $this->charactersService->getCharacter($campaignId, $user->id);
 
             // Succès
-            ResponseHelper::success($character);
+            if (!$pictureError) {
+                ResponseHelper::success($character);
+            } else {
+                ResponseHelper::warning(MessageHelper::WRN_PICTURE_NOT_FOUND, self::controllerName, __FUNCTION__, [$campaignId], $character);
+            }
         } catch (Exception $e) {
             // Exception
             ResponseHelper::error($e->getMessage(), self::controllerName, __FUNCTION__, [$campaignId]);
