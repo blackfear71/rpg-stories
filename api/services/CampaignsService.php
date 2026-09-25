@@ -72,7 +72,7 @@ class CampaignsService
         }
 
         // Vérification image existante et génération URL
-        $picture = $dataCampaign->picture ? FileHelper::checkFile('campaigns', $dataCampaign->picture) : null;
+        $picture = $dataCampaign->picture ? FileHelper::checkFile('images/campaigns', $dataCampaign->picture) : null;
 
         // Récupération des données campagne
         return new CampaignOutputDTO(
@@ -289,7 +289,7 @@ class CampaignsService
      */
     private function processImage(?int $campaignId, int $userId, ?string $action, ?array $file): ?string
     {
-        $destination = 'campaigns';
+        $destination = 'images/campaigns';
 
         // Récupération de l'image de la campagne
         $picture = $campaignId ? $this->campaignsRepository->getCampaignPicture($campaignId, $userId) : null;

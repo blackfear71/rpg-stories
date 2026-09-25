@@ -11,7 +11,7 @@
     max-width: calc(100vw - 72px); /* 20px padding page + 32px padding container */
     max-height: calc(100vw - 72px); /* 20px padding page + 32px padding container */
     border-radius: 50%;
-    background-color: var(--color-bg-icon);
+    background-color: var(--color-bg-tertiary);
     color: var(--color-text-primary);
     overflow: hidden;
     border: 5px solid var(--color-border-primary);
@@ -21,7 +21,7 @@
     display: block;
     object-fit: cover;
     height: 100%;
-    width: auto;
+    width: 100%;
 }
 
 .btn.character-button {

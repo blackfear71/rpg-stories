@@ -4,7 +4,7 @@
  * Renvoie le fichier demandé
  */
 $router->get('/serve-file/:destination', function ($params): void {
-    $destination = basename(urldecode($params['destination']));
+    $destination = 'images/' . basename(urldecode($params['destination']));
     $fileName = isset($_GET['file']) ? basename(urldecode($_GET['file'])) : null;
 
     try {

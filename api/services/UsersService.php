@@ -357,7 +357,7 @@ class UsersService
 
         // Login existant
         if (!$this->usersRepository->checkLoginAvailable($data->login)) {
-            throw new WarningException(MessageHelper::WRN_USER_EXISTS);
+            throw new \WarningException(MessageHelper::WRN_USER_EXISTS);
         }
 
         // Niveau renseigné

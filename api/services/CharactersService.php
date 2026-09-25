@@ -46,7 +46,7 @@ class CharactersService
         // Génération des DTO
         return array_map(function ($character) {
             // Vérification de l'image existante et génération de l'URL
-            $picture = $character->picture ? FileHelper::checkFile('characters', $character->picture) : null;
+            $picture = $character->picture ? FileHelper::checkFile('images/characters', $character->picture) : null;
 
             // Récupération des données personnage
             return new CharacterOutputDTO(
@@ -72,7 +72,7 @@ class CharactersService
 
         if ($dataCharacter) {
             // Vérification image existante et génération URL
-            $picture = $dataCharacter->picture ? FileHelper::checkFile('characters', $dataCharacter->picture) : null;
+            $picture = $dataCharacter->picture ? FileHelper::checkFile('images/characters', $dataCharacter->picture) : null;
 
             // Récupération des données personnage
             return new CharacterOutputDTO(
@@ -230,7 +230,7 @@ class CharactersService
      */
     private function processImage(?int $characterId, int $userId, ?string $action, ?array $file): ?string
     {
-        $destination = 'characters';
+        $destination = 'images/characters';
 
         // Récupération de l'image du personnage
         $picture = $characterId ? $this->charactersRepository->getCharacterPicture($characterId, $userId) : null;

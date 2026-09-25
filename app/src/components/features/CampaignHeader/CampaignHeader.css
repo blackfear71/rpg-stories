@@ -1,5 +1,6 @@
 .campaign-header-container {
     width: 100%;
+    min-height: 225px;
     background-color: var(--color-bg-secondary);
     background-size: cover;
     background-position: center;
