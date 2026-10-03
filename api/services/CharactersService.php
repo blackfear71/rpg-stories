@@ -168,13 +168,16 @@ class CharactersService
             throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
         }
 
+        // Suppression du personnage des campagnes liées
+        $this->getCampaignsService()->deleteCampaignsCharacter($characterId, $userId);
+
+        // Suppression de l'image
+        $this->processImage($characterId, $userId, EnumAction::DELETE->value, null);
+
         // Suppression logique du personnage
         if (!$this->charactersRepository->deleteCharacter($characterId, $userId)) {
             throw new \RuntimeException(MessageHelper::ERR_DELETION_FAILED);
         }
-
-        // Suppression du personnage des campagnes liées
-        $this->getCampaignsService()->deleteCampaignsCharacter($characterId, $userId);
     }
 
     /**
@@ -185,6 +188,13 @@ class CharactersService
         // Contrôle des données
         if (!$userDeleteId) {
             throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
+        }
+
+        // Suppression des images des personnages
+        $characterIds = $this->charactersRepository->getCharactersByUserId($userDeleteId);
+
+        foreach ($characterIds as $characterId) {
+            $this->processImage($characterId, $userDeleteId, EnumAction::DELETE->value, null);
         }
 
         // Suppression logique des personnages

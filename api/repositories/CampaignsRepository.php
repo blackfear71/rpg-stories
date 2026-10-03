@@ -155,6 +155,25 @@ class CampaignsRepository
     }
 
     /**
+     * Lecture des campagnes d'un utilisateur
+     */
+    public function getCampaignsByUserId(int $userId): array
+    {
+        $sql = "SELECT id
+            FROM {$this->campaignsTable}
+            WHERE created_by = :created_by AND picture IS NOT NULL AND picture <> '' AND is_active = 1
+            ORDER BY id DESC";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'created_by' => $userId
+        ]);
+
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+
+    /**
      * Insertion d'une campagne
      */
     public function createCampaign(Campaign $campaign): bool
@@ -246,13 +265,14 @@ class CampaignsRepository
     public function deleteCampaign(int $campaignId, int $userId): bool
     {
         $sql = "UPDATE {$this->campaignsTable}
-            SET deleted_at = :deleted_at, deleted_by = :deleted_by, is_active = :is_active
+            SET picture = :picture, deleted_at = :deleted_at, deleted_by = :deleted_by, is_active = :is_active
             WHERE id = :id AND created_by = :created_by";
 
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
             'id'         => $campaignId,
+            'picture'    => NULL,
             'created_by' => $userId,
             'deleted_at' => date('Y-m-d H:i:s'),
             'deleted_by' => $userId,
@@ -286,12 +306,13 @@ class CampaignsRepository
     public function deleteCampaignsByUserId(int $userDeleteId, int $userId): bool
     {
         $sql = "UPDATE {$this->campaignsTable}
-            SET deleted_at = :deleted_at, deleted_by = :deleted_by, is_active = :is_active
+            SET picture = :picture, deleted_at = :deleted_at, deleted_by = :deleted_by, is_active = :is_active
             WHERE created_by = :created_by AND is_active = 1";
 
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
+            'picture'    => NULL,
             'created_by' => $userDeleteId,
             'deleted_at' => date('Y-m-d H:i:s'),
             'deleted_by' => $userId,

@@ -230,6 +230,9 @@ class CampaignsService
         // Suppression logique des histoires
         $this->getStoriesService()->deleteStories($campaignId, $userId);
 
+        // Suppression de l'image
+        $this->processImage($campaignId, $userId, EnumAction::DELETE->value, null);
+
         // Suppression logique de la campagne
         if (!$this->campaignsRepository->deleteCampaign($campaignId, $userId)) {
             throw new \RuntimeException(MessageHelper::ERR_DELETION_FAILED);
@@ -260,6 +263,13 @@ class CampaignsService
         // Contrôle des données
         if (!$userDeleteId) {
             throw new \InvalidArgumentException(MessageHelper::ERR_INVALID_ID);
+        }
+
+        // Suppression des images des campagnes
+        $campaignsIds = $this->campaignsRepository->getCampaignsByUserId($userDeleteId);
+
+        foreach ($campaignsIds as $campaignId) {
+            $this->processImage($campaignId, $userDeleteId, EnumAction::DELETE->value, null);
         }
 
         // Suppression logique des campagnes
