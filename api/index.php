@@ -33,7 +33,6 @@ $uri = strtok(substr($_SERVER['REQUEST_URI'], strlen($basePath)), '?');
 // Paramètres CORS
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 $allowedOrigins = [
-    'http://localhost:3000',        // CRA
     'http://localhost:5173',        // Vite
     'http://rpg-stories.dedyn.io',  // HTTP
     'https://rpg-stories.dedyn.io', // HTTPS

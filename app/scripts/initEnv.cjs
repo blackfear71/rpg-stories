@@ -7,7 +7,7 @@ const envFiles = [
     {
         path: path.resolve('.env.development'),
         label: 'Front (dev)',
-        content: `VITE_APP_URL=http://localhost:3000
+        content: `VITE_APP_URL=http://localhost:5173
 VITE_API_URL=http://localhost/rpg-stories/api
 `
     },
@@ -21,24 +21,28 @@ VITE_API_URL=/api
     {
         path: path.resolve('../api/.env'),
         label: 'Back',
-        content: `# A modifier avec les identifiants du compte phpMyAdmin et les chemins [LOCAL] pour autoriser la connexion à la base de données (utilisé en développement)
+        content: `# A modifier avec les identifiants du compte phpMyAdmin [LOCAL] pour autoriser la connexion à la base de données (utilisé en développement)
 DB_HOST=localhost
 DB_PORT=
 DB_NAME=rpg_stories_db
 DB_USER=root
 DB_PASS=
+
+# Dossier des fichiers de l'application (images, logs...)
 FILES_DIR=../files
 `
     },
     {
         path: path.resolve('../api/.env.production'),
         label: 'Back',
-        content: `# A modifier avec les identifiants du compte phpMyAdmin et les chemins [SERVEUR] pour autoriser la connexion à la base de données (déployé sur le serveur automatiquement)
+        content: `# A modifier avec les identifiants du compte phpMyAdmin [SERVEUR] pour autoriser la connexion à la base de données (déployé sur le serveur automatiquement)
 DB_HOST=localhost
 DB_PORT=
 DB_NAME=rpg_stories_db
 DB_USER=root
 DB_PASS=
+
+# Dossier des fichiers de l'application (images, logs...)
 FILES_DIR=/server_path/files/rpg-stories
 `
     }
